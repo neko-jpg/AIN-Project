@@ -1,0 +1,229 @@
+[
+  {
+    "name": "Pytest",
+    "type": "テストフレームワーク",
+    "category_details": "Pythonテストフレームワーク",
+    "functions": [
+      "シンプルなassert文によるアサーション",
+      "強力なフィクスチャシステムによるテスト準備/後処理",
+      "パラメータ化テストによるデータ駆動テスト",
+      "豊富なプラグインによる機能拡張 (カバレッジ、レポート等)",
+      "既存のunittest/noseテストとの互換性"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "MITライセンスで無料。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "Pythonアプリケーションのユニットテストと統合テスト",
+      "requestsライブラリと連携したAPIテスト",
+      "Selenium/Playwright/Appiumのテストランナーとしての利用"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://pytest.org/",
+    "remarks": "Pythonエコシステムにおけるテスト自動化のデファクトスタンダード。シンプルな構文と強力なフィクスチャが特徴。"
+  },
+  {
+    "name": "Cypress",
+    "type": "テストフレームワーク",
+    "category_details": "フロントエンドE2Eテスト",
+    "functions": [
+      "E2Eテストとコンポーネントテスト",
+      "タイムトラベルデバッグ機能",
+      "自動待機によるテストの安定化",
+      "ネットワークトラフィックの制御（スタブ、スパイ）",
+      "統合APIテスト (cy.request)"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Cypress Appは無料。Cypress Cloudはテスト結果の記録や分析のための有償サービス。",
+    "free_tier_details": "ローカルでのテスト作成・実行は無料。",
+    "use_cases": [
+      "モダンなWebアプリケーションのE2Eテスト",
+      "React/Vue/Angular等のコンポーネントテスト",
+      "UIテストと連携したAPIテスト"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://www.cypress.io/",
+    "remarks": "開発者体験を重視したフロントエンドテストツール。デバッグの容易さとテストの安定性が大きな強み。ネイティブモバイルアプリは非対応。"
+  },
+  {
+    "name": "Playwright",
+    "type": "テストフレームワーク",
+    "category_details": "ブラウザ自動化ライブラリ",
+    "functions": [
+      "単一APIで主要ブラウザエンジン (Chromium, Firefox, WebKit) をサポート",
+      "多言語対応 (JS/TS, Python, Java, C#)",
+      "自動待機機能",
+      "ネットワークインターセプトとAPIテスト機能",
+      "優れたモバイルWebエミュレーション"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "Apache 2.0ライセンスで無料。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "厳密なクロスブラウザE2Eテスト",
+      "モバイルWebサイトのテスト",
+      "UIテストとAPIテストの統合"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://playwright.dev/",
+    "remarks": "Microsoftが開発するモダンなブラウザ自動化ツール。真のクロスブラウザテスト能力と多言語サポートが強力な差別化要因。"
+  },
+  {
+    "name": "Selenium",
+    "type": "テストフレームワーク",
+    "category_details": "ブラウザ自動化フレームワーク",
+    "functions": [
+      "WebDriverによるブラウザ操作",
+      "広範なプログラミング言語サポート",
+      "主要な全ブラウザに対応",
+      "Selenium Gridによる並列テスト実行"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "Apache 2.0ライセンスで無料。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "大規模で多様なブラウザ環境でのE2Eテスト",
+      "レガシーなWebアプリケーションのテスト",
+      "他のツール(Appium, JMeter)との連携"
+    ],
+    "learning_difficulty": "中程度～高度",
+    "official_website": "https://www.selenium.dev/",
+    "remarks": "長年の実績を持つブラウザ自動化の標準。成熟しているが、モダンなツールに比べてセットアップが複雑で、テストが不安定になりやすい側面もある。"
+  },
+  {
+    "name": "Jest",
+    "type": "テストフレームワーク",
+    "category_details": "JavaScriptテストフレームワーク",
+    "functions": [
+      "ユニットテストと統合テスト",
+      "組み込みのアサーション、モック、スパイ機能",
+      "スナップショットテストによるUIの差分検出",
+      "分離されたプロセスでの並列テスト実行",
+      "コードカバレッジレポート生成"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "MITライセンスで無料。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "Reactアプリケーションのコンポーネントテスト",
+      "Node.jsバックエンドのユニット・統合テスト",
+      "TypeScriptプロジェクトのテスト"
+    ],
+    "learning_difficulty": "容易",
+    "official_website": "https://jestjs.io/",
+    "remarks": "JavaScript、特にReactエコシステムにおける支配的なテストフレームワーク。「オールインワン」でゼロコンフィグを目指しており、導入が非常に容易。"
+  },
+  {
+    "name": "Mocha",
+    "type": "テストフレームワーク",
+    "category_details": "JavaScriptテストフレームワーク",
+    "functions": [
+      "柔軟なテスト構造 (describe, it)",
+      "非同期テストの強力なサポート",
+      "豊富なフック (before, after, beforeEach, afterEach)",
+      "ユーザーがアサーションやモックライブラリを自由に選択可能"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "MITライセンスで無料。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "Node.jsアプリケーションのユニット・統合テスト",
+      "テストスタックを細かく制御したいプロジェクト",
+      "非同期処理を多用するコードのテスト"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://mochajs.org/",
+    "remarks": "Jestとは対照的に、柔軟性とモジュール性を重視したフレームワーク。アサーションやモックライブラリを別途選択する必要がある。"
+  },
+  {
+    "name": "RSpec",
+    "type": "テストフレームワーク",
+    "category_details": "Ruby BDDフレームワーク",
+    "functions": [
+      "ビヘイビア駆動開発 (BDD) スタイルのテスト記述",
+      "表現力豊かなDSL (ドメイン固有言語)",
+      "強力なエクスペクテーション（アサーション）とモック機能",
+      "Ruby on Railsとの深い統合 (rspec-rails)"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "MITライセンスで無料。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "Ruby on Railsアプリケーションのテスト",
+      "BDDアプローチを採用するプロジェクト",
+      "Rubyライブラリのユニット・統合テスト"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://rspec.info/",
+    "remarks": "Ruby/Railsコミュニティにおけるテストの標準。可読性の高い「仕様書」のようなテストを記述できるのが大きな特徴。"
+  },
+  {
+    "name": "JUnit",
+    "type": "テストフレームワーク",
+    "category_details": "Javaユニットテストフレームワーク",
+    "functions": [
+      "アノテーションベースのテスト記述 (@Test)",
+      "パラメータ化テスト、動的テスト",
+      "拡張モデルによる機能追加",
+      "アサーションとアサンプション"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "Eclipse Public License 2.0で無料。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "Javaアプリケーションのユニット・統合テスト",
+      "Spring Bootアプリケーションのテスト",
+      "Selenium/Appiumテストのテストランナー (Java)"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://junit.org/junit5/",
+    "remarks": "Javaエコシステムにおけるユニットテストのデファクトスタンダード。JUnit 5でモジュール化され、大幅に現代化された。"
+  },
+  {
+    "name": "Postman",
+    "type": "APIプラットフォーム",
+    "category_details": "APIテスト & 開発ツール",
+    "functions": [
+      "GUIによるHTTP/Sリクエストの送信",
+      "APIテストの自動化（テストスクリプト）",
+      "リクエストのコレクション管理",
+      "環境変数とグローバル変数による設定管理",
+      "モックサーバーの構築",
+      "APIドキュメント生成"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "個人や小規模チーム向けの無料プランあり。大規模チームや高度なコラボレーション機能には有料プランが必要。",
+    "free_tier_details": "基本的なAPIリクエスト、テスト、コレクション管理機能は無料で利用可能。",
+    "use_cases": [
+      "APIの手動探索的テスト",
+      "APIの機能・リグレッションテストの自動化",
+      "APIの設計とドキュメンテーション",
+      "チームでのAPI開発コラボレーション"
+    ],
+    "learning_difficulty": "容易",
+    "official_website": "https://www.postman.com/",
+    "remarks": "API開発とテストのライフサイクル全体をカバーする包括的なプラットフォーム。GUIベースで直感的に操作できるため、導入が容易。"
+  },
+  {
+    "name": "Newman",
+    "type": "ツール",
+    "category_details": "コマンドラインコレクションランナー",
+    "functions": [
+      "Postmanコレクションのコマンドラインからの実行",
+      "CI/CDパイプラインへのAPIテストの統合",
+      "多様な形式でのテストレポート出力 (CLI, JSON, HTML, JUnit)",
+      "データファイル(CSV, JSON)を利用したデータ駆動テスト"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "Apache 2.0ライセンスで無料。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "CI/CD環境でのAPIテストの自動実行",
+      "定期的なAPIヘルスチェック",
+      "データ駆動型のAPIテスト"
+    ],
+    "learning_difficulty": "容易",
+    "official_website": "https://github.com/postmanlabs/newman",
+    "remarks": "Postmanのテストを自動化するための必須ツール。Postmanで作成したテストをCI/CDパイプラインに組み込むための橋渡し役。"
+  }
+]

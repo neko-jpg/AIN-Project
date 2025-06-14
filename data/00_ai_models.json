@@ -1,0 +1,225 @@
+[
+  {
+    "name": "Gemini 2.5 Pro Preview",
+    "type": "大規模言語モデル (LLM)",
+    "provider": "Google",
+    "pricing": {
+      "model": "従量課金 (プレビュー価格)",
+      "input_cost_usd_per_1m_tokens": 1.25,
+      "output_cost_usd_per_1m_tokens": 10.00,
+      "free_tier": "Google AI Studioで無料利用可能。APIにはテスト用の無料枠あり。",
+      "notes": "コンテキストが200kトークンを超えると価格が変動 ($2.50/$15.00)。別資料では$4.00/$20.00の価格提示もあり、GA版で変更の可能性。思考トークンへの追加料金はなし。"
+    },
+    "use_case": "複雑なプロンプト処理、高度な推論、コーディング、マルチモーダルアプリケーション（画像、動画、音声理解）、長文コンテキスト処理。",
+    "difficulty": "中級者",
+    "latest_info": "2025年6月現在、プレビュー版が利用可能。これまでで最もインテリジェントなモデルと評される。",
+    "features": ["Deep Think（強化された推論モード）", "ネイティブなマルチモーダリティ", "最大100万トークンの長文コンテキスト"],
+    "japanese_performance": "良好。従来のモデルより高速で出力が分かりやすく、曖昧な表現が減少したとのユーザー評価あり。",
+    "benchmark_scores": {
+      "GPQA_diamond": 86.4,
+      "VideoMMMU": 83.6,
+      "Global_MMLU_Lite": 89.2,
+      "SWE_Bench_Verified": 59.6
+    }
+  },
+  {
+    "name": "Gemini 2.5 Flash Preview",
+    "type": "大規模言語モデル (LLM)",
+    "provider": "Google",
+    "pricing": {
+      "model": "従量課金 (プレビュー価格)",
+      "input_cost_usd_per_1m_tokens": 0.15,
+      "output_cost_usd_per_1m_tokens": 0.60,
+      "free_tier": "Google AI Studioで無料利用可能。API無料ティアでは入出力が無料。",
+      "notes": "思考時の出力は$3.50/1Mトークンと高価になる。音声入力は$1.00/1Mトークン。"
+    },
+    "use_case": "複雑なタスクでの高速処理、価格と性能のバランスが求められるアプリケーション、マルチモーダルタスク。",
+    "difficulty": "初心者〜中級者",
+    "latest_info": "2025年6月現在、プレビュー版が利用可能。価格と性能のバランスを考慮して設計されている。",
+    "features": ["思考モデル", "高速パフォーマンス", "マルチモーダリティ"],
+    "japanese_performance": "良好。Gemini 2.5シリーズとして肯定的な評価。",
+    "benchmark_scores": {}
+  },
+  {
+    "name": "Gemini 2.0 Flash",
+    "type": "大規模言語モデル (LLM)",
+    "provider": "Google",
+    "pricing": {
+      "model": "従量課金",
+      "input_cost_usd_per_1m_tokens": 0.10,
+      "output_cost_usd_per_1m_tokens": 0.40,
+      "free_tier": "Google AI Studioで無料利用可能。API無料ティアでは入出力が無料。",
+      "notes": "音声入力は$0.70/1Mトークン。画像生成は$0.039/画像。"
+    },
+    "use_case": "コストを重視するアプリケーション、低遅延が求められるタスク、一般的なマルチモーダルタスク。",
+    "difficulty": "初心者",
+    "latest_info": "一般提供中。コスト効率と低遅延に最適化。",
+    "features": ["低コスト", "低遅延", "画像生成機能"],
+    "japanese_performance": "良好。日本語を理解し応答可能。",
+    "benchmark_scores": {}
+  },
+  {
+    "name": "GPT-4.1",
+    "type": "大規模言語モデル (LLM)",
+    "provider": "OpenAI",
+    "pricing": {
+      "model": "従量課金",
+      "input_cost_usd_per_1m_tokens": 2.00,
+      "output_cost_usd_per_1m_tokens": 8.00,
+      "free_tier": "ChatGPT Plusプラン（月額$20）で利用可能。APIの広範な無料枠はなし。",
+      "notes": "ファインチューニングやBatch API利用で価格は変動。プロンプトキャッシュ割引あり。"
+    },
+    "use_case": "エージェントによるコーディング、フロントエンド開発、大規模文書からの洞察抽出、複雑なタスク、コンテンツ作成。",
+    "difficulty": "中級者〜上級者",
+    "latest_info": "2025年4月頃リリース。コーディングと指示追従でGPT-4oを大幅に凌駕。",
+    "features": ["最先端のコーディング能力", "高い指示追従性", "32kトークンの出力制限"],
+    "japanese_performance": "非常に高い。流暢で読みやすい日本語を生成。多言語対応が傑出している。",
+    "benchmark_scores": {
+      "SWE_Bench_Verified": 54.6,
+      "Video_MME": 72.0,
+      "MMLU": 91.2
+    }
+  },
+  {
+    "name": "GPT-4.1 mini",
+    "type": "大規模言語モデル (LLM)",
+    "provider": "OpenAI",
+    "pricing": {
+      "model": "従量課金",
+      "input_cost_usd_per_1m_tokens": 0.40,
+      "output_cost_usd_per_1m_tokens": 1.60,
+      "free_tier": "ChatGPT Teamプランで利用可能。APIの広範な無料枠はなし。",
+      "notes": "GPT-4o比でコストを83%削減しつつ、同等以上の性能を多くのベンチマークで発揮。"
+    },
+    "use_case": "GPT-4.1より低コスト・低遅延が求められるアプリ、画像理解タスク。",
+    "difficulty": "初心者〜中級者",
+    "latest_info": "2025年4月頃リリース。速度と知能のバランスに優れる。",
+    "features": ["高いコストパフォーマンス", "低遅延", "強力な画像理解能力"],
+    "japanese_performance": "良好。GPT-4.1ファミリーとして高い日本語能力を持つ。",
+    "benchmark_scores": {}
+  },
+  {
+    "name": "Claude Opus 4",
+    "type": "大規模言語モデル (LLM)",
+    "provider": "Anthropic",
+    "pricing": {
+      "model": "従量課金",
+      "input_cost_usd_per_1m_tokens": 15.00,
+      "output_cost_usd_per_1m_tokens": 75.00,
+      "free_tier": "Claude Proプラン（月額$20）で利用可能。APIの広範な無料枠はなし。",
+      "notes": "最大出力32kトークン、コンテキストウィンドウ200k。"
+    },
+    "use_case": "最先端のエージェント、複雑なコーディングと問題解決、研究、科学的発見、長時間タスク。",
+    "difficulty": "上級者",
+    "latest_info": "2025年5月22日リリース。「世界最高のコーディングモデル」と評される。",
+    "features": ["最高レベルの知能", "ツール使用による拡張思考", "並列ツール使用", "改善されたメモリ"],
+    "japanese_performance": "非常に高い。ビジネス文書などのニュアンスや含意を適切に扱える。",
+    "benchmark_scores": {
+      "SWE_Bench_Verified": 72.5
+    }
+  },
+  {
+    "name": "Claude Sonnet 4",
+    "type": "大規模言語モデル (LLM)",
+    "provider": "Anthropic",
+    "pricing": {
+      "model": "従量課金",
+      "input_cost_usd_per_1m_tokens": 3.00,
+      "output_cost_usd_per_1m_tokens": 15.00,
+      "free_tier": "Claude.aiの無料プランで利用可能。",
+      "notes": "最大出力64kトークン、コンテキストウィンドウ200k。"
+    },
+    "use_case": "コーディングエージェント、日常的なユースケースでの高性能、操縦性と実用性のバランスが求められるアプリ。",
+    "difficulty": "中級者",
+    "latest_info": "2025年5月22日リリース。優れたコーディング能力と推論能力を持つ。",
+    "features": ["高い知能とバランスの取れた性能", "ツール使用による拡張思考", "改善されたメモリ"],
+    "japanese_performance": "良好。Claudeファミリーとして高い日本語能力を持つ。",
+    "benchmark_scores": {
+      "SWE_Bench_Verified": 72.7
+    }
+  },
+  {
+    "name": "Llama 4 Maverick",
+    "type": "大規模言語モデル (LLM)",
+    "provider": "Meta",
+    "pricing": {
+      "model": "オープンソース (APIはプロバイダー依存)",
+      "input_cost_usd_per_1m_tokens": 0.27,
+      "output_cost_usd_per_1m_tokens": 0.85,
+      "free_tier": "モデル自体の利用は無料（自己ホスト）。API利用はプロバイダーの料金体系に従う。",
+      "notes": "価格はTogether.ai経由の場合の参考値。自己ホストには高性能なGPU環境が必要。"
+    },
+    "use_case": "一般的なアシスタント、チャット、正確な画像理解、創造的な執筆、マルチモーダル体験、研究開発。",
+    "difficulty": "上級者",
+    "latest_info": "2025年4月5日リリース。クラス最高のマルチモーダルモデルと評される。",
+    "features": ["オープンソース", "Mixture of Experts (MoE)アーキテクチャ", "ネイティブマルチモーダリティ", "1Mトークンのコンテキストウィンドウ"],
+    "japanese_performance": "対応。多言語（12言語）対応モデル。",
+    "benchmark_scores": {
+      "MMLU": 85.5
+    }
+  },
+  {
+    "name": "Devstral",
+    "type": "大規模言語モデル (LLM)",
+    "provider": "Mistral AI",
+    "pricing": {
+      "model": "オープンソース (APIは安価)",
+      "input_cost_usd_per_1m_tokens": 0.10,
+      "output_cost_usd_per_1m_tokens": 0.30,
+      "free_tier": "Apache 2.0ライセンスで無料でダウンロード・使用可能。",
+      "notes": "単一のコンシューマ向けGPUでも実行可能なほど軽量。"
+    },
+    "use_case": "ソフトウェアエンジニアリングタスク、コードエージェント、GitHubイシューの解決、ローカルでのコーディング支援。",
+    "difficulty": "中級者〜上級者",
+    "latest_info": "2025年5月21日リリース。SWE-Benchで他のオープンソースモデルを大幅に上回る性能。",
+    "features": ["オープンソース (Apache 2.0)", "ソフトウェアエンジニアリング特化", "軽量"],
+    "japanese_performance": "コーディングに特化しており、日本語性能に関する特記事項はなし。",
+    "benchmark_scores": {
+      "SWE_Bench_Verified": 46.8
+    }
+  },
+  {
+    "name": "LangChain",
+    "type": "LLMアプリケーションフレームワーク",
+    "provider": "オープンソース",
+    "pricing": {
+      "model": "フリーミアム",
+      "notes": "コアライブラリは無料。LangSmith（可観測性）やLangGraph Platform（デプロイ）などのクラウドサービスは有料プランあり。"
+    },
+    "use_case": "チャットボット、RAG、ツールを使用するエージェント、ドキュメント要約・分析。",
+    "difficulty": "中級者〜上級者",
+    "latest_info": "LangGraphによるステートフルなエージェント構築に注力。「エージェントエンジニアリング」を推進。",
+    "features": ["モジュラーコンポーネント", "多様なツールとの連携", "ステートフルなエージェント構築 (LangGraph)"],
+    "japanese_performance": "フレームワークのため直接的な言語性能はないが、日本語対応LLMと組み合わせて利用可能。",
+    "benchmark_scores": {}
+  },
+  {
+    "name": "LlamaIndex",
+    "type": "LLMアプリケーション用データフレームワーク",
+    "provider": "オープンソース",
+    "pricing": {
+      "model": "フリーミアム",
+      "notes": "コアライブラリは無料。LlamaCloud（マネージドサービス）はクレジットベースの有料プランあり。"
+    },
+    "use_case": "プライベートデータに対するRAG、エンタープライズナレッジアシスタント、非構造化データからの構造化データ抽出。",
+    "difficulty": "初心者〜中級者",
+    "latest_info": "RAGから、より高度な「エージェント検索」や「エージェントドキュメントワークフロー」へと進化中。",
+    "features": ["RAGに特化", "多様なデータソースへのコネクタ (LlamaHub)", "高度なドキュメント解析 (LlamaParse)"],
+    "japanese_performance": "フレームワークのため直接的な言語性能はないが、日本語対応LLMと組み合わせて利用可能。",
+    "benchmark_scores": {}
+  },
+  {
+    "name": "Hugging Face Transformers",
+    "type": "Pythonライブラリ",
+    "provider": "オープンソース",
+    "pricing": {
+      "model": "無料"
+    },
+    "use_case": "事前学習済みモデルへのアクセスと利用、カスタムデータでのファインチューニング。",
+    "difficulty": "初心者〜上級者",
+    "latest_info": "モデルの発見からトレーニング、デプロイまでを網羅するエンドツーエンドのMLOpsプラットフォームへと進化。",
+    "features": ["膨大な数の事前学習済みモデル", "活発なコミュニティ", "PyTorch, TensorFlow, JAXに対応"],
+    "japanese_performance": "フレームワークのため直接的な言語性能はないが、多数の日本語モデルがHubで公開されている。",
+    "benchmark_scores": {}
+  }
+]

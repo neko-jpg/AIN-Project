@@ -1,0 +1,246 @@
+[
+  {
+    "name": "GitHub Actions",
+    "type": "CI/CDプラットフォーム",
+    "category_details": "GitHub内に統合されたCI/CD",
+    "functions": [
+      "イベント駆動のワークフロー自動化",
+      "コードのビルド、テスト、デプロイ",
+      "大規模なアクションマーケットプレイスによる機能拡張",
+      "マトリックスビルドによる複数環境でのテスト",
+      "セルフホストランナー対応"
+    ],
+    "cost_tier": "フリーミアム（GitHubプラン内の使用量ベース）",
+    "price_details": "Free: 月2,000分（プライベートリポジトリ）。Team: 月3,000分。Enterprise: 月50,000分。追加分購入可能。",
+    "free_tier_details": "パブリックリポジトリでは無料。プライベートでも小規模プロジェクトには十分な無料枠。",
+    "use_cases": [
+      "GitHubでホストされているプロジェクトのCI/CD自動化",
+      "オープンソースプロジェクトのビルドとテスト",
+      "多様なクラウドプラットフォームへのデプロイ"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://github.com/features/actions",
+    "remarks": "GitHubとのシームレスな統合が最大の強み。豊富なMarketplaceアクションにより、迅速にパイプラインを構築可能。"
+  },
+  {
+    "name": "CircleCI",
+    "type": "CI/CDプラットフォーム",
+    "category_details": "クラウドベースおよびセルフホスト型CI/CD",
+    "functions": [
+      "ビルド、テスト、デプロイの自動化",
+      "多様な実行環境サポート (Docker, Windows, macOS, Arm)",
+      "Orbsによる再利用可能なパイプライン設定",
+      "テストの並列実行と最適化",
+      "パフォーマンス監視とインサイト提供"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Free: 月30,000クレジット（約6,000ビルド分）。Performance: 月$15からの従量課金。Scale: 月$2,000からのカスタムプラン。",
+    "free_tier_details": "月30,000クレジット、5アクティブユーザーを含み、小規模プロジェクトには非常に寛大。",
+    "use_cases": [
+      "ウェブおよびモバイルアプリケーションのCI/CD",
+      "高速なフィードバックサイクルが求められる開発",
+      "複雑なビルド・テストワークフローの構築"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://circleci.com/",
+    "remarks": "速度と開発者体験で知られる。Orbsによる設定のモジュール化と再利用が大きな特徴。"
+  },
+  {
+    "name": "Jenkins",
+    "type": "CI/CDプラットフォーム",
+    "category_details": "オープンソース自動化サーバー",
+    "functions": [
+      "ビルド、テスト、デプロイの自動化",
+      "2,000以上のプラグインによる高い拡張性",
+      "コードとしてのパイプライン (Jenkins Pipeline, Groovy)",
+      "分散ビルドによるスケーリング",
+      "組み込みのモニタリングとレポーティング"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "ソフトウェアは無料。セルフホスティングのためのインフラコストと運用コストが発生。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "きめ細かい制御が必要な複雑でカスタマイズされたビルドパイプライン",
+      "オンプレミスまたはプライベートクラウドでのデプロイ",
+      "広範なツールとの連携が必要なプロジェクト"
+    ],
+    "learning_difficulty": "中程度～高度",
+    "official_website": "https://www.jenkins.io/",
+    "remarks": "非常に柔軟でカスタマイズ可能だが、運用オーバーヘッドが大きい。大規模なコミュニティとプラグインエコシステムを持つ。"
+  },
+  {
+    "name": "GitLab CI/CD",
+    "type": "CI/CDプラットフォーム",
+    "category_details": "GitLab DevOpsプラットフォーム統合CI/CD",
+    "functions": [
+      "Auto DevOpsによるパイプライン自動生成",
+      "統合コンテナレジストリ",
+      "統合セキュリティスキャン (SAST, DAST)",
+      "レビューアプリによるデプロイプレビュー",
+      "マージトレインによる安全なマージ"
+    ],
+    "cost_tier": "フリーミアム（GitLabプラン内の使用量ベース）",
+    "price_details": "Free: 月400コンピューティング分(5ユーザーまで)。Premium: 月10,000分($29/ユーザー/月)。Ultimate: 月50,000分($99/ユーザー/月)。",
+    "free_tier_details": "小規模チーム向けに無料枠を提供。セルフホストランナーの使用でコンピューティング分は無制限。",
+    "use_cases": [
+      "単一プラットフォームでの完全なDevOpsライフサイクル管理",
+      "DevSecOpsプラクティスの実装",
+      "GitLabをSCMとして使用しているプロジェクト"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://about.gitlab.com/stages-devops-lifecycle/continuous-integration/",
+    "remarks": "GitLabとの深い統合が特徴。ツールチェーンの複雑さを軽減し、単一のUIで開発ライフサイクルを管理したい場合に強力。"
+  },
+  {
+    "name": "Travis CI",
+    "type": "CI/CDプラットフォーム",
+    "category_details": "ホスト型CIサービス",
+    "functions": [
+      "GitHub/Bitbucketプロジェクトのビルドとテスト",
+      ".travis.ymlによるYAML設定",
+      "ビルドマトリックスによる複数環境でのテスト",
+      "30以上のプログラミング言語をサポート"
+    ],
+    "cost_tier": "有料 (無料トライアルあり)",
+    "price_details": "有料プランは月額$64から。オープンソース向けの無料提供は終了。",
+    "free_tier_details": "1万ビルド分の無料トライアルを提供。",
+    "use_cases": [
+      "シンプルな設定で始めたいプロジェクト",
+      "複数言語・環境でのテストが必要なライブラリ"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://www.travis-ci.com/",
+    "remarks": "オープンソースCIのパイオニア的存在。現在は有料サービスが中心だが、セットアップの容易さで知られる。"
+  },
+  {
+    "name": "Drone CI",
+    "type": "CI/CDプラットフォーム",
+    "category_details": "コンテナネイティブCI/CD",
+    "functions": [
+      "コンテナ内でのビルドステップ実行",
+      "YAML設定 (.drone.yml)",
+      "プラグインによる機能拡張",
+      "複数アーキテクチャ対応 (amd64, arm64)"
+    ],
+    "cost_tier": "フリーミアム (オープンソース)",
+    "price_details": "オープンソース版は無料。年間収益100万ドル超の企業向けにエンタープライズライセンス($30/開発者/月)あり。",
+    "free_tier_details": "コミュニティ版は全機能が無料で利用可能。",
+    "use_cases": [
+      "コンテナベースの開発ワークフロー",
+      "軽量でシンプルなセルフホストCIを求める場合"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://www.drone.io/",
+    "remarks": "コンテナファーストの設計思想が特徴。すべてのビルドが分離されたDockerコンテナ内で実行されるため、クリーンな環境が保証される。"
+  },
+  {
+    "name": "Azure DevOps Pipelines",
+    "type": "CI/CDプラットフォーム",
+    "category_details": "Azure DevOps統合CI/CD",
+    "functions": [
+      "YAMLまたはUI(クラシックエディタ)によるパイプライン設定",
+      "マルチステージパイプライン (ビルドとリリース)",
+      "デプロイ承認と環境管理",
+      "Azure Repos, Boards, Artifactsとの緊密な連携"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "最初の5ユーザーは無料。追加の並列ジョブごとに課金。",
+    "free_tier_details": "MicrosoftホストCI/CDジョブ1つ（月1,800分）、セルフホストジョブ1つ（無制限分）が無料。",
+    "use_cases": [
+      "Azureクラウドサービスへのデプロイ",
+      "Windowsアプリケーションや.NETプロジェクトのビルド",
+      "Microsoftエコシステム内での開発"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://azure.microsoft.com/services/devops/pipelines/",
+    "remarks": "Azure DevOpsスイートの一部として強力に機能。特にAzureへのデプロイやMicrosoftスタックとの親和性が高い。"
+  },
+  {
+    "name": "AWS CodePipeline",
+    "type": "CI/CDプラットフォーム",
+    "category_details": "継続的デリバリーサービス",
+    "functions": [
+      "リリースプロセスのモデル化、視覚化、自動化",
+      "AWSサービスとの深い統合 (CodeCommit, CodeBuild, S3, ECS, EKS等)",
+      "ステージとアクションによるワークフロー定義",
+      "並列実行のサポート"
+    ],
+    "cost_tier": "従量課金",
+    "price_details": "V2パイプラインはアクション実行分あたり$0.002。月間100分の無料枠あり。",
+    "free_tier_details": "アクティブなV1パイプライン1つが無料。V2は月100分まで無料。",
+    "use_cases": [
+      "AWS環境へのアプリケーションデプロイ",
+      "複数のAWSサービスを連携させたリリースワークフロー"
+    ],
+    "learning_difficulty": "中程度～高度",
+    "official_website": "https://aws.amazon.com/codepipeline/",
+    "remarks": "AWSネイティブなリリースワークフローのオーケストレーションツール。CI/CDの各ステージで他のAWSサービスを呼び出して使用する。"
+  },
+  {
+    "name": "Google Cloud Build",
+    "type": "CI/CDプラットフォーム",
+    "category_details": "サーバーレスCI/CDプラットフォーム",
+    "functions": [
+      "GCP上でのサーバーレスなビルド実行",
+      "Dockerコンテナ内でのステップ実行",
+      "GCPサービスとのネイティブ統合 (Artifact Registry, GKE, Cloud Run)",
+      "ビルド来歴の自動生成 (SLSAレベル3)"
+    ],
+    "cost_tier": "従量課金",
+    "price_details": "無料ティアを超えたビルド分に対して課金。料金はマシンタイプによる。",
+    "free_tier_details": "月間2,500ビルド分が無料。",
+    "use_cases": [
+      "Dockerコンテナのビルドとプッシュ",
+      "GKEやCloud Runへのアプリケーションデプロイ",
+      "サーバーレスなCI環境を求める場合"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://cloud.google.com/build",
+    "remarks": "GCP上で完結するサーバーレスCI/CD。インフラ管理が不要な点がメリット。"
+  },
+  {
+    "name": "Argo CD",
+    "type": "CDツール (GitOps)",
+    "category_details": "Kubernetes向け宣言的GitOpsツール",
+    "functions": [
+      "Gitリポジトリを信頼できる情報源とした自動デプロイ",
+      "Kubernetesマニフェスト、Helm、Kustomizeのサポート",
+      "アプリケーションの同期状態とヘルスの監視",
+      "UIダッシュボードとロールバック機能",
+      "プルベースの同期モデル"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "ソフトウェアは無料。Kubernetes上での実行と運用コストが発生。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "Kubernetesアプリケーションの継続的デリバリー",
+      "GitOpsワークフローの実装",
+      "宣言的なアプリケーション管理"
+    ],
+    "learning_difficulty": "中程度～高度",
+    "official_website": "https://argo-cd.readthedocs.io/",
+    "remarks": "KubernetesネイティブなGitOpsのデファクトスタンダード。CIツール（ビルド/テスト）を補完し、デプロイ部分を担当することが多い。"
+  },
+  {
+    "name": "Spinnaker",
+    "type": "CDプラットフォーム",
+    "category_details": "マルチクラウド継続的デリバリー",
+    "functions": [
+      "複雑なマルチクラウドデプロイメントの管理",
+      "高度なデプロイ戦略（ブルー/グリーン、カナリア分析）",
+      "宣言的なマネージドデリバリー",
+      "洗練されたパイプライン管理とオーケストレーション"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "ソフトウェアは無料。実行するためのインフラと運用コスト、商用サポートに費用がかかる場合がある。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "大規模で複雑なエンタープライズアプリケーションのリリース",
+      "複数のクラウドプロバイダーへのデプロイ",
+      "安全性が最優先される本番環境へのリリース"
+    ],
+    "learning_difficulty": "高度",
+    "official_website": "https://spinnaker.io/",
+    "remarks": "NetflixとGoogleによって開発された、エンタープライズグレードのCDプラットフォーム。学習曲線と運用オーバーヘッドは高いが、比類のない制御とパワーを提供する。"
+  }
+]

@@ -1,0 +1,182 @@
+[
+  {
+    "name": "Docker",
+    "type": "プラットフォーム",
+    "category_details": "コンテナ化プラットフォーム",
+    "functions": [
+      "アプリケーションのコンテナ化（イメージビルド）",
+      "コンテナの実行と管理 (Docker Engine)",
+      "コンテナイメージの共有と配布 (Docker Hub)",
+      "複数コンテナアプリケーションの定義と実行 (Docker Compose)",
+      "ネイティブなコンテナオーケストレーション (Docker Swarm)"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Docker Desktopは個人・小規模企業・教育・非商用オープンソースプロジェクトでは無料。大規模企業向けに有料プランあり。",
+    "free_tier_details": "Docker Engine (CLIツール) はオープンソースで無料。Docker Hubにも無料枠あり。",
+    "use_cases": [
+      "開発・テスト・本番環境の一貫性確保",
+      "マイクロサービスアーキテクチャの実装",
+      "アプリケーションのポータビリティ向上",
+      "CI/CDパイプラインでのビルドとテスト"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://www.docker.com/",
+    "remarks": "現代のコンテナ化技術を普及させた触媒的存在。開発者のローカル環境から本番まで、コンテナワークフローの基本を支える。"
+  },
+  {
+    "name": "Kubernetes",
+    "type": "プラットフォーム",
+    "category_details": "コンテナオーケストレーション",
+    "functions": [
+      "コンテナ化されたアプリケーションの自動デプロイ、スケーリング、管理",
+      "サービスの発見と負荷分散",
+      "ストレージオーケストレーション",
+      "自己修復機能（コンテナの自動再起動など）",
+      "宣言的な設定と自動化されたロールアウト・ロールバック"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "ソフトウェアは無料。運用にはインフラコストと管理コストが発生。主要クラウドプロバイダーがマネージドサービスを提供。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "大規模なマイクロサービスアプリケーションの運用",
+      "本番環境でのコンテナワークロードのスケーリング",
+      "高可用性と耐障害性が求められるシステムの構築"
+    ],
+    "learning_difficulty": "高度",
+    "official_website": "https://kubernetes.io/",
+    "remarks": "コンテナオーケストレーションの事実上の業界標準。非常に強力で広大なエコシステムを持つが、運用には高い専門知識が必要。"
+  },
+  {
+    "name": "Podman",
+    "type": "ツール",
+    "category_details": "デーモンレスコンテナエンジン",
+    "functions": [
+      "Docker互換のコンテナ管理コマンド",
+      "ルートレスコンテナの実行によるセキュリティ強化",
+      "Podの管理（Kubernetesと同様の概念）",
+      "systemdとのネイティブな統合"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "ソフトウェアは無料で利用可能。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "セキュリティを重視するコンテナ環境",
+      "マルチユーザーLinuxシステムでのコンテナ利用",
+      "Dockerデーモンを避けたい開発・運用"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://podman.io/",
+    "remarks": "デーモンレス・ルートレスアーキテクチャにより、Dockerのセキュリティ上の懸念点に対応する代替ツール。DockerとのCLI互換性が移行を容易にする。"
+  },
+  {
+    "name": "HashiCorp Nomad",
+    "type": "プラットフォーム",
+    "category_details": "ワークロードオーケストレーション",
+    "functions": [
+      "コンテナ、VM、スタンドアロンアプリなど多様なワークロードのスケジューリング",
+      "シンプルな単一バイナリによるクラスタ管理",
+      "マルチリージョン、マルチクラウド対応",
+      "バッチ処理ジョブのオーケストレーション"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "オープンソース版は無料。エンタープライズ版は有料で追加機能とサポートを提供。",
+    "free_tier_details": "オープンソース版は全機能が無料で利用可能。",
+    "use_cases": [
+      "Kubernetesが複雑すぎると感じる場合の代替",
+      "コンテナと非コンテナの混合ワークロードの管理",
+      "HashiCorpエコシステム (Consul, Vault) を活用した環境"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://www.nomadproject.io/",
+    "remarks": "シンプルさと運用容易性が最大の特徴。コンテナだけでなく、より広範なワークロードをオーケストレーションできる柔軟性を持つ。"
+  },
+  {
+    "name": "Vagrant",
+    "type": "ツール",
+    "category_details": "仮想開発環境構築",
+    "functions": [
+      "再現可能な仮想マシン環境の構築と管理",
+      "開発環境のコード化 (Vagrantfile)",
+      "各種プロバイダー (VirtualBox, VMware, Docker) のサポート",
+      "プロビジョニングツール (Shell, Ansible等) との連携"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "ソフトウェアは無料で利用可能。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "チーム内での開発環境の一貫性確保",
+      "完全なOS環境の複製が必要な開発",
+      "コンテナ開発環境の基盤となるVMのセットアップ"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://www.vagrantup.com/",
+    "remarks": "コンテナ時代においても、VMベースの一貫した開発環境を構築するツールとして依然として有用。Dockerと補完的に使われることも多い。"
+  },
+  {
+    "name": "AWS Fargate",
+    "type": "サーバーレスコンテナ",
+    "category_details": "サーバーレスコンピューティングエンジン",
+    "functions": [
+      "サーバーやクラスタを管理せずにコンテナを実行",
+      "ECSおよびEKSとの連携",
+      "vCPUとメモリに応じたリソースの自動割り当て",
+      "従量課金制"
+    ],
+    "cost_tier": "従量課金",
+    "price_details": "コンテナが消費したvCPUとメモリリソースに対して秒単位で課金。",
+    "free_tier_details": "AWS無料利用枠の一部として、一定時間の利用が可能。",
+    "use_cases": [
+      "インフラ管理のオーバーヘッドを削減したいコンテナアプリケーション",
+      "サーバーレスアーキテクチャでのコンテナ利用",
+      "バースト性のあるワークロード"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://aws.amazon.com/fargate/",
+    "remarks": "コンテナのポータビリティとサーバーレスの運用容易性を両立させる。インフラ管理をAWSに任せたい場合に強力な選択肢。"
+  },
+  {
+    "name": "Google Cloud Run",
+    "type": "サーバーレスコンテナ",
+    "category_details": "フルマネージドサーバーレスプラットフォーム",
+    "functions": [
+      "ステートレスなHTTPコンテナの実行",
+      "トラフィックに応じた自動スケーリング（ゼロへのスケールも可能）",
+      "カスタムドメインとの連携",
+      "Knativeをベースとしたオープンスタンダード"
+    ],
+    "cost_tier": "従量課金",
+    "price_details": "リクエスト数、コンテナのCPU・メモリ使用時間、ネットワーク帯域幅に応じた課金。",
+    "free_tier_details": "毎月一定量のリクエスト、CPU時間、メモリ時間などの無料枠が提供される。",
+    "use_cases": [
+      "Web APIやマイクロサービスのホスティング",
+      "イベント駆動型の処理",
+      "リクエストが断続的なアプリケーション"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://cloud.google.com/run",
+    "remarks": "コンテナイメージを提供するだけで簡単にWebサービスを公開できる。ゼロへのスケーリングはコスト効率に優れる。"
+  },
+  {
+    "name": "WebAssembly (Wasm)",
+    "type": "技術/ランタイム",
+    "category_details": "ポータブルなコンパイルターゲット",
+    "functions": [
+      "ブラウザおよびサーバーサイドでの安全なコード実行",
+      "ネイティブに近いパフォーマンス",
+      "強力なサンドボックスによるセキュリティ",
+      "言語ポータビリティ (C, C++, Rust, Goなどがコンパイル可能)"
+    ],
+    "cost_tier": "無料 (オープンスタンダード)",
+    "price_details": "技術仕様であり、特定の製品ではない。",
+    "free_tier_details": "N/A",
+    "use_cases": [
+      "エッジコンピューティング、サーバーレス関数",
+      "パフォーマンスが重要なWebアプリケーション",
+      "安全なプラグインシステムの構築",
+      "コンテナの代替または補完"
+    ],
+    "learning_difficulty": "高度",
+    "official_website": "https://webassembly.org/",
+    "remarks": "コンテナに代わる、あるいは補完する次世代の軽量・高速・安全な実行環境として注目されている。特にエッジやサーバーレスでの活用が期待される。"
+  }
+]

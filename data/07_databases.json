@@ -1,0 +1,313 @@
+[
+  {
+    "name": "PostgreSQL",
+    "type": "データベース",
+    "category_details": "リレーショナルデータベース (RDBMS)",
+    "functions": [
+      "ACID準拠トランザクション",
+      "複雑なクエリと結合",
+      "豊富なデータ型サポート (JSONB, PostGISなど)",
+      "高いSQL標準準拠性",
+      "拡張機能による機能追加"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "ソフトウェアは無料。ホスティングと管理には別途コストが発生。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "汎用的なWebアプリケーションのバックエンド",
+      "データウェアハウジング",
+      "地理情報システム (GIS)",
+      "強い一貫性が求められる金融システム"
+    ],
+    "learning_difficulty": "中程度～高度",
+    "official_website": "https://www.postgresql.org/",
+    "remarks": "非常に信頼性が高く機能豊富なRDBMS。その拡張性により、多くのモダンなDBaaS (Supabase等) の基盤となっている。"
+  },
+  {
+    "name": "MongoDB",
+    "type": "データベース",
+    "category_details": "NoSQLドキュメントデータベース",
+    "functions": [
+      "柔軟なスキーマを持つドキュメント指向ストレージ (BSON)",
+      "水平スケーリング (シャーディング)",
+      "高可用性 (レプリカセット)",
+      "強力なクエリ言語 (MQL) と集計フレームワーク"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "MongoDB Atlasの無料ティア(M0)あり。有料プランは月額約$9から。セルフホスト版はオープンソース。",
+    "free_tier_details": "Atlas M0クラスタは512MBストレージを提供し、開発や小規模アプリに適する。",
+    "use_cases": [
+      "コンテンツ管理システム (CMS)",
+      "Eコマースプラットフォーム",
+      "スキーマが頻繁に進化するアジャイル開発プロジェクト"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://www.mongodb.com/",
+    "remarks": "ドキュメントモデルとAtlas DBaaSにより、迅速な開発で人気のNoSQLデータベース。JOINの性能はRDBMSに劣る場合がある。"
+  },
+  {
+    "name": "SQLite",
+    "type": "データベース",
+    "category_details": "組み込みリレーショナルデータベース",
+    "functions": [
+      "サーバーレスなファイルベースDB",
+      "ACID準拠トランザクション",
+      "C言語ライブラリとしてアプリケーションに組み込み",
+      "ゼロコンフィギュレーション"
+    ],
+    "cost_tier": "無料 (パブリックドメイン)",
+    "price_details": "ソフトウェアは完全に無料。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "モバイル・デスクトップアプリのローカルデータストレージ",
+      "組み込み機器やIoTデバイス",
+      "テスト用データベース",
+      "小規模なWebサイト"
+    ],
+    "learning_difficulty": "容易",
+    "official_website": "https://sqlite.org/",
+    "remarks": "世界で最も広く展開されているDBエンジン。オンデバイスや組み込みストレージに最適だが、高並行性のWebアプリには不向き。"
+  },
+  {
+    "name": "Redis",
+    "type": "データベース",
+    "category_details": "インメモリキーバリューストア",
+    "functions": [
+      "高性能なインメモリデータストレージ",
+      "多様なデータ構造 (文字列, ハッシュ, リスト, JSON, ベクトル等)",
+      "キャッシング、セッション管理",
+      "Pub/Subメッセージング、タスクキュー",
+      "永続化オプション (RDB, AOF)"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "オープンソース版は無料。Redis Cloudは無料ティア(30MB)と有料プラン(月額$5〜)を提供。",
+    "free_tier_details": "Redis Cloudで30MBの無料データベースが利用可能。",
+    "use_cases": [
+      "高速なアプリケーションキャッシュ",
+      "リアルタイム分析、リーダーボード",
+      "セッションストア",
+      "メッセージブローカー"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://redis.io/",
+    "remarks": "単なるキャッシュを超え、多機能なデータ構造によりプライマリDBとしても利用可能な高性能データストア。"
+  },
+  {
+    "name": "Cassandra",
+    "type": "データベース",
+    "category_details": "NoSQLワイドカラムストア",
+    "functions": [
+      "マスターレス分散アーキテクチャ",
+      "線形スケーラビリティと高い書き込みスループット",
+      "高可用性とフォールトトレランス",
+      "調整可能な一貫性レベル"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "ソフトウェアは無料。運用とホスティングにコストがかかる。DataStax等がマネージドサービスを提供。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "大量の書き込み処理と高い可用性が求められるシステム",
+      "IoTデータ収集、時系列データ",
+      "不正検知システム"
+    ],
+    "learning_difficulty": "高度",
+    "official_website": "https://cassandra.apache.org/",
+    "remarks": "大規模な書き込み負荷に優れるが、クエリ駆動のデータモデリングが必要で、リレーショナルDBとは設計思想が大きく異なる。"
+  },
+  {
+    "name": "Couchbase",
+    "type": "データベース",
+    "category_details": "NoSQLマルチモデルデータベース",
+    "functions": [
+      "ドキュメントおよびキーバリューモデル",
+      "JSONデータに対するSQLライクなクエリ言語 (SQL++)",
+      "モバイル向けデータ同期 (Couchbase Lite)",
+      "全文検索、リアルタイム分析"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Couchbase Capella (DBaaS) は無料ティアあり。有料プランはリソースに応じた時間課金。",
+    "free_tier_details": "Capellaの無料トライアルが利用可能。",
+    "use_cases": [
+      "ミッションクリティカルなインタラクティブアプリケーション",
+      "オフラインファーストなモバイルアプリ",
+      "AI搭載アプリケーション"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://www.couchbase.com/",
+    "remarks": "SQL++により、SQL経験者がNoSQLの柔軟性を活用しやすい。モバイル同期機能が強力。"
+  },
+  {
+    "name": "Neo4j",
+    "type": "データベース",
+    "category_details": "グラフデータベース",
+    "functions": [
+      "ネイティブなグラフデータストレージ (ノードとリレーションシップ)",
+      "ACIDトランザクション",
+      "宣言的なグラフクエリ言語 (Cypher)",
+      "GraphQL APIライブラリ"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Community Editionは無料。AuraDB (DBaaS) は無料ティアと有料プラン (月額$65〜) を提供。",
+    "free_tier_details": "AuraDBに無料プランあり（ノード数・リレーション数に制限）。",
+    "use_cases": [
+      "レコメンデーションエンジン",
+      "不正検知、金融犯罪分析",
+      "ナレッジグラフ、ソーシャルネットワーク分析"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://neo4j.com/",
+    "remarks": "データ間の関連性を探索・分析するのに特化。Cypher言語は複雑な関係性のクエリを直感的に記述できる。"
+  },
+  {
+    "name": "Elasticsearch",
+    "type": "データベース",
+    "category_details": "検索エンジンデータベース",
+    "functions": [
+      "高速な全文検索と関連性スコアリング",
+      "リアルタイム分析とアグリゲーション",
+      "水平スケーラビリティ",
+      "可視化ツールKibanaとの連携 (ELK Stack)"
+    ],
+    "cost_tier": "フリーミアム (オープンソース)",
+    "price_details": "オープンソース版は無料。Elastic Cloud (マネージドサービス) はリソースに応じた従量課金。",
+    "free_tier_details": "Elastic Cloudに無料トライアルあり。",
+    "use_cases": [
+      "ログ分析と可観測性 (ELK Stack)",
+      "エンタープライズサーチ、ウェブサイト検索",
+      "セキュリティ分析 (SIEM)"
+    ],
+    "learning_difficulty": "中程度～高度",
+    "official_website": "https://www.elastic.co/",
+    "remarks": "強力な検索エンジンが中核。ログ分析と可観測性の分野ではデファクトスタンダードの一つ。"
+  },
+  {
+    "name": "ClickHouse",
+    "type": "データベース",
+    "category_details": "カラムナーOLAPデータベース",
+    "functions": [
+      "カラムナ（列指向）ストレージによる高速な分析クエリ",
+      "ベクトル化されたクエリ実行エンジン",
+      "高いデータ圧縮率",
+      "SQLライクなクエリ言語"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "オープンソース版は無料。ClickHouse Cloudは従量課金制で、月額$66.52から。",
+    "free_tier_details": "30日間の無料トライアルあり。",
+    "use_cases": [
+      "リアルタイム分析ダッシュボード",
+      "大規模なログ・イベントデータのインタラクティブ分析",
+      "ビジネスインテリジェンス"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://clickhouse.com/",
+    "remarks": "オンライン分析処理 (OLAP) に特化し、驚異的なクエリパフォーマンスを発揮する。"
+  },
+  {
+    "name": "CockroachDB",
+    "type": "データベース",
+    "category_details": "分散SQLデータベース",
+    "functions": [
+      "水平スケーラビリティを持つ分散SQL",
+      "グローバルなACIDトランザクション",
+      "PostgreSQL互換のSQLインターフェース",
+      "高可用性と自動リバランシング"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "CockroachDB Cloudは無料ティアあり。有料プランはサーバーレス(RUベース)と専用(vCPUベース)がある。",
+    "free_tier_details": "月間5000万RU、10GiBストレージまで無料。",
+    "use_cases": [
+      "強整合性が求められるグローバル規模のアプリケーション",
+      "金融システム、在庫管理、オンラインゲーム"
+    ],
+    "learning_difficulty": "中程度～高度",
+    "official_website": "https://www.cockroachlabs.com/",
+    "remarks": "PostgreSQLの互換性を持ちながら、手動シャーディングなしでスケールする能力が魅力。"
+  },
+  {
+    "name": "TiDB",
+    "type": "データベース",
+    "category_details": "分散SQLデータベース (HTAP)",
+    "functions": [
+      "MySQL互換の分散SQL",
+      "HTAP (ハイブリッドトランザクション/分析処理) アーキテクチャ",
+      "コンピュートとストレージの分離スケーリング",
+      "強整合性ACIDトランザクション"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "TiDB Cloud Serverlessプランに無料ティアあり。超過分はRUとストレージに応じた従量課金。",
+    "free_tier_details": "月間25GBストレージ、2.5億RUまで無料。",
+    "use_cases": [
+      "MySQLベースシステムのスケールアウト",
+      "トランザクションデータに対するリアルタイム分析",
+      "高トラフィックなEコマースや金融サービス"
+    ],
+    "learning_difficulty": "中程度～高度",
+    "official_website": "https://www.pingcap.com/",
+    "remarks": "トランザクション(OLTP)と分析(OLAP)を単一DBで処理できるHTAPが最大の特徴。"
+  },
+  {
+    "name": "PlanetScale",
+    "type": "DBaaS",
+    "category_details": "サーバーレスMySQLプラットフォーム",
+    "functions": [
+      "Vitessベースの水平スケーラビリティ",
+      "データベースブランチング機能",
+      "ノンブロッキングなオンラインスキーマ変更",
+      "デプロイリクエストによるスキーマ変更ワークフロー"
+    ],
+    "cost_tier": "有料",
+    "price_details": "Scaler Proプランが月額$39から。ストレージ容量などに応じた追加料金あり。",
+    "free_tier_details": "以前は無料プランがあったが、現在は有料プランのみの可能性。",
+    "use_cases": [
+      "スケーラブルなMySQLを必要とするSaaSやEコマース",
+      "Gitライクな安全なスキーマ変更ワークフローを導入したいチーム"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://planetscale.com/",
+    "remarks": "データベーススキーマ管理にGitのようなブランチングの概念を持ち込み、開発者体験を大きく向上させた。"
+  },
+  {
+    "name": "Prisma",
+    "type": "ORM/APIレイヤー",
+    "category_details": "次世代ORM (Node.js/TypeScript)",
+    "functions": [
+      "型安全なクエリビルダ (Prisma Client)",
+      "宣言的なスキーマ定義ファイル",
+      "データベースマイグレーション管理 (Prisma Migrate)",
+      "GUIデータベースブラウザ (Prisma Studio)"
+    ],
+    "cost_tier": "フリーミアム (オープンソース)",
+    "price_details": "ORMは無料。Prisma Data Platform (コネクションプール等) は従量課金制で無料枠あり。",
+    "free_tier_details": "Prisma Accelerateは月間10万オペレーションまで無料。",
+    "use_cases": [
+      "Node.js/TypeScriptでのサーバーサイドアプリケーション開発",
+      "GraphQL APIやREST APIのデータアクセス層"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://www.prisma.io/",
+    "remarks": "型安全性により、開発時のエラーを大幅に削減し、生産性を向上させる。ORMとしてGraphQLサーバー構築で多用される。"
+  },
+  {
+    "name": "Hasura",
+    "type": "GraphQL APIレイヤー",
+    "category_details": "インスタントGraphQL API",
+    "functions": [
+      "既存データベースからのGraphQL API自動生成",
+      "リアルタイムデータ同期 (GraphQL Subscriptions)",
+      "ロールベースの認証・認可設定",
+      "カスタムビジネスロジック (Actions)",
+      "複数データソースの統合"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Hasura Cloudに無料ティアあり。Professionalプランはアクティブ時間とデータパススルーに応じた従量課金。",
+    "free_tier_details": "月間300万APIリクエスト、100MBデータパススルーまで無料。",
+    "use_cases": [
+      "バックエンド開発を高速化したいプロジェクト",
+      "複数のデータソースを単一のGraphQL APIに統合",
+      "リアルタイム機能を持つアプリケーションの構築"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://hasura.io/",
+    "remarks": "データベースに接続するだけで即座にGraphQL APIを生成できるため、開発速度が劇的に向上する。"
+  }
+]

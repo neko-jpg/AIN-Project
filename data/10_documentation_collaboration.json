@@ -1,0 +1,268 @@
+[
+  {
+    "name": "Sphinx",
+    "type": "ドキュメンテーションツール",
+    "category_details": "静的サイトジェネレーター",
+    "functions": [
+      "reStructuredText(reST)によるセマンティックマークアップ",
+      "Pythonソースコードからのドキュメント自動生成 (autodoc)",
+      "豊富な拡張機能とテーマによる高いカスタマイズ性",
+      "HTML, PDFなど多様な形式への出力"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "MITライセンスで無料。ホスティング費用は別途必要。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "Pythonプロジェクトの公式ドキュメント作成",
+      "APIリファレンスドキュメントの生成",
+      "大規模な技術書籍やマニュアルの執筆"
+    ],
+    "learning_difficulty": "中程度～高度",
+    "official_website": "https://www.sphinx-doc.org/",
+    "remarks": "Pythonドキュメンテーションの標準。非常に強力で拡張性が高いが、reSTの学習コストがMarkdownより高い点が考慮事項。"
+  },
+  {
+    "name": "Docusaurus",
+    "type": "ドキュメンテーションツール",
+    "category_details": "静的サイトジェネレーター (Reactベース)",
+    "functions": [
+      "MDXによるインタラクティブなコンポーネントの埋め込み",
+      "ドキュメントのバージョニング機能",
+      "国際化（i18n）サポート",
+      "Algoliaによる強力な検索機能"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "MITライセンスで無料。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "モダンなWebサイトやブログの構築",
+      "Reactベースのプロジェクトドキュメント",
+      "インタラクティブなチュートリアルやガイドの作成"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://docusaurus.io/",
+    "remarks": "ReactとMDXを活用し、リッチでインタラクティブなドキュメンテーションサイトを容易に構築できる。モダンなフロントエンド開発との親和性が高い。"
+  },
+  {
+    "name": "Confluence",
+    "type": "ナレッジベース/コラボレーションツール",
+    "category_details": "チームワークスペース",
+    "functions": [
+      "リッチテキストエディタによるドキュメント作成",
+      "豊富なテンプレートとマクロによる生産性向上",
+      "Jiraとのシームレスな連携",
+      "チームでの共同編集とコメント機能",
+      "AI (Rovo) による高度な検索と要約 (Premium以上)"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Free: 最大10ユーザー。Standard: 約$5.16/ユーザー/月。Premium: 約$9.73/ユーザー/月。",
+    "free_tier_details": "最大10ユーザーまで無料で、基本的なドキュメント作成・共有機能が利用可能。",
+    "use_cases": [
+      "社内ナレッジベースの構築と運用",
+      "プロジェクト仕様書や議事録の管理",
+      "チームや部門横断での情報共有"
+    ],
+    "learning_difficulty": "容易",
+    "official_website": "https://www.atlassian.com/software/confluence",
+    "remarks": "チームでの知識集約とコラボレーションに特化したツール。Jiraとの連携が非常に強力で、Atlassianエコシステムの中核をなす。"
+  },
+  {
+    "name": "Read the Docs",
+    "type": "ホスティングプラットフォーム",
+    "category_details": "ドキュメンテーションホスティング",
+    "functions": [
+      "Gitリポジトリからのドキュメント自動ビルド＆ホスティング",
+      "複数バージョンのドキュメント管理",
+      "カスタムドメインのサポート",
+      "PDFやePubなど複数フォーマットでのダウンロード提供"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Community版(OSS向け)は無料(広告付き)。Business版は月額$50から。",
+    "free_tier_details": "オープンソースプロジェクトは、広告付きで無料でホスティング可能。",
+    "use_cases": [
+      "SphinxやMkDocsで作成されたドキュメントの公開",
+      "オープンソースプロジェクトのドキュメントサイト",
+      "ドキュメントのデプロイ自動化"
+    ],
+    "learning_difficulty": "容易",
+    "official_website": "https://readthedocs.org/",
+    "remarks": "Sphinx等のドキュメント生成ツールとGitを連携させ、ホスティングを自動化するのに特化。ドキュメントの公開プロセスを大幅に簡素化する。"
+  },
+  {
+    "name": "GitBook",
+    "type": "ドキュメンテーションプラットフォーム",
+    "category_details": "モダンなドキュメンテーションSaaS",
+    "functions": [
+      "ブロックベースの直感的なエディタ",
+      "Git/GitHub/GitLabとの双方向同期",
+      "OpenAPI仕様書からのAPIドキュメント自動生成",
+      "AIによるインスタントアンサーや文章作成支援"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "サイトプランとユーザープランの2本立て。個人利用は無料。サイトPremiumは$65/月〜、ユーザーPlusは$8/ユーザー/月〜。",
+    "free_tier_details": "個人ユーザー1名、基本機能の利用は無料。",
+    "use_cases": [
+      "製品ドキュメント、ヘルプセンターの構築",
+      "APIドキュメントの作成と公開",
+      "社内の技術ナレッジベース"
+    ],
+    "learning_difficulty": "容易",
+    "official_website": "https://www.gitbook.com/",
+    "remarks": "使いやすさとモダンなUI/UXが特徴。特にAPIドキュメントの作成に強みを持ち、AI機能も充実している。"
+  },
+  {
+    "name": "Wiki.js",
+    "type": "Wikiエンジン",
+    "category_details": "オープンソースWiki",
+    "functions": [
+      "複数マークアップ言語対応 (Markdown, AsciiDoc等)",
+      "Gitベースのストレージによるコンテンツ管理",
+      "統合アクセス制御と多様な認証方式",
+      "強力な組み込み検索エンジン"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "AGPLv3ライセンスで無料。セルフホスティングのためのインフラ・運用コストは自己負担。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "セルフホストでのナレッジベース構築",
+      "データとインフラを完全にコントロールしたい場合のWiki",
+      "多言語対応のドキュメントサイト"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://js.wiki/",
+    "remarks": "柔軟性とデータコントロールを重視する場合の強力なセルフホストオプション。AGPLv3ライセンスの条件を理解した上での利用が必要。"
+  },
+  {
+    "name": "Slack",
+    "type": "コラボレーションツール",
+    "category_details": "ビジネスコミュニケーション",
+    "functions": [
+      "チャンネルベースのチャットコミュニケーション",
+      "スレッドによる整理された議論",
+      "ハドルミーティング (音声/ビデオ)",
+      "豊富なアプリ連携とワークフロー自動化",
+      "AIによる要約・検索機能 (有料アドオン)"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Proプランは$7.25/ユーザー/月から。",
+    "free_tier_details": "90日間のメッセージ履歴、10個のアプリ連携、1対1のビデオ会議まで無料。",
+    "use_cases": [
+      "チーム内のリアルタイム/非同期コミュニケーション",
+      "各種ツールからの通知集約",
+      "定型業務のワークフロー自動化"
+    ],
+    "learning_difficulty": "容易",
+    "official_website": "https://slack.com/",
+    "remarks": "ビジネスチャットのデファクトスタンダード。アプリ連携のエコシステムが非常に強力で、業務の中心ハブとなり得る。"
+  },
+  {
+    "name": "Discord",
+    "type": "コラボレーションツール",
+    "category_details": "コミュニティプラットフォーム",
+    "functions": [
+      "サーバーとチャンネルによるコミュニティ管理",
+      "常時接続型の高品質な音声チャンネル",
+      "テキストチャット、ビデオチャット、画面共有",
+      "ロールと権限による詳細なアクセス制御"
+    ],
+    "cost_tier": "基本無料",
+    "price_details": "コア機能は無料。Nitroサブスクリプション($9.99/月)で機能強化。",
+    "free_tier_details": "メッセージ履歴無制限など、コア機能の大部分が無料で利用可能。",
+    "use_cases": [
+      "ゲームコミュニティやオンラインコミュニティの運営",
+      "リアルタイムの音声コミュニケーションが中心のチーム",
+      "オープンソースプロジェクトの交流の場"
+    ],
+    "learning_difficulty": "容易",
+    "official_website": "https://discord.com/",
+    "remarks": "リアルタイム音声コミュニケーションとコミュニティ形成に特化。ビジネス向けの管理機能や連携はSlack/Teamsに劣る。"
+  },
+  {
+    "name": "Microsoft Teams",
+    "type": "コラボレーションツール",
+    "category_details": "統合ワークスペース",
+    "functions": [
+      "チャット、ビデオ会議、ファイル共有",
+      "Microsoft 365アプリ (Word, Excel, etc.) とのシームレスな連携",
+      "SharePoint/OneDriveによるファイルストレージ",
+      "AIアシスタント (Microsoft Copilot)"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "主にMicrosoft 365サブスクリプションにバンドル。Business Basicは$6.50/ユーザー/月から。",
+    "free_tier_details": "最大100人/60分の会議、5GBのストレージなどが無料。",
+    "use_cases": [
+      "Microsoft 365を利用している企業のチームコラボレーション",
+      "大規模組織のコミュニケーション基盤",
+      "ファイル共同編集とビデオ会議の統合"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://www.microsoft.com/ja-jp/microsoft-teams/group-chat-software",
+    "remarks": "Microsoft 365エコシステムとのシームレスな統合が最大の強み。既存のMS製品ユーザーにとって最適な選択肢。"
+  },
+  {
+    "name": "Zoom",
+    "type": "コラボレーションツール",
+    "category_details": "ビデオ会議",
+    "functions": [
+      "高品質なビデオ・音声会議",
+      "画面共有、録画 (ローカル/クラウド)",
+      "ブレイクアウトルーム、投票、Q&A",
+      "バーチャル背景とフィルター",
+      "AI Companionによる会議要約・アクションアイテム抽出"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Proプランは約$15/ホスト/月から。",
+    "free_tier_details": "最大100人参加、40分までのグループ会議が無料。",
+    "use_cases": [
+      "オンライン会議、リモートでの商談",
+      "ウェビナーやオンラインセミナーの開催",
+      "バーチャルイベント"
+    ],
+    "learning_difficulty": "非常に容易",
+    "official_website": "https://zoom.us/",
+    "remarks": "使いやすさと安定したパフォーマンスでビデオ会議市場をリード。無料版の40分制限がアップグレードの動機となる。"
+  },
+  {
+    "name": "Google Meet",
+    "type": "コラボレーションツール",
+    "category_details": "ビデオ会議",
+    "functions": [
+      "安全なビデオ会議",
+      "Google Workspace (カレンダー, Gmail) との統合",
+      "リアルタイム字幕 (多言語対応)",
+      "ノイズキャンセル機能"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "主にGoogle Workspaceサブスクリプションにバンドル。Business Starterは約$6/ユーザー/月から。",
+    "free_tier_details": "Googleアカウントがあれば最大100人/60分の会議が無料。",
+    "use_cases": [
+      "Google Workspaceを利用している組織のビデオ会議",
+      "手軽なオンラインミーティング"
+    ],
+    "learning_difficulty": "非常に容易",
+    "official_website": "https://meet.google.com/",
+    "remarks": "Google Workspaceとのシームレスな統合が強み。特にカレンダーからの会議設定がスムーズ。"
+  },
+  {
+    "name": "Miro",
+    "type": "コラボレーションツール",
+    "category_details": "オンラインホワイトボード",
+    "functions": [
+      "無限の共同編集キャンバス",
+      "豊富なテンプレートライブラリ (ダイアグラム, ブレスト, アジャイルワークフロー等)",
+      "外部ツール連携 (Jira, Asana, Slack等)",
+      "ビデオチャット、投票、タイマー機能"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Starterプランは$8/メンバー/月から (年払い)。",
+    "free_tier_details": "3つの編集可能なボードまで無料。",
+    "use_cases": [
+      "リモートチームでのブレインストーミングやワークショップ",
+      "システム設計やアーキテクチャ図の共同作成",
+      "アジャイル開発のスプリント計画やふりかえり"
+    ],
+    "learning_difficulty": "容易",
+    "official_website": "https://miro.com/",
+    "remarks": "ビジュアルコラボレーションの主要プラットフォーム。豊富なテンプレートと連携機能で、単なるホワイトボード以上の価値を提供する。"
+  }
+]

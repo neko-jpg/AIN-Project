@@ -1,0 +1,267 @@
+[
+  {
+    "name": "Auth0",
+    "type": "IDaaSプラットフォーム",
+    "category_details": "CIAM (カスタマーアイデンティティアクセス管理)",
+    "functions": [
+      "ソーシャルログイン",
+      "パスワードレス認証 (パスキー, SMS, メール)",
+      "多要素認証 (MFA)",
+      "包括的なユーザー管理",
+      "カスタムロジック実装 (Auth0 Actions)",
+      "B2B向け組織管理"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "B2C/B2Bプランがあり、MAU(月間アクティブユーザー)ベース。Essentialsプランは$35/月(500 MAU)から。B2Bは高価になる傾向。",
+    "free_tier_details": "最大25,000 MAUまで無料。基本的な認証機能を含む寛大な無料枠。",
+    "use_cases": [
+      "B2CおよびB2Bアプリケーションの顧客認証",
+      "迅速なプロトタイピング",
+      "柔軟なカスタマイズが必要な認証フロー"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://auth0.com/",
+    "remarks": "開発者体験が非常に高く、柔軟性とカスタマイズ性に優れる。Okta傘下だが、開発者中心のCIAM市場向けに独自の強みを持つ。"
+  },
+  {
+    "name": "Okta",
+    "type": "IDaaSプラットフォーム",
+    "category_details": "IAM (アイデンティティアクセス管理)",
+    "functions": [
+      "シングルサインオン (SSO)",
+      "アダプティブ多要素認証 (MFA)",
+      "アイデンティティガバナンス (IGA)",
+      "ノーコード自動化 (Workflows)",
+      "カスタマーアイデンティティ (Auth0経由)"
+    ],
+    "cost_tier": "有料",
+    "price_details": "スイートベースでユーザーごとの月額料金。年間契約最低$1,500から。",
+    "free_tier_details": "なし（無料トライアルはあり）。",
+    "use_cases": [
+      "エンタープライズの従業員向け認証 (ワークフォースIAM)",
+      "複雑なセキュリティ・コンプライアンス要件を持つ大規模組織",
+      "多数のアプリケーションへのSSO"
+    ],
+    "learning_difficulty": "中程度～高度",
+    "official_website": "https://www.okta.com/",
+    "remarks": "エンタープライズIAMの市場リーダー。セキュリティとガバナンス機能が非常に強力。Auth0を買収し、CIAM市場にも展開。"
+  },
+  {
+    "name": "Firebase Authentication",
+    "type": "BaaS",
+    "category_details": "認証サービス",
+    "functions": [
+      "メール/パスワード、電話、ソーシャル認証",
+      "匿名認証",
+      "ドロップインUI (FirebaseUI)",
+      "Google Cloud Identity Platformとの連携"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Sparkプランは無料。Blazeプランは無料枠超過分が従量課金。SMS送信は別途課金。",
+    "free_tier_details": "最大50,000 MAUまで無料と非常に寛大。",
+    "use_cases": [
+      "モバイルアプリ (iOS, Android) のユーザー認証",
+      "Webアプリケーションの迅速な開発",
+      "Firebaseエコシステム内での開発"
+    ],
+    "learning_difficulty": "容易",
+    "official_website": "https://firebase.google.com/products/auth",
+    "remarks": "Firebase/GCPエコシステムとのシームレスな統合が最大の強み。実装が非常に容易で、スタートアップに最適。"
+  },
+  {
+    "name": "AWS Cognito",
+    "type": "IDaaSプラットフォーム",
+    "category_details": "CIAM (カスタマーアイデンティティアクセス管理)",
+    "functions": [
+      "ユーザープールによる認証・ユーザー管理",
+      "IDプールによるAWSリソースへのアクセス認可",
+      "ソーシャルおよびSAML/OIDCフェデレーション",
+      "リスクベースの適応型認証（有料ティア）"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "MAUベースの従量課金。MFA用SMSやM2M認証は別途課金。",
+    "free_tier_details": "月間10,000 MAUまで無料（Essentials/Liteティア）。",
+    "use_cases": [
+      "AWS上で構築されたアプリケーションの認証・認可",
+      "AWSリソースへの安全なアクセス制御"
+    ],
+    "learning_difficulty": "中程度～高度",
+    "official_website": "https://aws.amazon.com/cognito/",
+    "remarks": "AWSサービスとの緊密な統合が特徴。User PoolとIdentity Poolの概念が独特で、設定が複雑になる可能性がある。"
+  },
+  {
+    "name": "Microsoft Entra External ID",
+    "type": "IDaaSプラットフォーム",
+    "category_details": "CIAM (B2C/B2B統合)",
+    "functions": [
+      "顧客およびパートナー向けの認証",
+      "ソーシャルおよびエンタープライズフェデレーション",
+      "条件付きアクセスとMFA",
+      "IDガバナンス（有料アドオン）"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "コア機能はMAUベース。IDガバナンスやSMS認証は高価なアドオン。",
+    "free_tier_details": "最初の50,000 MAUまで無料。",
+    "use_cases": [
+      "AzureエコシステムでのCIAM",
+      "B2CとB2BのID管理を統合したい組織"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://www.microsoft.com/security/business/identity-access/microsoft-entra-external-id",
+    "remarks": "Azure AD B2Cの後継。B2CとB2Bのユースケースを統合することを目指すMicrosoftの次世代CIAMソリューション。"
+  },
+  {
+    "name": "Clerk",
+    "type": "IDaaSプラットフォーム",
+    "category_details": "CIAM (開発者中心)",
+    "functions": [
+      "既製のUIコンポーネントによる迅速な実装",
+      "ソーシャル、パスワードレス認証",
+      "組織管理機能 (B2B SaaS向け)",
+      "React/Next.jsとの優れた統合"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Proプランは月額$25から。MFAやSSOなどの高度な機能は高価な月額アドオンとして提供。",
+    "free_tier_details": "最大10,000 MAUまで無料と非常に寛大。",
+    "use_cases": [
+      "React/Next.jsを使用した最新のWebアプリケーション開発",
+      "スタートアップや個人の開発者",
+      "迅速なプロトタイピング"
+    ],
+    "learning_difficulty": "容易",
+    "official_website": "https://clerk.com/",
+    "remarks": "開発者体験が極めて高い。特にモダンなJavaScriptフレームワークでの開発を劇的に加速させる。セルフホストは不可。"
+  },
+  {
+    "name": "SuperTokens",
+    "type": "認証ソリューション",
+    "category_details": "オープンソース認証",
+    "functions": [
+      "セルフホストとクラウド(IDaaS)の両方を提供",
+      "メール/パスワード、ソーシャル、パスワードレス認証",
+      "堅牢なセッション管理",
+      "マルチテナンシー、RBAC（有料アドオン）"
+    ],
+    "cost_tier": "フリーミアム (オープンソース)",
+    "price_details": "セルフホストコアは無料・無制限。クラウド版は5,000 MAUまで無料。有料アドオンには月額最低料金あり。",
+    "free_tier_details": "セルフホスト版はコア機能が無料。クラウド版も寛大な無料枠を提供。",
+    "use_cases": [
+      "認証インフラを完全にコントロールしたい組織",
+      "ベンダーロックインを避けたいプロジェクト",
+      "柔軟なカスタマイズが必要な場合"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://supertokens.com/",
+    "remarks": "オープンソースであることと、セルフホスト/クラウドの選択肢があることが最大の特徴。開発者に高い制御性を提供する。"
+  },
+  {
+    "name": "Keycloak",
+    "type": "IAMソリューション",
+    "category_details": "オープンソースセルフホストIAM",
+    "functions": [
+      "シングルサインオン (SSO) / シングルログアウト (SLO)",
+      "OpenID ConnectとSAML 2.0をサポート",
+      "ユーザーフェデレーション (LDAP, Active Directory)",
+      "IDプロバイダーとしての機能",
+      "広範なカスタマイズ性（テーマ、SPI）"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "ソフトウェアは無料。インフラ、運用、メンテナンス、専門知識にコストがかかる。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "オンプレミス環境でのID管理",
+      "データとインフラを完全にコントロールする必要がある組織",
+      "独自の認証・認可サーバーを構築"
+    ],
+    "learning_difficulty": "高度",
+    "official_website": "https://www.keycloak.org/",
+    "remarks": "非常に強力でカスタマイズ可能なオープンソースIAM。運用には高い専門知識が必要で、総所有コスト（TCO）は高くなる可能性がある。"
+  },
+  {
+    "name": "Snyk",
+    "type": "アプリケーションセキュリティプラットフォーム",
+    "category_details": "AppSec, DevSecOps",
+    "functions": [
+      "オープンソース依存関係の脆弱性スキャン (SCA)",
+      "カスタムコードの静的解析 (SAST)",
+      "コンテナイメージのスキャン",
+      "IaC (Infrastructure as Code) の設定ミススキャン",
+      "IDEやCI/CDとの深い統合"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Developerプランは無料。Teamプランは$25/開発者/月から。",
+    "free_tier_details": "製品ごとに月間のテスト回数制限付きで無料利用可能。",
+    "use_cases": [
+      "開発ワークフローへのセキュリティの統合（シフトレフト）",
+      "アプリケーションの脆弱性管理",
+      "ライセンスコンプライアンスの確保"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://snyk.io/",
+    "remarks": "「開発者優先」のアプローチが特徴。コード、依存関係、コンテナ、IaCを網羅する包括的なセキュリティプラットフォーム。"
+  },
+  {
+    "name": "GitHub Dependabot",
+    "type": "ツール",
+    "category_details": "依存関係管理",
+    "functions": [
+      "既知の脆弱性を持つ依存関係の自動更新 (セキュリティアップデート)",
+      "依存関係を最新バージョンに保つ自動更新 (バージョンアップデート)",
+      "更新のためのプルリクエスト自動作成"
+    ],
+    "cost_tier": "無料",
+    "price_details": "GitHubのコア機能として無料で提供される。",
+    "free_tier_details": "パブリックおよびプライベートリポジトリで無料で利用可能。",
+    "use_cases": [
+      "プロジェクトの依存関係を安全かつ最新に保つ",
+      "依存関係の更新作業の自動化"
+    ],
+    "learning_difficulty": "容易",
+    "official_website": "https://github.com/dependabot",
+    "remarks": "GitHubとのシームレスな統合が最大の強み。依存関係管理に特化しており、SASTなどの機能は含まない。"
+  },
+  {
+    "name": "HashiCorp Vault",
+    "type": "ツール",
+    "category_details": "シークレット管理",
+    "functions": [
+      "静的シークレットの安全な保管",
+      "動的シークレットのオンデマンド生成",
+      "Encryption as a Service",
+      "アイデンティティベースのアクセス制御",
+      "詳細な監査ログ"
+    ],
+    "cost_tier": "フリーミアム (オープンソース)",
+    "price_details": "オープンソース版は無料。HCP Vault（クラウド版）やエンタープライズ版は有料。",
+    "free_tier_details": "オープンソース版は全機能が無料。",
+    "use_cases": [
+      "中央集権型シークレット管理",
+      "データベース認証情報やAPIキーの保護",
+      "CI/CDパイプラインへのシークレットの安全な提供"
+    ],
+    "learning_difficulty": "高度",
+    "official_website": "https://www.vaultproject.io/",
+    "remarks": "シークレット管理のデファクトスタンダード。非常に強力だが、特にセルフホストでの運用と管理は複雑。"
+  },
+  {
+    "name": "AWS Secrets Manager",
+    "type": "サービス",
+    "category_details": "シークレット管理",
+    "functions": [
+      "シークレットの安全な保管と取得",
+      "AWSサービスとの連携による自動シークレットローテーション",
+      "AWS IAMポリシーによるアクセス制御",
+      "AWS CloudTrailによる監査"
+    ],
+    "cost_tier": "従量課金",
+    "price_details": "シークレットごとの月額料金と、APIコール数に応じた料金。",
+    "free_tier_details": "30日間の無料トライアルあり。",
+    "use_cases": [
+      "AWS環境内でのシークレット管理",
+      "RDSデータベース等の認証情報の自動ローテーション"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://aws.amazon.com/secrets-manager/",
+    "remarks": "AWSエコシステムとのシームレスな統合が最大の強み。Vaultと比較して運用負荷が低いマネージドサービス。"
+  }
+]

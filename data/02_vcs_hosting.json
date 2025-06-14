@@ -1,0 +1,189 @@
+[
+  {
+    "name": "Git",
+    "type": "ツール",
+    "category_details": "バージョン管理システム (VCS)",
+    "functions": [
+      "分散バージョン管理",
+      "軽量なローカルブランチ作成とマージ",
+      "コミット履歴追跡",
+      "コミット用ステージングエリア（インデックス）",
+      "リリースタグ付け",
+      "多様なワークフローのサポート（Gitflow, トランクベース開発等）"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "オープンソースソフトウェアであり、無料で使用可能。",
+    "free_tier_details": "全機能が利用可能で、ローカルでの使用に機能制限はありません。",
+    "use_cases": [
+      "あらゆる規模のプロジェクトにおけるソースコード管理",
+      "複数人での共同ソフトウェア開発",
+      "フィーチャーブランチによる並行開発の促進",
+      "コード変更履歴の完全な追跡"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://git-scm.com/",
+    "remarks": "現代のソフトウェア開発におけるデファクトスタンダード。コード管理を含むあらゆる開発提案において基盤となる必須ツールです。"
+  },
+  {
+    "name": "GitHub",
+    "type": "プラットフォーム",
+    "category_details": "コードホスティング & 統合DevSecOps",
+    "functions": [
+      "Gitリポジトリホスティング",
+      "プルリクエストによるコードレビュー",
+      "課題・プロジェクト管理 (Issues, Projects)",
+      "CI/CD自動化 (GitHub Actions)",
+      "パッケージ管理 (GitHub Packages)",
+      "AIペアプログラマー (GitHub Copilot)",
+      "高度なセキュリティ (GHAS)",
+      "クラウド開発環境 (Codespaces)"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Free: 無制限パブリック/プライベートリポジトリ、月2,000 Actions分。Team: 約$4/ユーザー/月。Enterprise: 約$21/ユーザー/月。",
+    "free_tier_details": "個人や小規模組織には十分な無料枠。パブリックリポジトリでのActionsは無料。",
+    "use_cases": [
+      "オープンソースおよびプライベートプロジェクトのホスティング",
+      "CI/CDパイプラインの構築",
+      "アジャイルなプロジェクト管理",
+      "開発者コミュニティの構築と運用"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://github.com/",
+    "remarks": "世界最大のコードホスティングプラットフォーム。AI機能の統合と強力なコミュニティが特徴。広範な採用とオープンソース連携を重視するプロジェクトに最適。"
+  },
+  {
+    "name": "GitLab",
+    "type": "プラットフォーム",
+    "category_details": "オールインワンDevSecOpsプラットフォーム",
+    "functions": [
+      "ソースコード管理 (Gitベース)",
+      "強力な統合CI/CD (GitLab CI/CD)",
+      "統合セキュリティスキャン (SAST, DAST, etc.)",
+      "アジャイルプロジェクト管理 (Issues, Epics, Boards)",
+      "統合パッケージレジストリ",
+      "AI支援機能 (GitLab Duo)"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Free: 5ユーザーまで, 月400 CI/CD分。Premium: $29/ユーザー/月。Ultimate: $99/ユーザー/月。セルフホスト版も同等のプラン構成。",
+    "free_tier_details": "小規模チーム（5名まで）の利用に適した無料枠。セルフホストランナーを使用すればCI/CD時間は無制限。",
+    "use_cases": [
+      "単一プラットフォームでの完全なDevOpsライフサイクル管理",
+      "DevSecOpsプラクティスの実装",
+      "インフラを完全に制御したい場合のセルフホスティング"
+    ],
+    "learning_difficulty": "中程度～高度",
+    "official_website": "https://about.gitlab.com/",
+    "remarks": "DevOpsの全ステージを単一アプリケーションでカバーするアプローチ。ツールチェーンの簡素化と統合セキュリティを重視する企業に強力な選択肢。"
+  },
+  {
+    "name": "Bitbucket",
+    "type": "プラットフォーム",
+    "category_details": "コードホスティング (Atlassian連携)",
+    "functions": [
+      "Gitリポジトリホスティング (無制限プライベートリポジトリ)",
+      "CI/CD (Bitbucket Pipelines)",
+      "Jiraとのシームレスな連携による課題追跡",
+      "コードレビューとプルリクエスト",
+      "デプロイメント追跡"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Free: 最大5ユーザー、月50ビルド分。Standard: 約$3/ユーザー/月。Premium: 約$6/ユーザー/月。",
+    "free_tier_details": "最大5ユーザーまで利用可能。CI/CDのビルド時間とGit LFSストレージに制限あり。",
+    "use_cases": [
+      "JiraやConfluenceを多用するAtlassianエコシステム内の開発",
+      "Bitbucket Pipelinesを使用したシンプルなCI/CD",
+      "小規模チームでのプライベートリポジトリ管理"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://bitbucket.org/product/",
+    "remarks": "Atlassianエコシステムに深く統合されているチームにとって最高の選択肢。Jiraとの連携が非常に強力。"
+  },
+  {
+    "name": "Azure DevOps Repos",
+    "type": "プラットフォーム",
+    "category_details": "コードホスティング (Azure DevOps)",
+    "functions": [
+      "無制限のプライベートGitリポジトリ (TFVCもサポート)",
+      "プルリクエストとブランチポリシーによるコードレビュー",
+      "Azure PipelinesとのシームレスなCI/CD連携",
+      "Azure Boardsとのアジャイル計画連携",
+      "Azure Artifactsとのパッケージ管理連携"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "最初の5ユーザーは無料。6ユーザー目から$6/ユーザー/月。",
+    "free_tier_details": "5ユーザーまで無料。MicrosoftホストCI/CDで月1,800分の無料枠、セルフホストなら無制限。",
+    "use_cases": [
+      "Microsoft/Azureエコシステムに深く根ざしたプロジェクト開発",
+      "Windows Serverや.NETアプリケーションの開発",
+      "Azure Active Directory (Entra ID) によるID管理の一元化"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://azure.microsoft.com/services/devops/repos/",
+    "remarks": "Azure DevOpsスイートの一部として利用することで価値が最大化される。Microsoft中心の環境を持つ企業にとって自然な選択肢。"
+  },
+  {
+    "name": "Gitea",
+    "type": "ツール",
+    "category_details": "セルフホストGitサービス",
+    "functions": [
+      "軽量なGitリポジトリホスティング",
+      "コードレビューとプルリクエスト",
+      "課題追跡とマイルストーン管理",
+      "GitHub Actions互換のCI/CD (Gitea Actions)",
+      "統合パッケージレジストリ"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "MITライセンスで無料。セルフホスティングにはインフラコストが発生。有料のクラウド版(Gitea Cloud)も有り。",
+    "free_tier_details": "セルフホスト版は全機能が無料で利用可能。",
+    "use_cases": [
+      "リソース効率の高いセルフホスト環境の構築",
+      "GitLabが複雑すぎると感じる組織の代替",
+      "オープンソースソリューションを好む企業"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://gitea.com/",
+    "remarks": "軽量かつ高速なセルフホストGitサービス。低リソースで動作し、デプロイとメンテナンスが容易なのが大きな魅力。"
+  },
+  {
+    "name": "Fossil SCM",
+    "type": "ツール",
+    "category_details": "統合バージョン管理システム",
+    "functions": [
+      "分散バージョン管理",
+      "統合されたバグ追跡、Wiki、フォーラム",
+      "単一の実行ファイルで全機能を提供",
+      "リポジトリを単一のSQLiteファイルとして管理"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "2条項BSDライセンスで無料。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "自己完結型の小〜中規模プロジェクト",
+      "履歴の完全性とシンプルな運用を最優先するプロジェクト",
+      "「カテドラル」型の密接に監督された開発モデル"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://fossil-scm.org/",
+    "remarks": "Gitとは異なる哲学を持つ「箱入りGitHub」。VCS、バグ追跡、Wikiを一つにまとめたシンプルさが特徴。ニッチだが特定のニーズに適合する。"
+  },
+  {
+    "name": "Mercurial",
+    "type": "ツール",
+    "category_details": "分散型バージョン管理システム (DVCS)",
+    "functions": [
+      "分散バージョン管理",
+      "複数のブランチングモデル（クローン、ブックマーク、名前付きブランチ）",
+      "シンプルで直感的なコマンド体系"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "GPLv2ライセンスで無料。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "Gitの複雑さを避けたいチーム",
+      "大規模なモノリポ（単一リポジトリ）の管理（Google, Metaでの実績あり）"
+    ],
+    "learning_difficulty": "容易",
+    "official_website": "https://www.mercurial-scm.org/",
+    "remarks": "シンプルさと使いやすさで知られるDVCS。エコシステムはGitより小規模で、Bitbucketがサポートを終了するなど、採用には注意が必要。"
+  }
+]

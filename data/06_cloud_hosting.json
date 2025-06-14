@@ -1,0 +1,336 @@
+[
+  {
+    "name": "AWS (Amazon Web Services)",
+    "type": "クラウドプラットフォーム",
+    "category_details": "IaaS, PaaS, FaaS",
+    "functions": [
+      "仮想サーバー (EC2)",
+      "オブジェクトストレージ (S3)",
+      "マネージドデータベース (RDS, DynamoDB)",
+      "サーバーレス (Lambda)",
+      "コンテナ (ECS, EKS)",
+      "AI/MLサービス (SageMaker, Bedrock)",
+      "エッジコンピューティング (Lambda@Edge)"
+    ],
+    "cost_tier": "従量課金",
+    "price_details": "サービス毎の従量課金。EC2 t4g.nano: 約$0.0042/時。S3標準: 約$0.023/GB/月。",
+    "free_tier_details": "12ヶ月無料枠（EC2 750時間/月、S3 5GBなど）および常時無料枠（Lambda 100万リクエスト/月など）を提供。",
+    "use_cases": [
+      "スケーラブルなウェブサイト・アプリホスティング",
+      "ビッグデータ処理と分析",
+      "機械学習モデルの開発とデプロイ",
+      "エンタープライズアプリケーション"
+    ],
+    "learning_difficulty": "中程度～高度",
+    "official_website": "https://aws.amazon.com/",
+    "remarks": "市場リーダーであり、最も包括的なクラウドプラットフォーム。あらゆるユースケースに対応可能だが、専門知識が必要となる場合がある。"
+  },
+  {
+    "name": "GCP (Google Cloud Platform)",
+    "type": "クラウドプラットフォーム",
+    "category_details": "IaaS, PaaS, FaaS",
+    "functions": [
+      "仮想サーバー (Compute Engine)",
+      "コンテナオーケストレーション (GKE)",
+      "データウェアハウス (BigQuery)",
+      "AI/MLプラットフォーム (Vertex AI)",
+      "サーバーレス (Cloud Run, Cloud Functions)",
+      "BaaS (Firebase連携)"
+    ],
+    "cost_tier": "従量課金",
+    "price_details": "サービス毎の従量課金。新規$300無料クレジットあり。",
+    "free_tier_details": "Compute Engine e2-micro 1台/月、Cloud Storage 5GB/月など、20以上の常時無料サービスを提供。",
+    "use_cases": [
+      "大規模データ分析と機械学習",
+      "Kubernetesによるコンテナオーケストレーション",
+      "ウェブアプリケーションとAPIホスティング"
+    ],
+    "learning_difficulty": "中程度～高度",
+    "official_website": "https://cloud.google.com/",
+    "remarks": "データ分析、AI/ML、Kubernetes (GKE) に強み。Googleの技術インフラを活用できる。"
+  },
+  {
+    "name": "Microsoft Azure",
+    "type": "クラウドプラットフォーム",
+    "category_details": "IaaS, PaaS, FaaS",
+    "functions": [
+      "仮想サーバー (Virtual Machines)",
+      "Webアプリホスティング (App Service)",
+      "サーバーレス (Azure Functions)",
+      "コンテナ (AKS)",
+      "AIサービス (Azure OpenAI Service, Azure AI)",
+      "ハイブリッドクラウド管理 (Azure Arc)"
+    ],
+    "cost_tier": "従量課金",
+    "price_details": "サービス毎の従量課金。$200の初期クレジットあり。",
+    "free_tier_details": "12ヶ月無料枠（VM 750時間/月など）および55以上の常時無料サービスを提供。",
+    "use_cases": [
+      "エンタープライズアプリケーション",
+      "Windows Serverおよび.NETアプリケーションのホスティング",
+      "ハイブリッドクラウド環境の構築",
+      "AIソリューション開発"
+    ],
+    "learning_difficulty": "中程度～高度",
+    "official_website": "https://azure.microsoft.com/",
+    "remarks": "Microsoftエコシステムとの強力な連携が特徴。ハイブリッドクラウド戦略とエンタープライズ向け機能が充実。"
+  },
+  {
+    "name": "Netlify",
+    "type": "PaaS",
+    "category_details": "Jamstack & フロントエンドホスティング",
+    "functions": [
+      "Gitベースの自動ビルドとデプロイ (CI/CD)",
+      "グローバルエッジネットワークによる高速配信",
+      "サーバーレス関数 (Netlify Functions)",
+      "エッジ関数 (Netlify Edge Functions)",
+      "フォーム処理、ID管理、A/Bテスト等の組み込み機能"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Freeプランあり。Proプランは$19/メンバー/月から。帯域幅やビルド時間に応じて従量課金あり。",
+    "free_tier_details": "月間100GBの帯域幅、300ビルド分、12.5万回のサーバーレス関数呼び出しなど、寛大な無料枠。",
+    "use_cases": [
+      "静的サイト・Jamstackサイトのデプロイ",
+      "フロントエンドアプリケーションのホスティング",
+      "パフォーマンスを重視するマーケティングサイト"
+    ],
+    "learning_difficulty": "容易",
+    "official_website": "https://www.netlify.com/",
+    "remarks": "開発者エクスペリエンスが非常に高いフロントエンド向けPaaS。バッテリー同梱型で多くのバックエンド機能を提供する。"
+  },
+  {
+    "name": "Vercel",
+    "type": "PaaS",
+    "category_details": "フロントエンドクラウド",
+    "functions": [
+      "Next.jsに最適化されたデプロイ",
+      "グローバルエッジネットワーク",
+      "サーバーレス関数 (Vercel Functions)",
+      "エッジ関数とミドルウェア",
+      "AI SDKによるAIアプリ開発支援",
+      "KV、Postgres、Blobなどのストレージ提供"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Hobbyプランは無料。Proプランは$20/ユーザー/月から。帯域幅や関数実行回数に応じて従量課金あり。",
+    "free_tier_details": "月間100GBの帯域幅、10万回のサーバーレス関数呼び出しなど、個人開発には十分な無料枠。",
+    "use_cases": [
+      "Next.jsアプリケーションのデプロイ",
+      "高いパフォーマンスが求められるフロントエンド開発",
+      "サーバーサイドレンダリング(SSR)やISRを活用したサイト"
+    ],
+    "learning_difficulty": "容易",
+    "official_website": "https://vercel.com/",
+    "remarks": "Next.jsの開発元が提供するプラットフォームであり、Next.jsとの親和性は最高。開発者体験とパフォーマンスを最優先。"
+  },
+  {
+    "name": "Render",
+    "type": "PaaS",
+    "category_details": "統合クラウドプラットフォーム",
+    "functions": [
+      "Webサービス (Node.js, Python, Docker等)",
+      "静的サイトホスティング",
+      "バックグラウンドワーカーとCronジョブ",
+      "マネージドデータベース (PostgreSQL, Redis)",
+      "永続ディスクとオートスケーリング"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "無料インスタンスタイプあり。有料プランはリソース（CPU/RAM）に応じた従量課金。例：Starter Web Service $7/月。",
+    "free_tier_details": "Webサービス、PostgreSQL、Redisの無料インスタンスあり。非アクティブでスリープするなどの制限あり。",
+    "use_cases": [
+      "フルスタックアプリケーションのホスティング",
+      "Herokuの代替",
+      "静的サイトからバックエンドAPI、データベースまでの一元管理"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://render.com/",
+    "remarks": "ハイパースケーラーより簡単で、専門PaaSより機能が豊富というバランスの良さが特徴。予測可能な価格設定。"
+  },
+  {
+    "name": "DigitalOcean",
+    "type": "IaaS/PaaS",
+    "category_details": "開発者向けクラウド",
+    "functions": [
+      "仮想サーバー (Droplets)",
+      "マネージドKubernetes (DOKS)",
+      "フルマネージドPaaS (App Platform)",
+      "サーバーレス (Functions)",
+      "マネージドデータベース (PostgreSQL, MySQL, Redis等)"
+    ],
+    "cost_tier": "従量課金",
+    "price_details": "予測可能な月額/時間単位の固定料金が中心。例：Basic Droplet $4/月～。新規$200のクレジット提供。",
+    "free_tier_details": "App PlatformやFunctionsは無料から開始可能。",
+    "use_cases": [
+      "ウェブホスティング、VPS",
+      "中小企業やスタートアップのアプリケーション開発",
+      "シンプルなPaaSソリューション"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://www.digitalocean.com/",
+    "remarks": "開発者向けのシンプルさと予測可能な価格設定が最大の魅力。近年はPaaSやAI/ML機能も強化している。"
+  },
+  {
+    "name": "Linode (Akamai)",
+    "type": "IaaS/PaaS",
+    "category_details": "開発者向けクラウド",
+    "functions": [
+      "仮想サーバー (Linodes)",
+      "マネージドKubernetes (LKE)",
+      "マネージドデータベース (MySQL, PostgreSQL等)",
+      "AkamaiのCDNやエッジコンピューティングとの連携"
+    ],
+    "cost_tier": "従量課金",
+    "price_details": "シンプルで手頃な価格設定。例：Nanode 1GBプラン $5/月。",
+    "free_tier_details": "明確な常時無料枠はないが、低価格プランが充実。",
+    "use_cases": [
+      "信頼性の高いIaaSを競争力のある価格で利用",
+      "中小企業のウェブホスティング",
+      "グローバルなコンテンツ配信"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://www.linode.com/",
+    "remarks": "DigitalOceanと並ぶ開発者フレンドリーなIaaS。Akamaiによる買収で、CDNやエッジ機能が強化されている。"
+  },
+  {
+    "name": "Heroku",
+    "type": "PaaS",
+    "category_details": "アプリケーション実行プラットフォーム",
+    "functions": [
+      "マネージドランタイム (Dynos)",
+      "多言語サポート (ビルドパック)",
+      "CI/CDパイプラインとレビューアプリ",
+      "マネージドデータベース (Postgres, Redis)",
+      "豊富なアドオンマーケットプレイス",
+      "Salesforceデータ同期 (Heroku Connect)"
+    ],
+    "cost_tier": "有料",
+    "price_details": "Eco Dynoプランが$5/月から。リソースに応じて価格が上昇。",
+    "free_tier_details": "2022年に無料プランは廃止された。",
+    "use_cases": [
+      "デプロイと管理の容易さを最優先する開発",
+      "迅速なプロトタイピング",
+      "多様なプログラミング言語でのアプリケーション構築"
+    ],
+    "learning_difficulty": "容易",
+    "official_website": "https://www.heroku.com/",
+    "remarks": "PaaSのパイオニアで、優れた開発者体験で知られる。現在はSalesforceの一部門。無料プランの廃止は大きな変化点。"
+  },
+  {
+    "name": "Fly.io",
+    "type": "PaaS/IaaS",
+    "category_details": "グローバルアプリケーションプラットフォーム",
+    "functions": [
+      "グローバルな複数リージョンでのアプリケーション実行 (Fly Machines)",
+      "Dockerコンテナのデプロイ",
+      "永続ストレージ (Fly Volumes)",
+      "マネージドPostgres",
+      "動的なリクエストルーティング"
+    ],
+    "cost_tier": "従量課金",
+    "price_details": "使用量ベースの課金。小規模な利用（月額約$5未満）は請求が免除されることが多い。",
+    "free_tier_details": "実質的な無料試用が可能。",
+    "use_cases": [
+      "グローバルに分散した低遅延アプリケーション",
+      "リアルタイム性が求められるアプリケーション (Elixir/Phoenix等)",
+      "Dockerコンテナをユーザーの近くで実行"
+    ],
+    "learning_difficulty": "中程度～高度",
+    "official_website": "https://fly.io/",
+    "remarks": "アプリケーションを物理的にユーザーの近くで実行することに特化。CLI中心のワークフローで、開発者にある程度のコントロールを要求する。"
+  },
+  {
+    "name": "Railway",
+    "type": "PaaS",
+    "category_details": "インフラストラクチャプラットフォーム",
+    "functions": [
+      "Git/Dockerベースのサービスデプロイ",
+      "視覚的なインフラ管理キャンバス",
+      "テンプレートによる迅速なデプロイ",
+      "統合されたデータベース提供 (Postgres, Redis等)"
+    ],
+    "cost_tier": "従量課金 (プラン最低料金あり)",
+    "price_details": "Hobbyプランは月額$5から（$5分の利用料込み）。Proプランは月額$20から。CPU/RAM/ネットワーク使用量に応じて課金。",
+    "free_tier_details": "新規登録時に$5分の一時的なクレジットが付与される。",
+    "use_cases": [
+      "Heroku/Renderの代替",
+      "インフラの複雑さを抽象化したい開発",
+      "視覚的なツールとCLIの両方を活用したいプロジェクト"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://railway.app/",
+    "remarks": "インフラのスケーリングを簡単にすることを目指す。使用量ベースの価格だが、プランごとに最低利用料金がある。"
+  },
+  {
+    "name": "Cloudflare Workers",
+    "type": "Edge Computing/FaaS",
+    "category_details": "サーバーレス実行環境",
+    "functions": [
+      "グローバルエッジネットワーク上での関数実行",
+      "V8 Isolatesによる超低遅延・高速コールドスタート",
+      "キーバリューストア (Workers KV)",
+      "SQLデータベース (D1)",
+      "オブジェクトストレージ (R2)",
+      "ベクトルデータベース (Vectorize)",
+      "エッジでのAIモデル実行 (Workers AI)"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Freeプランあり。Paidプランは$5/月からで、CPU実行時間やリクエスト数に応じた従量課金。",
+    "free_tier_details": "1日あたり10万リクエスト、10ms CPU時間/リクエストなど、非常に寛大な無料枠。",
+    "use_cases": [
+      "パフォーマンスが最重要視されるエッジ関数",
+      "グローバルな低遅延APIの構築",
+      "HTTPリクエスト/レスポンスの動的な変更",
+      "A/Bテストやパーソナライゼーション"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://workers.cloudflare.com/",
+    "remarks": "エッジコンピューティングのパフォーマンスにおいて最先端を走る。CDN事業者が持つ広大なネットワークが強み。"
+  },
+  {
+    "name": "Supabase",
+    "type": "BaaS (Backend-as-a-Service)",
+    "category_details": "オープンソースFirebase代替",
+    "functions": [
+      "フルアクセス可能なマネージドPostgreSQL",
+      "認証 (OAuth, Email, Magic Link等)",
+      "オブジェクトストレージ (S3互換)",
+      "リアルタイムサブスクリプション",
+      "エッジ関数 (Denoランタイム)",
+      "ベクトル埋め込みストア (pgvector)"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Freeプランあり。Proプランは$25/月から（コンピューティングアドオンあり）。",
+    "free_tier_details": "DB 500MB、ストレージ 1GB、月間5万アクティブユーザーなど、ホビープロジェクトには十分な無料枠。",
+    "use_cases": [
+      "SQLベースのバックエンドを迅速に構築",
+      "オープンソースのBaaSを求める開発",
+      "リアルタイムアプリケーション（チャット等）",
+      "AIアプリケーションのベクトル検索"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://supabase.com/",
+    "remarks": "PostgreSQLをバックエンドの中核に据えているのが最大の特徴。オープンソースであり、セルフホストも可能。"
+  },
+  {
+    "name": "Firebase",
+    "type": "BaaS (Backend-as-a-Service)",
+    "category_details": "Googleのアプリ開発プラットフォーム",
+    "functions": [
+      "NoSQLデータベース (Firestore, Realtime Database)",
+      "認証 (Auth)",
+      "ファイルストレージ (Cloud Storage)",
+      "サーバーレス関数 (Cloud Functions)",
+      "ウェブホスティング",
+      "機械学習機能 (Firebase ML)"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Sparkプランは無料。Blazeプランは無料枠を超えた分が従量課金。",
+    "free_tier_details": "Firestore 1GiB、Hosting 10GBなど、多くのサービスで非常に寛大な無料枠を提供。",
+    "use_cases": [
+      "モバイルアプリ開発 (iOS, Android)",
+      "ウェブアプリケーションの迅速な開発",
+      "リアルタイムデータ同期が必要なアプリ（ゲーム、チャット）"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://firebase.google.com/",
+    "remarks": "特にモバイルアプリ開発で絶大な人気を誇る。Google Cloudとの深い連携が強み。NoSQL中心のアーキテクチャ。"
+  }
+]

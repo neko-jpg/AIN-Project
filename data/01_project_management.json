@@ -1,0 +1,234 @@
+[
+  {
+    "name": "Notion",
+    "type": "プロジェクト管理ツール",
+    "category_details": "オールインワンワークスペース、ナレッジベース",
+    "functions": [
+      "カスタマイズ可能なデータベース（ボード、リスト、カレンダー等）",
+      "ドキュメント＆Wiki機能",
+      "タスク管理とプロジェクト追跡",
+      "AIによる文書生成・要約・自動入力",
+      "豊富なテンプレートと外部ツール連携"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Free: 個人向け。Plus: $10/ユーザー/月。Business: $18/ユーザー/月。AIアドオンは別途$10/ユーザー/月。",
+    "free_tier_details": "個人利用は無制限ページ/ブロック。チーム利用はブロック試用制限あり。",
+    "use_cases": [
+      "チームのナレッジベース構築",
+      "柔軟なプロジェクト計画とタスク管理",
+      "コンテンツカレンダーとロードマップ作成",
+      "情報の一元管理"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://www.notion.so/",
+    "remarks": "非常に柔軟でカスタマイズ性が高い。情報の一元管理とドキュメント作成を重視するチームに最適。AI機能が充実している。"
+  },
+  {
+    "name": "Jira",
+    "type": "プロジェクト管理ツール",
+    "category_details": "アジャイル開発、課題・バグ追跡",
+    "functions": [
+      "課題追跡（チケットシステム）",
+      "スクラムボードとカンバンボード",
+      "カスタマイズ可能なワークフロー",
+      "製品ロードマップ計画",
+      "アジャイルレポーティング（バーンダウンチャート等）",
+      "Atlassian IntelligenceによるAI支援"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Free: 最大10ユーザー。Standard: 約$8.60/ユーザー/月。Premium: 約$17/ユーザー/月。",
+    "free_tier_details": "最大10ユーザー、2GBストレージ、コアなアジャイルボード機能を提供。小規模なソフトウェアチームに適する。",
+    "use_cases": [
+      "アジャイルソフトウェア開発（Scrum, Kanban）",
+      "バグおよび課題の追跡・管理",
+      "スプリント計画と実行",
+      "大規模ITプロジェクト管理"
+    ],
+    "learning_difficulty": "中程度～高度",
+    "official_website": "https://www.atlassian.com/software/jira",
+    "remarks": "アジャイル開発チームの業界標準。Atlassian製品群との深い連携が強み。設定と管理が複雑になる可能性がある。"
+  },
+  {
+    "name": "Trello",
+    "type": "プロジェクト管理ツール",
+    "category_details": "カンバン方式ビジュアルコラボレーション",
+    "functions": [
+      "カンバンボードによるタスク管理",
+      "直感的なドラッグ＆ドロップ操作",
+      "チェックリスト、期日、添付ファイル",
+      "機能拡張のためのPower-Up",
+      "Butlerによるワークフロー自動化"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Free: ワークスペースあたり最大10ボード。Standard: $5/ユーザー/月。Premium: $10/ユーザー/月。",
+    "free_tier_details": "無制限カード、ワークスペースあたり最大10ボード。個人利用や小規模チームのシンプルなタスク管理に適する。",
+    "use_cases": [
+      "視覚的なプロジェクト進捗追跡",
+      "個人および小規模チームのタスク管理",
+      "編集カレンダー、セールスパイプライン管理"
+    ],
+    "learning_difficulty": "容易",
+    "official_website": "https://trello.com/",
+    "remarks": "非常に使いやすく視覚的に魅力的。カンバンベースのワークフローやシンプルなプロジェクトに最適。"
+  },
+  {
+    "name": "Asana",
+    "type": "プロジェクト管理ツール",
+    "category_details": "ワークマネジメントプラットフォーム",
+    "functions": [
+      "タスク・サブタスク管理",
+      "多様なプロジェクトビュー（リスト、ボード、タイムライン、カレンダー）",
+      "目標管理と追跡 (ゴール)",
+      "ワークフロー自動化 (ルール)",
+      "リソース管理とワークロード表示",
+      "AI Studioによる支援機能"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Personal (Free): 最大10ユーザー。Starter: $10.99/ユーザー/月。Advanced: $24.99/ユーザー/月。",
+    "free_tier_details": "最大10ユーザーまで無制限のタスク/プロジェクト、基本ビュー。小規模チームのタスク管理に適する。",
+    "use_cases": [
+      "部門横断的なプロジェクト計画と調整",
+      "目標設定と進捗追跡 (OKR)",
+      "マーケティングキャンペーン、製品リリースの管理"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://asana.com/",
+    "remarks": "多様なチームタイプに対応する多機能ツール。ワークフロー自動化と目標整合性に強い。"
+  },
+  {
+    "name": "ClickUp",
+    "type": "プロジェクト管理ツール",
+    "category_details": "オールインワン生産性プラットフォーム",
+    "functions": [
+      "100以上のビューを持つタスク管理（カンバン、ガント等）",
+      "統合されたドキュメント、チャット、ホワイトボード機能",
+      "ClickUp BrainによるAI支援",
+      "スプリント管理と自動化",
+      "Connected Searchによる外部ツール検索"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Free Forever: 個人向け。Unlimited: $7/ユーザー/月。Business: $12/ユーザー/月。",
+    "free_tier_details": "無制限メンバーで利用可能だが、ストレージや機能に制限あり。",
+    "use_cases": [
+      "複数のツールを一つに集約したいチーム",
+      "リモート環境でのタスク可視化",
+      "アジャイル開発プロジェクト管理"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://clickup.com/",
+    "remarks": "「すべてをこなせるアプリ」を標榜する多機能ツール。日本語対応が不十分な点が課題になる可能性あり。"
+  },
+  {
+    "name": "Monday.com",
+    "type": "プロジェクト管理ツール",
+    "category_details": "Work OS (ワークオペレーティングシステム)",
+    "functions": [
+      "高いカスタマイズ性を持つワークフロー構築",
+      "直感的なUIと多様なビュー（カンバン、ガント等）",
+      "強力な自動化と外部ツール連携",
+      "リアルタイムダッシュボードとレポート",
+      "CRM、Dev、Service等の専門製品"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Free: 最大2シート。Basic: $9/ユーザー/月。Standard: $12/ユーザー/月。Pro: $19/ユーザー/月。",
+    "free_tier_details": "最大2ユーザーまで。機能は非常に限定的。",
+    "use_cases": [
+      "非エンジニアを含む多様なチームの業務可視化",
+      "カスタムワークフローの自動化",
+      "部門横断的なプロジェクト管理"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://monday.com/",
+    "remarks": "直感的なUIと高いカスタマイズ性で、非エンジニアも活用しやすい。動作の重さが課題になる場合がある。"
+  },
+  {
+    "name": "Basecamp",
+    "type": "プロジェクト管理ツール",
+    "category_details": "チームコラボレーションとコミュニケーション",
+    "functions": [
+      "メッセージボードによる議論の一元化",
+      "To-Doリストによるタスク管理",
+      "スケジュール管理 (カレンダー)",
+      "ドキュメント＆ファイル共有",
+      "進捗状況を視覚化するヒルチャート"
+    ],
+    "cost_tier": "有料",
+    "price_details": "無料トライアルあり。Pro Unlimitedプランは$299/月（ユーザー数無制限）。",
+    "free_tier_details": "なし（30日間の無料トライアルのみ）。",
+    "use_cases": [
+      "シンプルなプロジェクトのタスク・ファイル・コミュニケーションの一元管理",
+      "リモートチームの協調性向上"
+    ],
+    "learning_difficulty": "容易",
+    "official_website": "https://basecamp.com/",
+    "remarks": "シンプルさを重視した設計。機能は主要なものに絞られている。ユーザー数無制限の固定料金プランが特徴。"
+  },
+  {
+    "name": "Redmine",
+    "type": "プロジェクト管理ツール",
+    "category_details": "オープンソースプロジェクト管理",
+    "functions": [
+      "課題管理（チケットシステム）",
+      "ガントチャートとカレンダーによる進捗可視化",
+      "プロジェクトごとのWikiとフォーラム",
+      "リポジトリブラウザ (Git, SVN等と連携)",
+      "時間追跡（工数管理）"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "オープンソース。ホスティング、メンテナンス、サポートに別途コストがかかる場合がある。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "オンプレミス環境でのプロジェクト管理",
+      "ITリテラシーの高い開発チームによる課題管理",
+      "ウォーターフォール型プロジェクトの工数管理"
+    ],
+    "learning_difficulty": "中程度～高度",
+    "official_website": "https://www.redmine.org/",
+    "remarks": "オープンソースでカスタマイズ性が非常に高い。UIは古めだが、堅実な機能を持つ。公式サポートはないがコミュニティは活発。"
+  },
+  {
+    "name": "Taiga",
+    "type": "プロジェクト管理ツール",
+    "category_details": "オープンソースアジャイルプロジェクト管理",
+    "functions": [
+      "ScrumとKanbanに特化したボード",
+      "バックログ管理とスプリント計画",
+      "バーンダウンチャートと見積もりツール",
+      "課題追跡とWiki機能",
+      "セルフホストオプション"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Cloud Basic: 無料。Cloud Premium: 70€/月。Self-hosted: 無料。",
+    "free_tier_details": "Cloud Basicプランは小規模プロジェクト向けに無料提供。",
+    "use_cases": [
+      "Scrum/Kanbanを実践するアジャイル開発チーム",
+      "オープンソースの柔軟性を求める開発組織"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://www.taiga.io/",
+    "remarks": "アジャイル開発に特化したオープンソースツール。直感的で効果的なプロジェクト管理が可能。"
+  },
+  {
+    "name": "Wrike",
+    "type": "プロジェクト管理ツール",
+    "category_details": "包括的ワークマネジメントプラットフォーム",
+    "functions": [
+      "タスクの一元管理と進捗可視化（ガント、カンバン等）",
+      "Work Intelligence®によるAIと自動化",
+      "高度なリアルタイムレポートとダッシュボード",
+      "ダイナミックリクエストフォーム",
+      "校正機能と400以上のアプリ連携"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Free: タスク数制限あり。Team: $9.80/ユーザー/月。Business: $24.80/ユーザー/月。",
+    "free_tier_details": "基本的なタスク管理機能を提供。タスク数に制限あり。",
+    "use_cases": [
+      "大規模プロジェクトとリソース管理",
+      "マーケティングやクリエイティブ部門のワークフロー管理",
+      "PMO（プロジェクト管理オフィス）による全社的なプロジェクト統括"
+    ],
+    "learning_difficulty": "中程度～高度",
+    "official_website": "https://www.wrike.com/",
+    "remarks": "大規模プロジェクトや複雑なワークフローに強み。費用は比較的高めとの評価もある。"
+  }
+]

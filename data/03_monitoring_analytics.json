@@ -1,0 +1,284 @@
+[
+  {
+    "name": "Sentry",
+    "type": "ツール",
+    "category_details": "エラー監視 & パフォーマンスモニタリング",
+    "functions": [
+      "リアルタイムのエラー追跡（スタックトレース、コンテキスト情報）",
+      "パフォーマンス監視（分散トレーシング、ボトルネック特定）",
+      "ユーザーセッションのリプレイによる問題再現",
+      "コードカバレッジの可視化"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Developerプランは無料。Teamプランは$26/月から、Businessプランは$80/月から。イベント量に応じて変動。",
+    "free_tier_details": "1ユーザー、エラー5,000件/月、リテンション30日の無料枠あり。",
+    "use_cases": [
+      "本番環境でのエラー検知と迅速なデバッグ",
+      "パフォーマンス問題の特定と改善",
+      "モバイルアプリのクラッシュレポート",
+      "リリースの安定性評価"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://sentry.io/",
+    "remarks": "開発者ファーストなエラー追跡ツール。コードレベルの詳細な洞察を提供し、問題解決を加速させる。開発者のワークフローとの統合が強力。"
+  },
+  {
+    "name": "Datadog",
+    "type": "プラットフォーム",
+    "category_details": "フルスタックオブザーバビリティ",
+    "functions": [
+      "インフラ監視（サーバー、コンテナ、サーバーレス）",
+      "APM（分散トレーシング、サービス監視）",
+      "統合ログ管理",
+      "リアルユーザー監視（RUM）とセッションリプレイ",
+      "統合セキュリティ監視（Cloud SIEM, CSPM, CWPP）",
+      "AIによる異常検知 (Watchdog)"
+    ],
+    "cost_tier": "従量課金",
+    "price_details": "モジュール式の従量課金。例: Infrastructure Proプラン $15/ホスト/月、APM $31/ホスト/月、Log Management $0.10/GBから。",
+    "free_tier_details": "14日間の無料トライアルあり。一部機能に限定的な無料枠が存在。",
+    "use_cases": [
+      "クラウドネイティブ環境の包括的な監視",
+      "DevSecOpsの実現",
+      "ツールの乱立を防ぎ、監視プラットフォームを統合",
+      "大規模システムのパフォーマンスと安定性確保"
+    ],
+    "learning_difficulty": "中程度～高度",
+    "official_website": "https://www.datadoghq.com/",
+    "remarks": "700以上のインテグレーションを誇る、非常に広範な監視プラットフォーム。クラウド環境に特に強い。オブザーバビリティとセキュリティの統合が大きな強み。"
+  },
+  {
+    "name": "New Relic",
+    "type": "プラットフォーム",
+    "category_details": "フルスタックオブザーバビリティ",
+    "functions": [
+      "APM 360（分散トレーシング、エラー分析）",
+      "インフラストラクチャ監視",
+      "デジタルエクスペリエンス監視（RUM、セッションリプレイ）",
+      "統合ログ管理",
+      "New Relic AIによるAIOpsと根本原因分析",
+      "開発者コラボレーションツール (CodeStream)"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "データ取り込み量とユーザー数に基づく価格設定。Standardプランは$99/追加ユーザー/月、Pro/Enterpriseはカスタム価格。",
+    "free_tier_details": "100GB/月までのデータ取り込みと、フルプラットフォームユーザー1名が無料。",
+    "use_cases": [
+      "デジタルエクスペリエンスの最適化",
+      "DevOpsプラクティスの推進",
+      "ビジネスKPIとシステムパフォーマンスの関連付け"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://newrelic.com/",
+    "remarks": "ユーザーベースのシンプルな価格体系への移行が特徴。オブザーバビリティの洞察を他のツールに連携する「Agentic Integrations」に注力。"
+  },
+  {
+    "name": "Dynatrace",
+    "type": "プラットフォーム",
+    "category_details": "AI駆動型オブザーバビリティ & セキュリティ",
+    "functions": [
+      "Davis AIによる自動化された根本原因分析",
+      "インフラおよびアプリケーションのオブザーバビリティ",
+      "デジタルエクスペリエンス監視",
+      "アプリケーションセキュリティ（リアルタイム脆弱性検知）",
+      "ビジネス分析連携"
+    ],
+    "cost_tier": "従量課金",
+    "price_details": "機能ごとの従量課金制。例: Full-Stack Monitoring 約$0.08/時/8GiBホスト、Log Management $0.20/GB。",
+    "free_tier_details": "15日間の無料トライアルあり。",
+    "use_cases": [
+      "複雑なマルチクラウド環境の自動監視",
+      "AIOpsによる運用効率の最大化",
+      "ビジネストランザクションとITパフォーマンスの連携分析"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://www.dynatrace.com/",
+    "remarks": "因果関係AI「Davis」による自動化が最大の強み。設定がほとんど不要で、問題の「答え」を提供することに重点を置いている。"
+  },
+  {
+    "name": "Grafana",
+    "type": "プラットフォーム",
+    "category_details": "データ可視化 & オブザーバビリティ",
+    "functions": [
+      "多様なデータソースに対応したダッシュボードと可視化",
+      "統一されたアラートシステム",
+      "広範なプラグインエコシステム",
+      "LGTMスタック（Loki, Grafana, Tempo, Mimir）による統合監視"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "オープンソース版は無料。Grafana Cloudは無料枠あり、Proプランは従量課金。",
+    "free_tier_details": "Grafana Cloudの無料ティアはPrometheusメトリクス10kシリーズ、ログ50GBなど、個人や小規模プロジェクトには十分な枠を提供。",
+    "use_cases": [
+      "インフラとアプリケーションのメトリクス可視化",
+      "ビジネスKPIダッシュボードの構築",
+      "IoTデータのリアルタイム監視",
+      "Prometheusと組み合わせた監視スタック構築"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://grafana.com/",
+    "remarks": "オープンソース監視の「顔」とも言える存在。データソースを問わない美しい可視化が強み。Grafana Labsは独自の監視バックエンドも開発中。"
+  },
+  {
+    "name": "Prometheus",
+    "type": "ツール",
+    "category_details": "メトリクス監視 & アラート",
+    "functions": [
+      "時系列データの収集と保存",
+      "強力なクエリ言語 (PromQL)",
+      "プルベースのメトリクス収集モデル",
+      "サービスディスカバリによる動的なターゲット発見",
+      "Alertmanagerによるアラート処理"
+    ],
+    "cost_tier": "無料 (オープンソース)",
+    "price_details": "ソフトウェア自体は無料。運用コスト（サーバー、ストレージ）は自己負担。",
+    "free_tier_details": "全機能が無料で利用可能。",
+    "use_cases": [
+      "Kubernetesおよびクラウドネイティブ環境の監視",
+      "インフラおよびアプリケーションのメトリクス監視",
+      "Grafanaのデータソースとしての利用"
+    ],
+    "learning_difficulty": "中程度～高度",
+    "official_website": "https://prometheus.io/",
+    "remarks": "クラウドネイティブ監視のデファクトスタンダード。Grafanaとの組み合わせは非常に強力だが、大規模運用の長期保存には工夫が必要。"
+  },
+  {
+    "name": "Google Analytics",
+    "type": "ツール",
+    "category_details": "ウェブ分析",
+    "functions": [
+      "ウェブサイトやアプリのトラフィック分析",
+      "ユーザー行動の追跡（イベントベース）",
+      "コンバージョントラッキング",
+      "オーディエンスセグメンテーション",
+      "Google広告エコシステムとの深い連携"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Standard版は無料。大規模データ処理やSLAが必要な場合は有料のAnalytics 360がある。",
+    "free_tier_details": "データサンプリングなどの制限はあるが、ほとんどのウェブサイトにとって十分な機能を提供。",
+    "use_cases": [
+      "トラフィック流入元の分析",
+      "マーケティングキャンペーンの効果測定",
+      "ユーザーのサイト内行動の理解",
+      "コンバージョン率の最適化 (CRO)"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://marketingplatform.google.com/about/analytics/",
+    "remarks": "ウェブ分析の標準ツール。「ユーザーがどうやって来たか」を理解するのに最適。GA4への移行によりイベントベースの分析が強化された。"
+  },
+  {
+    "name": "Mixpanel",
+    "type": "ツール",
+    "category_details": "プロダクト分析",
+    "functions": [
+      "イベントベースのユーザー行動分析",
+      "ファネル分析",
+      "リテンションレポートとコホート分析",
+      "ユーザーセグメンテーション",
+      "セッションリプレイ"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Freeプランあり。有料のGrowthプランはイベント量に応じて変動。",
+    "free_tier_details": "最大100万イベント/月まで無料で利用可能。",
+    "use_cases": [
+      "プロダクトの機能利用状況の分析",
+      "ユーザーオンボーディングの改善",
+      "コンバージョンファネルのボトルネック特定",
+      "プロダクト主導型成長 (PLG) の推進"
+    ],
+    "learning_difficulty": "容易～中程度",
+    "official_website": "https://mixpanel.com/",
+    "remarks": "「ユーザーがプロダクト内で何をしているか」を深く理解するためのツール。直感的なUIで非技術者にも使いやすい。"
+  },
+  {
+    "name": "Amplitude",
+    "type": "プラットフォーム",
+    "category_details": "デジタル分析プラットフォーム",
+    "functions": [
+      "詳細なユーザー行動分析",
+      "A/Bテストと実験機能 (Experiment)",
+      "セッションリプレイ",
+      "マーケティング分析",
+      "データガバナンス機能"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Starterプランは無料。有料のPlus/Growth/EnterpriseプランはMTU（月間追跡ユーザー）数などに応じて変動。",
+    "free_tier_details": "最大5万MTUまで無料で利用可能。",
+    "use_cases": [
+      "ユーザー獲得、リテンション、収益化の分析",
+      "A/Bテストによるプロダクト改善",
+      "ユーザーエクスペリエンスのパーソナライズ"
+    ],
+    "learning_difficulty": "中程度",
+    "official_website": "https://amplitude.com/",
+    "remarks": "プロダクト分析に加えて、実験機能が強力。データ駆動でグロースを目指すチームに適している。"
+  },
+  {
+    "name": "Segment",
+    "type": "プラットフォーム",
+    "category_details": "顧客データプラットフォーム (CDP)",
+    "functions": [
+      "顧客データの収集・統合・配信",
+      "ID解決による顧客の単一ビュー作成",
+      "データ品質とガバナンスの管理 (Protocols)",
+      "400以上の外部ツールへのデータ連携"
+    ],
+    "cost_tier": "フリーミアム",
+    "price_details": "Freeプランあり。有料のTeamプランは$120/月から（訪問者数に応じて変動）。",
+    "free_tier_details": "月間1,000訪問者まで、2つのソースと1つのデータウェアハウス宛先が無料。",
+    "use_cases": [
+      "データサイロの解消",
+      "一貫性のある顧客体験のパーソナライズ",
+      "マーケティングROIの向上",
+      "分析データパイプラインの合理化"
+    ],
+    "learning_difficulty": "中程度～高度",
+    "official_website": "https://segment.com/",
+    "remarks": "様々なツールに顧客データを供給するハブとしての役割を担う。データ戦略の基盤となる重要なインフラ。Twilioに買収された。"
+  },
+  {
+    "name": "ELK Stack (Elastic Stack)",
+    "type": "プラットフォーム",
+    "category_details": "ログ管理、検索、分析",
+    "functions": [
+      "スケーラブルなログ集約と検索 (Elasticsearch)",
+      "データ収集と変換 (Logstash, Beats)",
+      "柔軟なデータ可視化 (Kibana)",
+      "APM、SIEMへの機能拡張"
+    ],
+    "cost_tier": "オープンソース (フリーミアム)",
+    "price_details": "オープンソース版は無料。Elastic Cloud（マネージドサービス）はリソースに応じた従量課金。",
+    "free_tier_details": "オープンソース版は全機能が無料で利用可能。",
+    "use_cases": [
+      "大規模システムのログ分析",
+      "アプリケーション検索機能の実装",
+      "セキュリティ分析 (SIEM)",
+      "運用インテリジェンス"
+    ],
+    "learning_difficulty": "中程度～高度",
+    "official_website": "https://www.elastic.co/",
+    "remarks": "強力な検索エンジンElasticsearchが中核。ログ管理から始まり、多用途なデータプラットフォームへと進化。自己管理は複雑になる可能性がある。"
+  },
+  {
+    "name": "Splunk",
+    "type": "プラットフォーム",
+    "category_details": "データプラットフォーム, SIEM",
+    "functions": [
+      "機械生成データの大規模な検索、監視、分析",
+      "強力な検索言語 (SPL)",
+      "フルスタックオブザーバビリティ",
+      "堅牢なSIEMとセキュリティ機能",
+      "AI/MLによるインテリジェントな洞察"
+    ],
+    "cost_tier": "有料 (限定的な無料版あり)",
+    "price_details": "データ取り込み量ベースが主。Splunk Freeは500MB/日まで。有料プランは高価になる可能性がある。",
+    "free_tier_details": "機能とデータ量に大きな制限があるため、主に評価用。",
+    "use_cases": [
+      "セキュリティ監視とインシデント対応 (SIEM)",
+      "IT運用インテリジェンス",
+      "大規模システムのトラブルシューティング",
+      "コンプライアンスレポート"
+    ],
+    "learning_difficulty": "高度",
+    "official_website": "https://www.splunk.com/",
+    "remarks": "セキュリティ分野で非常に強力な市場リーダー。強力なSPLは学習曲線が急だが、マスターすれば比類のない分析能力を発揮する。Ciscoに買収された。"
+  }
+]
