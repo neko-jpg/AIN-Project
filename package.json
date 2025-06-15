@@ -15,9 +15,6 @@
     "react-dom": "^18.3.1",
     "react-markdown": "^9.0.1",
     "recharts": "^2.15.3",
-    "remark-gfm": "^4.0.0",
-    "react-markdown": "^9.0.1",
-    "recharts": "^2.8.0",
     "remark-gfm": "^4.0.0"
   },
   "devDependencies": {
