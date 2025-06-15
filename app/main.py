@@ -1,4 +1,4 @@
-# このファイルは app/main.py です
+# app/main.py (エラー完全修正版)
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
@@ -19,11 +19,10 @@ load_dotenv()
 app = FastAPI(
     title="AI Navigator (AIN) Backend",
     description="ユーザーの要件に基づいて最適なAI構成と、対話的に修正可能な本格的な企画書を提案するAPIです。",
-    version="6.0.0"
+    version="8.0.0"
 )
 
-# Renderデプロイのため、一旦すべて許可します。本番環境ではフロントエンドのURLに限定してください。
-origins = ["*"] 
+origins = ["*"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -33,12 +32,16 @@ app.add_middleware(
 )
 
 # --- Gemini APIの設定 ---
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-if not GEMINI_API_KEY:
-    raise ValueError("GEMINI_API_KEYが設定されていません。'.env'ファイルを確認してください。")
-genai.configure(api_key=GEMINI_API_KEY)
+try:
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise ValueError("環境変数 'GEMINI_API_KEY' が設定されていません。")
+    genai.configure(api_key=api_key)
+except Exception as e:
+    logging.critical(f"Gemini APIキーの設定に失敗しました: {e}")
+    raise RuntimeError("Gemini APIキーが設定されていないため、アプリケーションを起動できません。")
 
-# --- ★★★ PydanticモデルをReactの型定義(api.ts)に完全に一致させる ★★★ ---
+# --- Pydanticモデル ---
 class UserPayload(BaseModel):
     purpose: str
     project_type: str
@@ -46,61 +49,46 @@ class UserPayload(BaseModel):
     experience_level: str
     weekly_hours: str
 
-class FullProposalRequest(UserPayload):
-    # このモデルは現在フロントエンドからは直接使われませんが、
-    # 将来的に初期提案を渡すように拡張する場合のために残しておきます。
-    initial_suggestion: str
-    
-class RefineRequest(BaseModel):
-    # ReactのApp.tsxから送られてくるキー名に合わせる
+class RefinementRequest(BaseModel):
     user_payload: UserPayload
     current_proposal: str
     refinement_request: str
 
-# --- 複数JSONファイル対応の知識ベース読み込み関数 ---
-def load_knowledge_base(directory_path: str = "data") -> str:
-    all_knowledge = []
-    try:
-        if not os.path.isdir(directory_path):
-            logging.error(f"エラー: 指定された知識ベースのパス '{directory_path}' はディレクトリではありません。")
-            return "[]"
-        json_files = sorted([f for f in os.listdir(directory_path) if f.endswith('.json')])
-        if not json_files:
-            logging.warning(f"警告: '{directory_path}' ディレクトリにJSONファイルが見つかりません。")
-            return "[]"
-        
-        logging.info(f"'{directory_path}' ディレクトリから以下のファイルを読み込みます: {json_files}")
+class RefinementResponse(BaseModel):
+    type: str
+    content: str
 
+# --- 知識ベース読み込み ---
+KNOWLEDGE_BASE_STR = ""
+try:
+    all_knowledge_data = []
+    directory_path = "data"
+    if os.path.isdir(directory_path):
+        json_files = sorted([f for f in os.listdir(directory_path) if f.endswith('.json')])
         for filename in json_files:
             file_path = os.path.join(directory_path, filename)
-            try:
-                with open(file_path, 'r', encoding='utf-8') as f:
-                    data = json.load(f)
-                    if isinstance(data, list):
-                        all_knowledge.extend(data)
-            except Exception as e:
-                logging.error(f"エラー: {filename} の読み込み中にエラー: {e}")
-        
-        logging.info(f"合計 {len(all_knowledge)} 件の知識ベースエントリを読み込みました。")
-        return json.dumps(all_knowledge, indent=2, ensure_ascii=False)
+            with open(file_path, 'r', encoding='utf-8') as f:
+                all_knowledge_data.extend(json.load(f))
+    KNOWLEDGE_BASE_STR = json.dumps(all_knowledge_data, ensure_ascii=False)
+    logging.info(f"合計 {len(all_knowledge_data)} 件の知識ベースエントリを起動時に読み込みました。")
+except Exception as e:
+    logging.error(f"起動時の知識ベース読み込み処理全体でエラー: {e}")
 
-    except Exception as e:
-        logging.error(f"知識ベース読み込み処理全体でエラー: {e}")
-        return "[]"
+# --- プロンプト生成関数 ---
 
-# --- プロンプト生成関数群 ---
-
-def generate_initial_prompt(user_input: UserPayload, knowledge_base: str) -> str:
+def generate_initial_prompt(user_input: UserPayload) -> str:
     return f"""
 # 役割: あなたは、世界トップクラスのソリューションアーキテクトです。ユーザーの要件から最適な技術スタックを提案します。
-# 知識ベース: ```json\n{knowledge_base}\n```
+# 知識ベース: ```json
+{KNOWLEDGE_BASE_STR}
+```
 # ユーザー要件:
 - **目的**: {user_input.purpose}
 - **プロジェクト種類**: {user_input.project_type}
 - **月額予算**: {user_input.budget}円 以下
 - **開発経験**: {user_input.experience_level}
 - **週の開発時間**: {user_input.weekly_hours}
-# 指示: 上記に基づき、最適な技術スタック構成案を提案してください。各技術要素（フロントエンド、バックエンド、DB、AI、CI/CD、監視等）について、なぜそれを選んだのか理由を明確に記述してください。
+# 指示: 上記に基づき、最適な技術スタック構成案を提案してください。AIモデルだけでなく、フレームワーク、DB等のAI以外のツールも網羅的に考慮し、なぜそれを選んだのか理由を明確に記述してください。
 
 # 提案フォーマット (Markdown)
 ---
@@ -123,7 +111,7 @@ def generate_initial_prompt(user_input: UserPayload, knowledge_base: str) -> str
 - **選定理由**:
 """
 
-def generate_full_proposal_prompt(request: UserPayload, knowledge_base: str) -> str: # FullProposalRequest -> UserPayload
+def generate_full_proposal_prompt(request: UserPayload) -> str:
     return f"""
 # 役割: あなたは、経験豊富なシニアプロジェクトマネージャー兼AIコンサルタントです。
 # ユーザー要件:
@@ -132,7 +120,9 @@ def generate_full_proposal_prompt(request: UserPayload, knowledge_base: str) -> 
 - 経験: {request.experience_level}
 - 時間: {request.weekly_hours}/週
 - プロジェクト種類: {request.project_type}
-# 知識ベース: ```json\n{knowledge_base}\n```
+# 知識ベース: ```json
+{KNOWLEDGE_BASE_STR}
+```
 # 指示:
 上記情報を基に、投資家や経営層にも提出できる、最高品質のプロジェクト企画書を作成してください。
 以下のフォーマットと項目を**すべて**含め、具体的かつ論理的に記述してください。
@@ -141,9 +131,9 @@ def generate_full_proposal_prompt(request: UserPayload, knowledge_base: str) -> 
 # 企画書フォーマット (Markdown)
 ---
 ### **プロジェクト名案**
-- 案1:
-- 案2:
-- 案3:
+- 案1: (キャッチーで覚えやすい名前)
+- 案2: (プロジェクト内容を的確に表す名前)
+- 案3: (先進性を感じさせる名前)
 ### **1. 目的と背景**
 ### **2. ターゲットユーザーと課題**
 ### **3. ソリューション概要**
@@ -165,54 +155,94 @@ def generate_full_proposal_prompt(request: UserPayload, knowledge_base: str) -> 
 - **理想構成**:
 """
 
-def generate_refine_prompt(request: RefineRequest) -> str:
+def generate_refine_prompt(request: RefinementRequest) -> str:
     return f"""
-# 役割: あなたは「AIの消しゴム」機能を持つ、超優秀な「AIアドバイザー」です。
-# 元の企画書: ```markdown\n{request.current_proposal}\n```
-# ユーザーからの修正・質問指示: "{request.refinement_request}"
-# ユーザーの初期要件: {json.dumps(request.user_payload.model_dump())}
-# 指示:
-ユーザーの指示を正確に解釈し、以下のいずれかの役割を完璧に遂行してください。
-1.  **AI消しゴム (修正依頼の場合)**: ユーザーの指示が修正依頼である場合、元の企画書から指定された部分だけを的確に修正し、**企画書全体を整合性を保ちながら再構成して出力**してください。元のフォーマットは完全に維持し、自然な企画書を返却してください。
-2.  **AIアドバイザー (質問の場合)**: ユーザーの指示が深掘りの質問である場合、**企画書は変更せず、その質問に対する回答のみを**、専門家として詳細かつ分かりやすく記述してください。
-3.  **利用制限の示唆**: どちらの場合でも、回答の最後に、`(AINからのアドバイス：無料版でのご相談はあと数回可能です。より専門的なコンサルティングや無制限の修正はProプランをご検討ください。)`というメッセージを必ず付け加えてください。
+# 役割:
+あなたは「AIアドバイザー」です。ユーザーからの指示を分析し、以下のルールに従って応答を生成してください。
+
+# ルール:
+1.  まず、ユーザーの指示が「現在の企画書」に直接関連する「修正依頼」か「質問」かを判断します。
+2.  **修正依頼の場合**: 企画書を指示通りに修正し、修正後の企画書全体を生成します。応答タイプは "proposal" とします。
+3.  **質問の場合**: 企画書は変更せず、その質問に対する回答のみを生成します。応答タイプは "answer" とします。
+4.  **企画書に関係ない場合**: 「申し訳ありませんが、そのご質問にはお答えできません。企画書に関する内容でお願いします。」という固定の文章を生成します。応答タイプは "rejection" とします。
+5.  生成するテキストの最後に、`(AINからのアドバイス：...Proプランをご検討ください。)` というメッセージは**含めないでください**。
+
+# 出力フォーマット (JSON):
+必ず以下のJSON形式で応答してください。
+{{
+  "type": "proposal" | "answer" | "rejection",
+  "content": "ここに生成したテキスト（企画書全体、回答、または拒否メッセージ）を入れる"
+}}
+
+---
+# 入力情報
+
+## 現在の企画書:
+```markdown
+{request.current_proposal}
+```
+
+## ユーザーの初期要件:
+```json
+{json.dumps(request.user_payload.model_dump(), ensure_ascii=False)}
+```
+
+## ユーザーからの今回の指示:
+「{request.refinement_request}」
+
+---
+# あなたの応答 (JSON形式で):
 """
 
 # --- APIエンドポイント ---
 @app.post("/analyze_purpose/")
 async def analyze_purpose(request: UserPayload):
     try:
-        knowledge_base_str = load_knowledge_base()
-        prompt = generate_initial_prompt(request, knowledge_base_str)
+        prompt = generate_initial_prompt(request)
         model = genai.GenerativeModel('gemini-1.5-flash-latest')
-        response = model.generate_content(prompt, request_options={"timeout": 600})
+        response = await model.generate_content_async(prompt)
         return {"suggestion": response.text}
     except Exception as e:
+        logging.error(f"/analyze_purpose/ エラー: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/generate_full_proposal/")
-async def generate_full_proposal(request: UserPayload): # FullProposalRequest -> UserPayload
+async def generate_full_proposal(request: UserPayload):
     try:
-        knowledge_base_str = load_knowledge_base()
-        prompt = generate_full_proposal_prompt(request, knowledge_base_str)
+        prompt = generate_full_proposal_prompt(request)
         model = genai.GenerativeModel('gemini-1.5-flash-latest')
-        response = model.generate_content(prompt, request_options={"timeout": 600})
-        # ★ フロントエンドの期待するキー 'suggestion' に合わせて返す
+        response = await model.generate_content_async(prompt)
         return {"suggestion": response.text}
     except Exception as e:
+        logging.error(f"/generate_full_proposal/ エラー: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/refine_proposal/")
-async def refine_proposal(request: RefineRequest):
+@app.post("/refine_proposal/", response_model=RefinementResponse)
+async def refine_proposal_endpoint(request: RefinementRequest):
     try:
         prompt = generate_refine_prompt(request)
         model = genai.GenerativeModel('gemini-1.5-flash-latest')
-        response = model.generate_content(prompt, request_options={"timeout": 600})
-        # ★ フロントエンドの期待するキー 'suggestion' に合わせて返す
-        return {"suggestion": response.text}
+        
+        generation_config = genai.types.GenerationConfig(
+            response_mime_type="application/json"
+        )
+        
+        response = await model.generate_content_async(prompt, generation_config=generation_config)
+        
+        response_json = json.loads(response.text)
+
+        return RefinementResponse(
+            type=response_json.get("type", "answer"),
+            content=response_json.get("content", "エラー：応答を解析できませんでした。")
+        )
+
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        logging.error(f"/refine_proposal/ エラー: {e}")
+        return RefinementResponse(
+            type="answer",
+            content=f"大変申し訳ありません、リクエストの処理中にエラーが発生しました。({e})"
+        )
 
 @app.get("/")
 def read_root():
-    return {"message": "AI Navigator (AIN) Backend v6.0 is running."}
+    return {"message": "AI Navigator (AIN) Backend v8.0 is running."}
