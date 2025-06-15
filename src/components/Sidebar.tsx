@@ -125,17 +125,13 @@ const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, isL
             disabled={isLoading || !formData.purpose.trim()}
             className="w-full bg-blue-600 text-white py-2.5 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-medium transition-colors"
           >
+            {/* [修正点] isLoading状態に応じて、要素の構造を変えずにアイコンとテキストの中身だけを切り替える */}
             {isLoading ? (
-              <>
-                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-                分析中...
-              </>
+              <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
             ) : (
-              <>
-                <Send className="h-4 w-4" />
-                最適な技術スタックを提案してもらう
-              </>
+              <Send className="h-4 w-4" />
             )}
+            <span>{isLoading ? '分析中...' : '最適な技術スタックを提案してもらう'}</span>
           </button>
         </form>
       </div>

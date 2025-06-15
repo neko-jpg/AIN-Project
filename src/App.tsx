@@ -242,17 +242,13 @@ function App() {
                         disabled={state.isLoadingFull}
                         className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3 font-medium transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                       >
+                        {/* [修正点] isLoading状態に応じて、要素の構造を変えずにアイコンとテキストの中身だけを切り替える */}
                         {state.isLoadingFull ? (
-                          <>
-                            <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
-                            企画書生成中...
-                          </>
+                          <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
                         ) : (
-                          <>
-                            <FileText className="h-5 w-5" />
-                            この提案で本格的な企画書を作成する
-                          </>
+                          <FileText className="h-5 w-5" />
                         )}
+                        <span>{state.isLoadingFull ? '企画書生成中...' : 'この提案で本格的な企画書を作成する'}</span>
                       </button>
                     </div>
                   )}
@@ -390,19 +386,15 @@ function App() {
                       <button
                         type="submit"
                         disabled={state.isLoadingRefinement || !refinementText.trim()}
-                        className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-xl hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3 font-medium transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                        className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-xl hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 font-medium transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                       >
+                        {/* [修正点] isLoading状態に応じて、要素の構造を変えずにアイコンとテキストの中身だけを切り替える */}
                         {state.isLoadingRefinement ? (
-                          <>
-                            <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
-                            修正中...
-                          </>
+                          <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
                         ) : (
-                          <>
-                            <MessageCircle className="h-5 w-5" />
-                            修正・質問を依頼する
-                          </>
+                          <MessageCircle className="h-5 w-5" />
                         )}
+                        <span>{state.isLoadingRefinement ? '修正中...' : '修正・質問を依頼する'}</span>
                       </button>
                     </form>
                   )}
