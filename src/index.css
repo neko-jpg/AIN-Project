@@ -10,6 +10,33 @@
   .break-words {
     word-break: break-word;
   }
+  
+  /* 長いURLやコードブロックの処理 */
+  .prose pre {
+    @apply overflow-x-auto max-w-full;
+  }
+  
+  .prose code {
+    @apply break-words overflow-wrap-anywhere;
+  }
+  
+  .prose table {
+    @apply w-full overflow-x-auto block;
+  }
+  
+  /* Markdownコンテンツの改行とスペース処理 */
+  .prose p {
+    @apply break-words overflow-wrap-anywhere;
+  }
+  
+  .prose li {
+    @apply break-words overflow-wrap-anywhere;
+  }
+  
+  /* 長いリンクの処理 */
+  .prose a {
+    @apply break-words overflow-wrap-anywhere;
+  }
 }
 
 /* Custom scrollbar */
@@ -36,3 +63,23 @@
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
+
+/* アバターアニメーション */
+@keyframes gentle-nod {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(2deg); }
+}
+
+@keyframes thinking-dots {
+  0%, 20% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.animate-gentle-nod {
+  animation: gentle-nod 2s ease-in-out infinite;
+}
+
+.thinking-dots span:nth-child(1) { animation-delay: 0s; }
+.thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+.thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
