@@ -36,7 +36,7 @@ export const splitProposalIntoSections = (proposal: string): Array<{ title: stri
     const title = lines[0].trim();
     const content = lines.slice(1).join('\n').trim();
     return { title, content };
-  });
+  }).filter(section => section.content.length > 0); // Filter out empty sections
 };
 
 export const formatCurrency = (amount: number): string => {
@@ -45,4 +45,16 @@ export const formatCurrency = (amount: number): string => {
     currency: 'JPY',
     minimumFractionDigits: 0,
   }).format(amount);
+};
+
+export const downloadMarkdown = (content: string, filename: string): void => {
+  const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 };
