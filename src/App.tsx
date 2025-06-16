@@ -8,6 +8,7 @@ import { MessageCircle, Sparkles, GitBranch, Brain, Zap, TreePine, Target, Arrow
 import DialogModeScreen from './screens/DialogModeScreen';
 import BallModeScreen from './screens/BallModeScreen';
 import TreeModeScreen from './screens/TreeModeScreen';
+import BoltBadge from './components/BoltBadge';
 
 type AppMode = 'intro' | 'dialog' | 'ball' | 'tree';
 
@@ -82,15 +83,30 @@ function App() {
 
   // Render different screens based on current mode
   if (currentMode === 'dialog') {
-    return <DialogModeScreen onBack={() => setCurrentMode('intro')} />;
+    return (
+      <>
+        <DialogModeScreen onBack={() => setCurrentMode('intro')} />
+        <BoltBadge />
+      </>
+    );
   }
 
   if (currentMode === 'ball') {
-    return <BallModeScreen onBack={() => setCurrentMode('intro')} />;
+    return (
+      <>
+        <BallModeScreen onBack={() => setCurrentMode('intro')} />
+        <BoltBadge />
+      </>
+    );
   }
 
   if (currentMode === 'tree') {
-    return <TreeModeScreen onBack={() => setCurrentMode('intro')} />;
+    return (
+      <>
+        <TreeModeScreen onBack={() => setCurrentMode('intro')} />
+        <BoltBadge />
+      </>
+    );
   }
 
   // Main intro screen
@@ -253,6 +269,9 @@ function App() {
           </div>
         </div>
       </main>
+
+      {/* Built on Bolt Badge */}
+      <BoltBadge />
 
       {/* Custom CSS for animations */}
       <style jsx>{`
