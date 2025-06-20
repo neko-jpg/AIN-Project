@@ -4,7 +4,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 // lucide-reactからのアイコンをインポート
-import { Bot, FileText, Zap, Clock, TrendingUp, MessageCircle, ChevronDown, ChevronRight, Send, Download as DownloadIcon, Sparkles, Menu, X, ArrowLeft } from 'lucide-react'; 
+import { Bot, FileText, Zap, Clock, TrendingUp, MessageCircle, ChevronDown, ChevronRight, Send, Download as DownloadIcon, Sparkles, Menu, X, ArrowLeft, Lightbulb, Target, Rocket, Star, Users, Code, Database, Shield } from 'lucide-react'; 
 
 // Markdownレンダリング用ライブラリをインポート
 import ReactMarkdown from 'react-markdown';
@@ -297,6 +297,17 @@ const DifficultyChart: React.FC<{ userLevel: string; projectComplexity?: number;
   );
 };
 
+// Feature Card Component for Welcome Screen
+const FeatureCard: React.FC<{ icon: React.ReactNode; title: string; description: string; color: string; }> = ({ icon, title, description, color }) => (
+  <div className={`p-4 rounded-xl bg-gradient-to-br ${color} text-white transform hover:scale-105 transition-all duration-200`}>
+    <div className="flex items-center gap-3 mb-2">
+      {icon}
+      <h4 className="font-semibold text-sm">{title}</h4>
+    </div>
+    <p className="text-xs opacity-90">{description}</p>
+  </div>
+);
+
 // Conversation item type for chat history (user/ai turns)
 type ConversationItem = {
   type: 'user' | 'ai';
@@ -369,7 +380,19 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
         'Help me build a mobile app for fitness tracking',
         'Design a data analytics dashboard for my business',
         'Create a chatbot for customer service automation'
-      ]
+      ],
+      features: {
+        smartAnalysis: 'Smart Analysis',
+        smartAnalysisDesc: 'AI analyzes your requirements and suggests optimal solutions',
+        realTimeChat: 'Real-time Chat',
+        realTimeChatDesc: 'Interactive conversation with AI for refined proposals',
+        comprehensiveReports: 'Comprehensive Reports',
+        comprehensiveReportsDesc: 'Detailed project plans with timelines and budgets',
+        expertGuidance: 'Expert Guidance',
+        expertGuidanceDesc: 'Professional advice tailored to your experience level'
+      },
+      getStarted: 'Get Started',
+      learnMore: 'Learn More'
     },
     ja: {
       dialogMode: '対話モード',
@@ -410,7 +433,19 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
         'フィットネス追跡用のモバイルアプリを構築したい',
         'ビジネス用のデータ分析ダッシュボードを設計したい',
         'カスタマーサービス自動化用のチャットボットを作成したい'
-      ]
+      ],
+      features: {
+        smartAnalysis: 'スマート分析',
+        smartAnalysisDesc: 'AIがあなたの要件を分析し、最適なソリューションを提案',
+        realTimeChat: 'リアルタイムチャット',
+        realTimeChatDesc: 'AIとの対話的な会話で洗練された提案を作成',
+        comprehensiveReports: '包括的なレポート',
+        comprehensiveReportsDesc: 'タイムラインと予算を含む詳細なプロジェクト計画',
+        expertGuidance: 'エキスパートガイダンス',
+        expertGuidanceDesc: 'あなたの経験レベルに合わせたプロフェッショナルなアドバイス'
+      },
+      getStarted: '始める',
+      learnMore: '詳細を見る'
     }
   };
 
@@ -618,7 +653,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
           <div className="w-9" /> {/* Spacer for centering */}
         </div>
 
-        <div className="max-w-5xl mx-auto p-3 lg:p-6">
+        <div className="max-w-6xl mx-auto p-3 lg:p-6">
           {/* Header - Hidden on mobile */}
           <div className="text-center mb-6 lg:mb-8 hidden lg:block">
             <div className="flex items-center justify-between mb-4">
@@ -655,24 +690,73 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
 
           {/* Welcome Screen */}
           {showWelcomeScreen && (
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto">
               <div className="text-center mb-8 lg:mb-12">
                 <h2 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-4">{t.welcomeTitle}</h2>
                 <p className="text-lg text-gray-600 mb-8">{t.welcomeSubtitle}</p>
                 
+                {/* Feature Highlights */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                  <FeatureCard
+                    icon={<Brain className="h-5 w-5" />}
+                    title={t.features.smartAnalysis}
+                    description={t.features.smartAnalysisDesc}
+                    color="from-blue-500 to-blue-600"
+                  />
+                  <FeatureCard
+                    icon={<MessageCircle className="h-5 w-5" />}
+                    title={t.features.realTimeChat}
+                    description={t.features.realTimeChatDesc}
+                    color="from-green-500 to-green-600"
+                  />
+                  <FeatureCard
+                    icon={<FileText className="h-5 w-5" />}
+                    title={t.features.comprehensiveReports}
+                    description={t.features.comprehensiveReportsDesc}
+                    color="from-purple-500 to-purple-600"
+                  />
+                  <FeatureCard
+                    icon={<Users className="h-5 w-5" />}
+                    title={t.features.expertGuidance}
+                    description={t.features.expertGuidanceDesc}
+                    color="from-orange-500 to-orange-600"
+                  />
+                </div>
+                
                 {/* Approach Selection */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-8">
                   {/* Traditional Approach */}
-                  <div className="bg-white rounded-2xl border border-gray-200 p-6 lg:p-8 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                  <div className="bg-white rounded-2xl border border-gray-200 p-6 lg:p-8 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group">
                     <div className="text-center">
-                      <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <FileText className="h-8 w-8 text-blue-600" />
+                      <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <FileText className="h-8 w-8 text-white" />
                       </div>
                       <h3 className="text-xl font-bold text-gray-900 mb-2">{t.traditionalApproach}</h3>
                       <p className="text-gray-600 mb-6">{t.traditionalDescription}</p>
+                      
+                      {/* Benefits */}
+                      <div className="grid grid-cols-2 gap-2 mb-6 text-xs">
+                        <div className="flex items-center gap-1 text-gray-500">
+                          <Target className="h-3 w-3" />
+                          <span>{language === 'en' ? 'Structured' : '構造化'}</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-gray-500">
+                          <Zap className="h-3 w-3" />
+                          <span>{language === 'en' ? 'Fast' : '高速'}</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-gray-500">
+                          <Shield className="h-3 w-3" />
+                          <span>{language === 'en' ? 'Reliable' : '信頼性'}</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-gray-500">
+                          <Star className="h-3 w-3" />
+                          <span>{language === 'en' ? 'Proven' : '実証済み'}</span>
+                        </div>
+                      </div>
+                      
                       <button
                         onClick={() => setSidebarOpen(true)}
-                        className="w-full bg-blue-600 text-white py-3 px-6 rounded-xl font-medium hover:bg-blue-700 transition-colors"
+                        className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-6 rounded-xl font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
                       >
                         {t.startTraditional}
                       </button>
@@ -680,36 +764,74 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                   </div>
 
                   {/* Prompt Engineering */}
-                  <div className="bg-white rounded-2xl border border-gray-200 p-6 lg:p-8 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                  <div className="bg-white rounded-2xl border border-gray-200 p-6 lg:p-8 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group relative overflow-hidden">
+                    {/* Coming Soon Badge */}
+                    <div className="absolute top-4 right-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                      {language === 'en' ? 'COMING SOON' : '近日公開'}
+                    </div>
+                    
                     <div className="text-center">
-                      <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Zap className="h-8 w-8 text-purple-600" />
+                      <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <Code className="h-8 w-8 text-white" />
                       </div>
                       <h3 className="text-xl font-bold text-gray-900 mb-2">{t.promptEngineering}</h3>
                       <p className="text-gray-600 mb-6">{t.promptDescription}</p>
+                      
+                      {/* Benefits */}
+                      <div className="grid grid-cols-2 gap-2 mb-6 text-xs">
+                        <div className="flex items-center gap-1 text-gray-500">
+                          <Lightbulb className="h-3 w-3" />
+                          <span>{language === 'en' ? 'Creative' : '創造的'}</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-gray-500">
+                          <Rocket className="h-3 w-3" />
+                          <span>{language === 'en' ? 'Advanced' : '高度'}</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-gray-500">
+                          <Database className="h-3 w-3" />
+                          <span>{language === 'en' ? 'Flexible' : '柔軟'}</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-gray-500">
+                          <Users className="h-3 w-3" />
+                          <span>{language === 'en' ? 'Custom' : 'カスタム'}</span>
+                        </div>
+                      </div>
+                      
                       <button
-                        className="w-full bg-purple-600 text-white py-3 px-6 rounded-xl font-medium hover:bg-purple-700 transition-colors"
+                        className="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white py-3 px-6 rounded-xl font-medium opacity-50 cursor-not-allowed"
                         disabled
                       >
-                        {t.startPrompt} (Coming Soon)
+                        {t.startPrompt}
                       </button>
                     </div>
                   </div>
                 </div>
 
                 {/* Example Prompts */}
-                <div className="bg-gray-50 rounded-2xl p-6 lg:p-8">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.examplePrompts}</h3>
+                <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl p-6 lg:p-8 border border-gray-200">
+                  <div className="flex items-center justify-center gap-2 mb-4">
+                    <Lightbulb className="h-5 w-5 text-blue-600" />
+                    <h3 className="text-lg font-semibold text-gray-900">{t.examplePrompts}</h3>
+                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {t.examples.map((example, index) => (
                       <button
                         key={index}
                         onClick={() => handleExampleClick(example)}
-                        className="text-left p-4 bg-white rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-all duration-200 text-sm lg:text-base"
+                        className="text-left p-4 bg-white rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 hover:shadow-md transition-all duration-200 text-sm lg:text-base group"
                       >
-                        <span className="text-blue-600 font-medium">💡</span> {example}
+                        <div className="flex items-start gap-3">
+                          <span className="text-blue-600 font-medium text-lg group-hover:scale-110 transition-transform duration-200">💡</span>
+                          <span className="flex-1">{example}</span>
+                          <ArrowLeft className="h-4 w-4 text-gray-400 group-hover:text-blue-600 transition-colors duration-200 transform rotate-180" />
+                        </div>
                       </button>
                     ))}
+                  </div>
+                  <div className="mt-4 text-center">
+                    <p className="text-sm text-gray-600">
+                      {language === 'en' ? 'Click any example to get started quickly' : 'どの例でもクリックして素早く開始'}
+                    </p>
                   </div>
                 </div>
               </div>
