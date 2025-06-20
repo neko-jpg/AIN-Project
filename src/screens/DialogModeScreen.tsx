@@ -4,7 +4,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 // lucide-reactからのアイコンをインポート
-import { Bot, FileText, Zap, Clock, TrendingUp, MessageCircle, ChevronDown, ChevronRight, Send, Download as DownloadIcon, Sparkles, Menu, X, ArrowLeft, Lightbulb, Target, Rocket, Star, Users, Code, Database, Shield } from 'lucide-react'; 
+import { Bot, FileText, Zap, Clock, TrendingUp, MessageCircle, ChevronDown, ChevronRight, Send, Download as DownloadIcon, Sparkles, Menu, X, ArrowLeft, Lightbulb, Target, Rocket, Star, Users, Code, Database, Shield, Brain } from 'lucide-react'; 
 
 // Markdownレンダリング用ライブラリをインポート
 import ReactMarkdown from 'react-markdown';
