@@ -1,4 +1,4 @@
-# app/main.py (エラー完全修正版)
+# app/main.py (Enhanced with custom prompt execution)
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
@@ -9,7 +9,7 @@ import json
 import logging
 from fastapi.middleware.cors import CORSMiddleware
 import datetime
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 
 # --- 基本設定 ---
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -19,7 +19,7 @@ load_dotenv()
 app = FastAPI(
     title="AI Navigator (AIN) Backend",
     description="ユーザーの要件に基づいて最適なAI構成と、対話的に修正可能な本格的な企画書を提案するAPIです。",
-    version="8.0.0"
+    version="9.0.0"
 )
 
 origins = ["*"]
@@ -48,6 +48,8 @@ class UserPayload(BaseModel):
     budget: int
     experience_level: str
     weekly_hours: str
+    development_time: Optional[int] = None
+    language: Optional[str] = "ja"
 
 class RefinementRequest(BaseModel):
     user_payload: UserPayload
@@ -57,6 +59,10 @@ class RefinementRequest(BaseModel):
 class RefinementResponse(BaseModel):
     type: str
     content: str
+
+class CustomPromptRequest(BaseModel):
+    prompt: str
+    language: Optional[str] = "en"
 
 # --- 知識ベース読み込み ---
 KNOWLEDGE_BASE_STR = ""
@@ -77,6 +83,8 @@ except Exception as e:
 # --- プロンプト生成関数 ---
 
 def generate_initial_prompt(user_input: UserPayload) -> str:
+    language_instruction = "Please respond in English." if user_input.language == "en" else "日本語で回答してください。"
+    
     return f"""
 # 役割: あなたは、世界トップクラスのソリューションアーキテクトです。ユーザーの要件から最適な技術スタックを提案します。
 # 知識ベース: ```json
@@ -88,6 +96,11 @@ def generate_initial_prompt(user_input: UserPayload) -> str:
 - **月額予算**: {user_input.budget}円 以下
 - **開発経験**: {user_input.experience_level}
 - **週の開発時間**: {user_input.weekly_hours}
+- **開発期間**: {user_input.development_time or 6}ヶ月
+- **言語設定**: {user_input.language}
+
+{language_instruction}
+
 # 指示: 上記に基づき、最適な技術スタック構成案を提案してください。AIモデルだけでなく、フレームワーク、DB等のAI以外のツールも網羅的に考慮し、なぜそれを選んだのか理由を明確に記述してください。
 
 # 提案フォーマット (Markdown)
@@ -112,6 +125,8 @@ def generate_initial_prompt(user_input: UserPayload) -> str:
 """
 
 def generate_full_proposal_prompt(request: UserPayload) -> str:
+    language_instruction = "Please respond in English." if request.language == "en" else "日本語で回答してください。"
+    
     return f"""
 # 役割: あなたは、経験豊富なシニアプロジェクトマネージャー兼AIコンサルタントです。
 # ユーザー要件:
@@ -120,6 +135,11 @@ def generate_full_proposal_prompt(request: UserPayload) -> str:
 - 経験: {request.experience_level}
 - 時間: {request.weekly_hours}/週
 - プロジェクト種類: {request.project_type}
+- 開発期間: {request.development_time or 6}ヶ月
+- 言語設定: {request.language}
+
+{language_instruction}
+
 # 知識ベース: ```json
 {KNOWLEDGE_BASE_STR}
 ```
@@ -156,9 +176,13 @@ def generate_full_proposal_prompt(request: UserPayload) -> str:
 """
 
 def generate_refine_prompt(request: RefinementRequest) -> str:
+    language_instruction = "Please respond in English." if request.user_payload.language == "en" else "日本語で回答してください。"
+    
     return f"""
 # 役割:
 あなたは「AIアドバイザー」です。ユーザーからの指示を分析し、以下のルールに従って応答を生成してください。
+
+{language_instruction}
 
 # ルール:
 1.  まず、ユーザーの指示が「現在の企画書」に直接関連する「修正依頼」か「質問」かを判断します。
@@ -243,6 +267,31 @@ async def refine_proposal_endpoint(request: RefinementRequest):
             content=f"大変申し訳ありません、リクエストの処理中にエラーが発生しました。({e})"
         )
 
+@app.post("/execute_custom_prompt/")
+async def execute_custom_prompt(request: CustomPromptRequest):
+    try:
+        language_instruction = "Please respond in English." if request.language == "en" else "日本語で回答してください。"
+        
+        enhanced_prompt = f"""
+{language_instruction}
+
+# Knowledge Base: ```json
+{KNOWLEDGE_BASE_STR}
+```
+
+# User's Custom Prompt:
+{request.prompt}
+
+Please provide a comprehensive and helpful response based on the user's request and the available knowledge base.
+"""
+        
+        model = genai.GenerativeModel('gemini-1.5-flash-latest')
+        response = await model.generate_content_async(enhanced_prompt)
+        return {"suggestion": response.text}
+    except Exception as e:
+        logging.error(f"/execute_custom_prompt/ エラー: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.get("/")
 def read_root():
-    return {"message": "AI Navigator (AIN) Backend v8.0 is running."}
+    return {"message": "AI Navigator (AIN) Backend v9.0 is running with enhanced features."}
