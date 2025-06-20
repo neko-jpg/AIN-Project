@@ -13,6 +13,15 @@ export interface VoiceMemo {
   timestamp: Date;
 }
 
+export interface PromptTemplate {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  icon: React.ReactNode;
+  blocks: string[];
+}
+
 export interface AppSettings {
   language: 'en' | 'ja';
   developmentTime: number; // in months

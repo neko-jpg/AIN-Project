@@ -1,44 +1,17 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { ArrowLeft, MessageCircle, Send, Sparkles, Brain, Lightbulb, Zap, Plus, Settings, Eye, Edit3, Copy, Check, Mic, MicOff, GripVertical, Trash2, FileText, Clock, TrendingUp, Target, AlertTriangle, User, Briefcase, ChevronDown, ChevronRight, Download as DownloadIcon, Menu, X, Bot, Layers, Maximize2, Minimize2, PanelLeftOpen, PanelRightOpen, PanelTopOpen } from 'lucide-react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { ArrowLeft, Send, Sparkles, Edit3, AlertTriangle, X, Download as DownloadIcon, PanelLeftOpen, PanelRightOpen, PanelTopOpen } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
 // Components
 import Sidebar from '../components/Sidebar';
-import LoadingSpinner from '../components/LoadingSpinner';
-import SpeechBubble from '../components/SpeechBubble';
-import InteractiveAvatar from '../components/InteractiveAvatar';
-import QuickSuggestions from '../components/QuickSuggestions';
-import ExpandableSection from '../components/ExpandableSection';
 import DownloadButton from '../components/DownloadButton';
-import ExecutiveSummary from '../components/ExecutiveSummary';
-import BudgetBreakdownChart from '../components/BudgetBreakdownChart';
-import TimelineChart from '../components/TimelineChart';
-import DifficultyChart from '../components/DifficultyChart';
-import MetricCard from '../components/MetricCard';
-import ConversationHistory from '../components/ConversationHistory';
 import DevelopmentTimeSlider from '../components/DevelopmentTimeSlider';
 import EnhancedPromptComposer from '../components/EnhancedPromptComposer';
-import PromptPreview from '../components/PromptPreview';
-import ResizablePanel from '../components/ResizablePanel';
-
-// Utils and types
-import { analyzeProject, generateFullProposal, refineProposal, executeCustomPrompt } from '../utils/api';
-import { extractDurationFromText, splitProposalIntoSections } from '../utils/textProcessing';
+import { analyzeProject, executeCustomPrompt } from '../utils/api';
 import { PromptBlock } from '../types';
 
-interface DialogModeScreenProps {
-  onBack: () => void;
-  language: 'en' | 'ja';
-}
-
-interface ConversationItem {
-  type: 'user' | 'ai';
-  content: string;
-  timestamp: Date;
-}
-
-// textsオブジェクトをコンポーネントの外に移動
+// Translation texts
 const texts = {
   en: {
     title: 'Dialog Mode',
@@ -49,8 +22,8 @@ const texts = {
     tryAgain: 'Try Again',
     executePrompt: 'Execute Prompt',
     promptResult: 'AI Result',
-    promptPlaceholder: 'Your combined prompt will appear here. Edit as needed before sending to AI.',
-    noPromptYet: 'No prompt generated yet. Use the prompt composer on the right to build your prompt.',
+    promptPlaceholder: 'The combined prompt will appear here. Edit as needed before sending to AI.',
+    noPromptYet: 'No prompt generated yet. Use the prompt composer on the right to create one.',
     sendToAI: 'Send to AI',
     toggleLeftPanel: 'Toggle Form Panel',
     toggleRightPanel: 'Toggle Prompt Panel',
@@ -82,85 +55,68 @@ const texts = {
   }
 };
 
-// ヘルパー関数をコンポーネント内に定義
-const createAutoPromptBlocks = (formData: any, developmentTime: number): PromptBlock[] => [
-  { id: 'purpose-block', content: `プロジェクト目的: ${formData.purpose}`, priority: 0, timestamp: new Date(), type: 'text' },
-  { id: 'project-type-block', content: `プロジェクト種類: ${formData.projectType}`, priority: 1, timestamp: new Date(), type: 'text' },
-  { id: 'budget-block', content: `月額予算: ${formData.budget}円`, priority: 2, timestamp: new Date(), type: 'text' },
-  { id: 'experience-block', content: `開発経験レベル: ${formData.experienceLevel}`, priority: 3, timestamp: new Date(), type: 'text' },
-  { id: 'time-block', content: `週間開発時間: ${formData.weeklyHours}、開発期間: ${developmentTime}ヶ月`, priority: 4, timestamp: new Date(), type: 'text' }
-];
+interface DialogModeScreenProps {
+  onBack: () => void;
+  language: 'en' | 'ja';
+}
 
 const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language }) => {
-  // --- State Management ---
+  // State Management
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [layoutMode, setLayoutMode] = useState<'desktop' | 'mobile'>('desktop');
+
+const [formData, setFormData] = useState({
+  purpose: '',
+  projectType: 'Webアプリケーション',
+  budget: 10000,
+  experienceLevel: '初心者',
+  weeklyHours: '〜5時間',
+});
+const [developmentTime, setDevelopmentTime] = useState(3);
+const [promptBlocks, setPromptBlocks] = useState<PromptBlock[]>([]);
+const [currentPrompt, setCurrentPrompt] = useState('');
+const [aiResult, setAiResult] = useState<string | null>(null);
+
+const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(true);
+const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
+const [isBottomPanelOpen, setIsBottomPanelOpen] = useState(false);
+
+const chatEndRef = useRef<HTMLDivElement>(null);
+
+// useMemoで翻訳テキストをメモ化
+const t = useMemo(() => texts[language], [language]);
+
+// Detect screen size
+useEffect(() => {
+  const checkScreenSize = () => {
+    setLayoutMode(window.innerWidth >= 1024 ? 'desktop' : 'mobile');
+  };
   
-  const [formData, setFormData] = useState({
-    purpose: '',
-    projectType: 'Webアプリケーション',
-    budget: 10000,
-    experienceLevel: '中級者',
-    weeklyHours: '5〜20時間',
-  });
-  const [developmentTime, setDevelopmentTime] = useState(6);
+  checkScreenSize();
+  window.addEventListener('resize', checkScreenSize);
+  return () => window.removeEventListener('resize', checkScreenSize);
+}, []);
 
-  const [aiResult, setAiResult] = useState<string>('');
-  const [promptBlocks, setPromptBlocks] = useState<PromptBlock[]>([]);
-  const [currentPrompt, setCurrentPrompt] = useState('');
+// Auto-scroll to bottom of chat
+useEffect(() => {
+  chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+}, [aiResult]);
 
-  const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(true);
-  const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
-  const [isBottomPanelOpen, setIsBottomPanelOpen] = useState(false);
+// Handle form changes
+const handleFormChange = (field: string, value: string | number) => {
+  setFormData(prev => ({ ...prev, [field]: value }));
+};
 
-  const chatEndRef = useRef<HTMLDivElement>(null);
+// Handle traditional form submission
+const handleFormSubmit = async () => {
+  if (!formData.purpose.trim()) return;
 
-  // useMemoで翻訳テキストをメモ化
-  const t = useMemo(() => texts[language], [language]);
+  setIsLoading(true);
+  setError(null);
+  setIsBottomPanelOpen(true);
 
-  // --- Effects ---
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setLayoutMode(window.innerWidth >= 1024 ? 'desktop' : 'mobile');
-    };
-    checkScreenSize();
-    window.addEventListener('resize', checkScreenSize);
-    return () => window.removeEventListener('resize', checkScreenSize);
-  }, []);
-
-  useEffect(() => {
-    if (aiResult) {
-      chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [aiResult]);
-
-  // --- Handlers ---
-  const handleFormChange = useCallback((field: string, value: string | number) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  }, []);
-
-  const handlePromptFromComposer = useCallback((prompt: string) => {
-    setCurrentPrompt(prompt);
-  }, []);
-  
-  const executeApiCall = useCallback(async (apiFunction: () => Promise<{ suggestion: string }>) => {
-    setIsLoading(true);
-    setError(null);
-    setIsBottomPanelOpen(true);
-    try {
-      const response = await apiFunction();
-      setAiResult(response.suggestion);
-    } catch (err) {
-      console.error('API Request Error:', err);
-      setError(err instanceof Error ? err.message : '不明なエラーが発生しました');
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  const handleFormSubmit = useCallback(async () => {
-    if (!formData.purpose.trim()) return;
+  try {
     const payload = {
       purpose: formData.purpose,
       project_type: formData.projectType,
@@ -170,26 +126,93 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
       development_time: developmentTime,
       language
     };
-    await executeApiCall(() => analyzeProject(payload));
-  }, [formData, developmentTime, language, executeApiCall]);
 
-  const handleQuickGenerate = useCallback(async () => {
-    if (!formData.purpose.trim()) return;
-    const autoBlocks = createAutoPromptBlocks(formData, developmentTime);
-    setPromptBlocks(autoBlocks);
-    const combinedPrompt = autoBlocks.map(block => block.content).join('\n\n');
-    setCurrentPrompt(combinedPrompt);
-    await executeApiCall(() => executeCustomPrompt(combinedPrompt, language));
-  }, [formData, developmentTime, language, executeApiCall]);
+    const response = await analyzeProject(payload);
+    setAiResult(response.suggestion);
+  } catch (err) {
+    console.error('API Request Error (Form Submit):', err);
+    setError(err instanceof Error ? err.message : 'Unknown error occurred');
+  } finally {
+    setIsLoading(false);
+  }
+};
 
-  const handleExecutePrompt = useCallback(async () => {
-    if (!currentPrompt.trim()) return;
-    await executeApiCall(() => executeCustomPrompt(currentPrompt, language));
-  }, [currentPrompt, language, executeApiCall]);
+// Handle quick generation (auto-generate prompt from form data)
+const handleQuickGenerate = async () => {
+  if (!formData.purpose.trim()) return;
 
+  // Auto-generate prompt blocks from form data
+  const autoBlocks: PromptBlock[] = [
+    {
+      id: 'purpose-block',
+      content: `プロジェクト目的: ${formData.purpose}`,
+      priority: 0,
+      timestamp: new Date(),
+      type: 'text'
+    },
+    {
+      id: 'experience-block',
+      content: `開発経験レベル: ${formData.experienceLevel}`,
+      priority: 3,
+      timestamp: new Date(),
+      type: 'text'
+    },
+    {
+      id: 'time-block',
+      content: `週間開発時間: ${formData.weeklyHours}、開発期間: ${developmentTime}ヶ月`,
+      priority: 4,
+      timestamp: new Date(),
+      type: 'text'
+    }
+  ];
 
-  // --- Render Logic ---
-  if (layoutMode === 'mobile') {
+  setPromptBlocks(autoBlocks);
+
+  // Generate combined prompt
+  const combinedPrompt = autoBlocks.map(block => block.content).join('\n\n');
+  setCurrentPrompt(combinedPrompt);
+
+  // Execute immediately
+  setIsLoading(true);
+  setError(null);
+  setIsBottomPanelOpen(true);
+
+  try {
+    const response = await executeCustomPrompt(combinedPrompt, language);
+    setAiResult(response.suggestion);
+  } catch (err) {
+    console.error('API Request Error (Quick Generate):', err);
+    setError(err instanceof Error ? err.message : 'Unknown error occurred');
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+// Handle prompt from composer
+const handlePromptFromComposer = (prompt: string) => {
+  setCurrentPrompt(prompt);
+};
+
+// Execute prompt
+const handleExecutePrompt = async () => {
+  if (!currentPrompt.trim()) return;
+
+  setIsLoading(true);
+  setError(null);
+  setIsBottomPanelOpen(true); // Auto-open results panel
+
+  try {
+    const response = await executeCustomPrompt(currentPrompt, language);
+    setAiResult(response.suggestion);
+  } catch (err) {
+    console.error('API Request Error (Custom Prompt):', err);
+    setError(err instanceof Error ? err.message : 'Unknown error occurred');
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+if (layoutMode === 'mobile') {
     return (
       <div className="min-h-screen bg-gray-50 flex flex-col">
         {/* Mobile Header */}
@@ -265,38 +288,37 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                     <input
                       type="number"
                       value={formData.budget}
-                      onChange={(e) => handleFormChange('budget', Number(e.target.value) || 0)}
+                      onChange={(e) => handleFormChange('budget', parseInt(e.target.value))}
                       min="0"
                       max="100000"
                       step="1000"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      経験レベル
-                    </label>
-                    <select
-                      value={formData.experienceLevel}
-                      onChange={(e) => handleFormChange('experienceLevel', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    >
-                      <option value="初心者">初心者</option>
-                      <option value="中級者">中級者</option>
-                      <option value="上級者">上級者</option>
-                    </select>
-                  </div>
-
+</div>
+<div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    開発経験レベル
+  </label>
+  <select
+    value={formData.experienceLevel}
+    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleFormChange('experienceLevel', e.target.value)}
+    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+  >
+    <option value="初心者">初心者</option>
+    <option value="中級者">中級者</option>
+    <option value="上級者">上級者</option>
+  </select>
+</div>
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
+                  ) : (
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       週間時間
                     </label>
                     <select
                       value={formData.weeklyHours}
-                      onChange={(e) => handleFormChange('weeklyHours', e.target.value)}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleFormChange('weeklyHours', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="〜5時間">〜5時間</option>
@@ -305,30 +327,6 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                     </select>
                   </div>
                 </div>
-
-                <button
-                  onClick={handleQuickGenerate}
-                  disabled={isLoading || !formData.purpose.trim()}
-                  className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-4 rounded-lg hover:from-green-600 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2 font-medium"
-                >
-                  {isLoading ? (
-                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
-                  ) : (
-                    <Sparkles className="h-4 w-4" />
-                  )}
-                  {isLoading ? '生成中...' : 'クイック生成'}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Prompt Composer Section */}
-          <div className="bg-gray-50">
-            <div className="p-4">
-              <div className="flex items-center gap-2 mb-4">
-                <PanelRightOpen className="h-5 w-5 text-purple-600" />
-                <h3 className="text-lg font-semibold text-gray-900">{t.promptPanel}</h3>
-              </div>
               
               <div className="bg-white rounded-lg border border-gray-200 max-h-96 overflow-hidden">
                 <EnhancedPromptComposer

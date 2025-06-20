@@ -1,6 +1,7 @@
 import React from 'react';
-// [修正点] Sparkles アイコンをインポートします
-import { Bot, Send, Sparkles } from 'lucide-react';
+
+import { Bot, Send, Sparkles, Zap } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface SidebarProps {
   formData: {
@@ -15,54 +16,51 @@ interface SidebarProps {
   onSubmit: () => void;
   // [修正点2] onQuickGenerateをpropsとして受け取る定義を追加します
   // これにより、先ほどのTypeScriptエラーが解消されます。
-  onQuickGenerate: () => void;
+  onQuickGenerate?: () => void; // 新しいプロップ
   isLoading: boolean;
 }
 
-// [修正点3] onQuickGenerate を引数として受け取ります
-const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, onQuickGenerate, isLoading }) => {
+const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, isLoading, onQuickGenerate }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.purpose.trim()) return;
     onSubmit();
   };
-  
-  // クイック生成ボタンがクリックされたときの処理
-  const handleQuickGenerateClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault(); // formの送信を防ぐ
-    if (!formData.purpose.trim()) return;
-    onQuickGenerate();
+
+  function t(arg0: string): React.ReactNode {
+    throw new Error('Function not implemented.');
+  }
+
+  function handleQuickGenerateClick(event: React.MouseEvent<HTMLButtonElement>): void {
+    throw new Error('Function not implemented.');
+  }
+
+  function handleQuickGenerate(event: React.MouseEvent<HTMLButtonElement>): void {
+    throw new Error('Function not implemented.');
   }
 
   return (
-    // h-screen だと親要素のレイアウトによっては画面全体を覆ってしまうため、h-full に変更して親に追従するようにします
-    <div className="w-80 bg-white border-r border-gray-200 h-full flex flex-col">
-      <div className="p-6 overflow-y-auto"> {/* スクロールは内側の要素に任せます */}
+    <div className="w-80 bg-white border-r border-gray-200 h-screen overflow-y-auto">
+      <div className="p-6">
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 bg-blue-100 rounded-lg">
             <Bot className="h-6 w-6 text-blue-600" />
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">AIN Navigator</h2>
-            <p className="text-sm text-gray-500">Your AI Project Partner</p>
+            <h2 className="text-lg font-semibold text-gray-900">{t('app.title')}</h2>
+            <p className="text-sm text-gray-500">{t('app.subtitle')}</p>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <h3 className="text-base font-medium text-gray-900 mb-4">
-              プロジェクトの概要を教えてください
-            </h3>
-          </div>
-
-          <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              AIを使って実現したいことは何ですか？
+              {t('form.purpose')}
             </label>
             <textarea
               value={formData.purpose}
               onChange={(e) => onFormChange('purpose', e.target.value)}
-              placeholder="例：顧客データを分析して売上予測を行うシステムを作りたい"
+              placeholder={String(t('form.purposePlaceholder'))}
               className="w-full h-32 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
               required
             />
@@ -70,24 +68,24 @@ const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, onQ
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              プロジェクトの種類
+              {t('form.projectType')}
             </label>
             <select
               value={formData.projectType}
               onChange={(e) => onFormChange('projectType', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="Webアプリケーション">Webアプリケーション</option>
-              <option value="モバイルアプリケーション">モバイルアプリケーション</option>
-              <option value="APIバックエンド">APIバックエンド</option>
-              <option value="データ分析基盤">データ分析基盤</option>
-              <option value="その他">その他</option>
+              <option value="Webアプリケーション">{t('form.projectTypes.webApp')}</option>
+              <option value="モバイルアプリケーション">{t('form.projectTypes.mobileApp')}</option>
+              <option value="APIバックエンド">{t('form.projectTypes.apiBackend')}</option>
+              <option value="データ分析基盤">{t('form.projectTypes.dataAnalysis')}</option>
+              <option value="その他">{t('form.projectTypes.other')}</option>
             </select>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              月額予算（円）
+              {t('form.budget')}
             </label>
             <input
               type="number"
@@ -107,31 +105,31 @@ const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, onQ
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              あなたの開発経験レベル
+              {t('form.experienceLevel')}
             </label>
             <select
               value={formData.experienceLevel}
               onChange={(e) => onFormChange('experienceLevel', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="初心者">初心者</option>
-              <option value="中級者">中級者</option>
-              <option value="上級者">上級者</option>
+              <option value="初心者">{t('form.experienceLevels.beginner')}</option>
+              <option value="中級者">{t('form.experienceLevels.intermediate')}</option>
+              <option value="上級者">{t('form.experienceLevels.advanced')}</option>
             </select>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              週に使える開発時間
+              {t('form.weeklyHours')}
             </label>
             <select
               value={formData.weeklyHours}
               onChange={(e) => onFormChange('weeklyHours', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="〜5時間">〜5時間</option>
-              <option value="5〜20時間">5〜20時間</option>
-              <option value="20時間以上">20時間以上</option>
+              <option value="〜5時間">{t('form.weeklyHours.low')}</option>
+              <option value="5〜20時間">{t('form.weeklyHours.medium')}</option>
+              <option value="20時間以上">{t('form.weeklyHours.high')}</option>
             </select>
           </div>
           
@@ -151,6 +149,24 @@ const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, onQ
           </button>
 
 
+          {/* クイック生成ボタン */}
+          {onQuickGenerate && (
+            <button
+              type="button"
+              onClick={handleQuickGenerate}
+              disabled={isLoading || !formData.purpose.trim()}
+              className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-4 rounded-md hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-medium transition-colors mb-3"
+            >
+              {isLoading ? (
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+              ) : (
+                <Sparkles className="h-4 w-4" />
+              )}
+              <span>{isLoading ? '生成中...' : 'クイック生成'}</span>
+            </button>
+          )}
+
+          {/* 従来の送信ボタン */}
           <button
             type="submit"
             disabled={isLoading || !formData.purpose.trim()}
@@ -161,7 +177,7 @@ const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, onQ
             ) : (
               <Send className="h-4 w-4" />
             )}
-            <span>{isLoading ? '分析中...' : '詳細プロンプトで実行'}</span>
+            <span>{isLoading ? '分析中...' : '最適な技術スタックを提案してもらう'}</span>
           </button>
         </form>
       </div>
