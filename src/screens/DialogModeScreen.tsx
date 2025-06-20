@@ -307,6 +307,59 @@ type ConversationItem = {
   timestamp: Date;
 }
 
+// ConversationHistory component
+const ConversationHistory: React.FC<{ history: ConversationItem[] }> = ({ history }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  
+  if (history.length === 0) return null;
+  
+  return (
+    <div className="border border-gray-200 rounded-lg overflow-hidden">
+      <button 
+        onClick={() => setIsExpanded(!isExpanded)} 
+        className="w-full px-3 lg:px-4 py-3 bg-gray-50 hover:bg-gray-100 flex items-center gap-2 text-left font-medium text-gray-900 transition-colors text-sm lg:text-base"
+      >
+        {isExpanded ? <ChevronDown className="h-4 w-4 flex-shrink-0" /> : <ChevronRight className="h-4 w-4 flex-shrink-0" />} 
+        <span className="truncate">Conversation History ({history.length} messages)</span>
+      </button>
+      {isExpanded && (
+        <div className="p-3 lg:p-4 bg-white space-y-4">
+          {history.map((item, index) => (
+            <div key={index} className={`flex gap-2 lg:gap-4 ${item.type === 'user' ? 'justify-end' : 'justify-start'}`}>
+              {item.type === 'ai' && (
+                <div className="flex-shrink-0">
+                  <div className="w-6 h-6 lg:w-8 lg:h-8 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
+                    <Bot className="h-3 w-3 lg:h-4 lg:w-4 text-white" />
+                  </div>
+                </div>
+              )}
+              <div className={`max-w-xs lg:max-w-md p-3 rounded-lg ${
+                item.type === 'user' 
+                  ? 'bg-blue-600 text-white ml-auto' 
+                  : 'bg-gray-100 text-gray-900'
+              }`}>
+                <div className="text-sm break-words">
+                  {item.content}
+                </div>
+                <div className={`text-xs mt-1 ${item.type === 'user' ? 'text-blue-100' : 'text-gray-500'}`}>
+                  {item.timestamp.toLocaleTimeString()}
+                </div>
+              </div>
+              {item.type === 'user' && (
+                <div className="flex-shrink-0">
+                  <div className="w-6 h-6 lg:w-8 lg:h-8 bg-gradient-to-r from-gray-500 to-gray-600 rounded-full flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">U</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 interface DialogModeScreenProps {
   onBack: () => void;
   language: 'en' | 'ja';
@@ -651,7 +704,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
               </div>
               <div className="w-24" /> {/* Spacer for centering */}
             </div>
-          )}
+          </div>
 
           {/* Welcome Screen */}
           {showWelcomeScreen && (
