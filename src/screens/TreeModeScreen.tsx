@@ -1,8 +1,5 @@
-// src/screens/TreeModeScreen.tsx
-// 木モード - ツリー構造でプロジェクト要素を整理
-
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Plus, Minus, GitBranch, Leaf, TreePine, Zap, Database, Shield, Smartphone, Globe, Brain } from 'lucide-react';
+import { ArrowLeft, Plus, Minus, GitBranch, Leaf, TreePine, Zap, Database, Shield, Smartphone, Globe, Brain, Code, Cloud, Palette, Users, Settings, Target, CheckCircle } from 'lucide-react';
 
 interface TreeNode {
   id: string;
@@ -15,6 +12,8 @@ interface TreeNode {
   isSelected: boolean;
   color: string;
   description: string;
+  category: 'core' | 'feature' | 'infrastructure' | 'design';
+  priority: number;
 }
 
 interface TreeModeScreenProps {
@@ -26,6 +25,8 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack }) => {
   const [selectedPath, setSelectedPath] = useState<string[]>([]);
   const [aiSuggestions, setAiSuggestions] = useState<string[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newNodeData, setNewNodeData] = useState({ label: '', description: '', category: 'feature' as const });
 
   // Initialize tree structure
   useEffect(() => {
@@ -38,20 +39,25 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack }) => {
         children: ['frontend', 'backend', 'ai-core', 'infrastructure'],
         isExpanded: true,
         isSelected: false,
-        color: 'from-green-600 to-green-800',
-        description: 'プロジェクトの全体構成'
+        color: 'from-emerald-600 to-emerald-800',
+        description: 'プロジェクトの全体構成',
+        category: 'core',
+        priority: 1
       },
+      // Level 1 - Core Components
       {
         id: 'frontend',
         label: 'フロントエンド',
         icon: <Globe className="h-5 w-5" />,
         level: 1,
         parentId: 'root',
-        children: ['react', 'mobile-app'],
+        children: ['react-app', 'mobile-app', 'ui-design'],
         isExpanded: false,
         isSelected: false,
         color: 'from-blue-500 to-blue-700',
-        description: 'ユーザーインターフェース'
+        description: 'ユーザーインターフェース層',
+        category: 'core',
+        priority: 2
       },
       {
         id: 'backend',
@@ -59,11 +65,13 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack }) => {
         icon: <Database className="h-5 w-5" />,
         level: 1,
         parentId: 'root',
-        children: ['api', 'database'],
+        children: ['api-server', 'database', 'auth-system'],
         isExpanded: false,
         isSelected: false,
         color: 'from-purple-500 to-purple-700',
-        description: 'サーバーサイド処理'
+        description: 'サーバーサイド処理',
+        category: 'core',
+        priority: 3
       },
       {
         id: 'ai-core',
@@ -71,11 +79,13 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack }) => {
         icon: <Brain className="h-5 w-5" />,
         level: 1,
         parentId: 'root',
-        children: ['model-training', 'inference'],
+        children: ['model-training', 'inference-engine', 'data-pipeline'],
         isExpanded: false,
         isSelected: false,
         color: 'from-orange-500 to-orange-700',
-        description: 'AI機能の中核'
+        description: 'AI機能の中核',
+        category: 'core',
+        priority: 4
       },
       {
         id: 'infrastructure',
@@ -83,24 +93,28 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack }) => {
         icon: <Shield className="h-5 w-5" />,
         level: 1,
         parentId: 'root',
-        children: ['cloud', 'security'],
+        children: ['cloud-platform', 'security', 'monitoring'],
         isExpanded: false,
         isSelected: false,
         color: 'from-gray-500 to-gray-700',
-        description: 'システム基盤'
+        description: 'システム基盤',
+        category: 'infrastructure',
+        priority: 5
       },
-      // Level 2 nodes
+      // Level 2 - Detailed Components
       {
-        id: 'react',
-        label: 'React Web App',
-        icon: <Leaf className="h-4 w-4" />,
+        id: 'react-app',
+        label: 'React Webアプリ',
+        icon: <Code className="h-4 w-4" />,
         level: 2,
         parentId: 'frontend',
         children: [],
         isExpanded: false,
         isSelected: false,
         color: 'from-cyan-400 to-cyan-600',
-        description: 'Reactベースのウェブアプリケーション'
+        description: 'Reactベースのウェブアプリケーション',
+        category: 'feature',
+        priority: 6
       },
       {
         id: 'mobile-app',
@@ -112,10 +126,26 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack }) => {
         isExpanded: false,
         isSelected: false,
         color: 'from-pink-400 to-pink-600',
-        description: 'iOS/Androidアプリ'
+        description: 'iOS/Androidアプリ',
+        category: 'feature',
+        priority: 7
       },
       {
-        id: 'api',
+        id: 'ui-design',
+        label: 'UI/UXデザイン',
+        icon: <Palette className="h-4 w-4" />,
+        level: 2,
+        parentId: 'frontend',
+        children: [],
+        isExpanded: false,
+        isSelected: false,
+        color: 'from-rose-400 to-rose-600',
+        description: 'ユーザーエクスペリエンス設計',
+        category: 'design',
+        priority: 8
+      },
+      {
+        id: 'api-server',
         label: 'REST API',
         icon: <Zap className="h-4 w-4" />,
         level: 2,
@@ -124,7 +154,9 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack }) => {
         isExpanded: false,
         isSelected: false,
         color: 'from-indigo-400 to-indigo-600',
-        description: 'RESTful API設計'
+        description: 'RESTful API設計',
+        category: 'feature',
+        priority: 9
       },
       {
         id: 'database',
@@ -136,7 +168,23 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack }) => {
         isExpanded: false,
         isSelected: false,
         color: 'from-emerald-400 to-emerald-600',
-        description: 'データ永続化層'
+        description: 'データ永続化層',
+        category: 'infrastructure',
+        priority: 10
+      },
+      {
+        id: 'auth-system',
+        label: '認証システム',
+        icon: <Users className="h-4 w-4" />,
+        level: 2,
+        parentId: 'backend',
+        children: [],
+        isExpanded: false,
+        isSelected: false,
+        color: 'from-violet-400 to-violet-600',
+        description: 'ユーザー認証・認可',
+        category: 'feature',
+        priority: 11
       },
       {
         id: 'model-training',
@@ -148,10 +196,12 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack }) => {
         isExpanded: false,
         isSelected: false,
         color: 'from-yellow-400 to-yellow-600',
-        description: '機械学習モデルの訓練'
+        description: '機械学習モデルの訓練',
+        category: 'feature',
+        priority: 12
       },
       {
-        id: 'inference',
+        id: 'inference-engine',
         label: '推論エンジン',
         icon: <Zap className="h-4 w-4" />,
         level: 2,
@@ -160,19 +210,37 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack }) => {
         isExpanded: false,
         isSelected: false,
         color: 'from-red-400 to-red-600',
-        description: 'リアルタイム推論処理'
+        description: 'リアルタイム推論処理',
+        category: 'feature',
+        priority: 13
       },
       {
-        id: 'cloud',
+        id: 'data-pipeline',
+        label: 'データパイプライン',
+        icon: <Settings className="h-4 w-4" />,
+        level: 2,
+        parentId: 'ai-core',
+        children: [],
+        isExpanded: false,
+        isSelected: false,
+        color: 'from-amber-400 to-amber-600',
+        description: 'データ処理フロー',
+        category: 'infrastructure',
+        priority: 14
+      },
+      {
+        id: 'cloud-platform',
         label: 'クラウド基盤',
-        icon: <Globe className="h-4 w-4" />,
+        icon: <Cloud className="h-4 w-4" />,
         level: 2,
         parentId: 'infrastructure',
         children: [],
         isExpanded: false,
         isSelected: false,
-        color: 'from-blue-400 to-blue-600',
-        description: 'AWS/GCP/Azure'
+        color: 'from-sky-400 to-sky-600',
+        description: 'AWS/GCP/Azure',
+        category: 'infrastructure',
+        priority: 15
       },
       {
         id: 'security',
@@ -183,8 +251,24 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack }) => {
         children: [],
         isExpanded: false,
         isSelected: false,
-        color: 'from-gray-400 to-gray-600',
-        description: '認証・認可・暗号化'
+        color: 'from-slate-400 to-slate-600',
+        description: '認証・認可・暗号化',
+        category: 'infrastructure',
+        priority: 16
+      },
+      {
+        id: 'monitoring',
+        label: 'モニタリング',
+        icon: <Target className="h-4 w-4" />,
+        level: 2,
+        parentId: 'infrastructure',
+        children: [],
+        isExpanded: false,
+        isSelected: false,
+        color: 'from-teal-400 to-teal-600',
+        description: 'システム監視・ログ管理',
+        category: 'infrastructure',
+        priority: 17
       }
     ];
     setNodes(initialNodes);
@@ -219,7 +303,39 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack }) => {
     }
   };
 
-  // Simulate AI analysis
+  // Add new node
+  const addNewNode = () => {
+    if (!newNodeData.label.trim()) return;
+
+    const newNode: TreeNode = {
+      id: `custom-${Date.now()}`,
+      label: newNodeData.label,
+      icon: <Leaf className="h-4 w-4" />,
+      level: 2,
+      parentId: 'root',
+      children: [],
+      isExpanded: false,
+      isSelected: false,
+      color: 'from-green-400 to-green-600',
+      description: newNodeData.description || '新しく追加された要素',
+      category: newNodeData.category,
+      priority: nodes.length + 1
+    };
+
+    setNodes(prev => [...prev, newNode]);
+    
+    // Add to root's children
+    setNodes(prev => prev.map(node => 
+      node.id === 'root' 
+        ? { ...node, children: [...node.children, newNode.id] }
+        : node
+    ));
+
+    setNewNodeData({ label: '', description: '', category: 'feature' });
+    setShowAddModal(false);
+  };
+
+  // Advanced AI analysis
   const triggerAIAnalysis = (nodeId: string) => {
     const node = nodes.find(n => n.id === nodeId);
     if (!node) return;
@@ -227,16 +343,42 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack }) => {
     setIsAnalyzing(true);
     
     setTimeout(() => {
-      const suggestions = [
-        `🌟 ${node.label}の実装に最適なツールを提案します`,
-        `🔗 ${node.label}と他のコンポーネントの連携方法`,
-        `⚡ ${node.label}のパフォーマンス最適化案`,
-        `🛡️ ${node.label}のセキュリティ考慮事項`
-      ];
+      const selectedNodes = nodes.filter(n => selectedPath.includes(n.id) || n.id === nodeId);
+      const categories = [...new Set(selectedNodes.map(n => n.category))];
       
-      setAiSuggestions(prev => [...prev.slice(-2), ...suggestions.slice(0, 2)]);
+      let suggestions: string[] = [];
+      
+      // Category-based analysis
+      if (categories.includes('core') && categories.includes('feature')) {
+        suggestions.push("🎯 コア機能と追加機能のバランスが良好です");
+      }
+      
+      if (categories.includes('infrastructure')) {
+        suggestions.push("🏗️ インフラ要素が含まれており、スケーラブルな設計が可能です");
+      }
+      
+      if (categories.includes('design')) {
+        suggestions.push("🎨 UX/UIが考慮されており、ユーザー体験が向上します");
+      }
+      
+      // Specific node analysis
+      if (node.category === 'core') {
+        suggestions.push(`🌟 ${node.label}は他のコンポーネントとの連携が重要です`);
+      } else if (node.category === 'feature') {
+        suggestions.push(`⚡ ${node.label}の実装優先度を検討しましょう`);
+      }
+      
+      // Complexity analysis
+      const complexity = selectedNodes.length;
+      if (complexity >= 5) {
+        suggestions.push("🚀 複雑なシステムですが、段階的な開発で実現可能です");
+      } else if (complexity >= 3) {
+        suggestions.push("💡 適度な複雑さで、実装しやすいプロジェクトです");
+      }
+      
+      setAiSuggestions(prev => [...prev.slice(-3), ...suggestions.slice(0, 3)]);
       setIsAnalyzing(false);
-    }, 1500);
+    }, 1200);
   };
 
   // Render tree connections
@@ -247,17 +389,14 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack }) => {
       if (node.parentId) {
         const parent = nodes.find(n => n.id === node.parentId);
         if (parent && parent.isExpanded) {
-          const parentLevel = parent.level;
-          const nodeLevel = node.level;
-          
           connections.push(
             <div
               key={`connection-${node.id}`}
               className="absolute border-l-2 border-white/30"
               style={{
-                left: `${20 + parentLevel * 40}px`,
-                top: `${60 + parentLevel * 80 + 40}px`,
-                height: `${(nodeLevel - parentLevel) * 80 - 20}px`,
+                left: `${20 + parent.level * 40}px`,
+                top: `${60 + parent.level * 80 + 40}px`,
+                height: `${(node.level - parent.level) * 80 - 20}px`,
                 width: '20px',
                 borderBottom: '2px solid rgba(255,255,255,0.3)',
                 borderBottomLeftRadius: '8px'
@@ -271,7 +410,7 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack }) => {
     return connections;
   };
 
-  // Get visible nodes (considering expansion state)
+  // Get visible nodes
   const getVisibleNodes = () => {
     const visible: TreeNode[] = [];
     
@@ -313,7 +452,13 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack }) => {
             </p>
           </div>
           
-          <div className="w-20" />
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all duration-200"
+          >
+            <Plus className="h-5 w-5" />
+            <span className="hidden sm:inline">要素を追加</span>
+          </button>
         </div>
       </div>
 
@@ -351,24 +496,37 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack }) => {
                   <div
                     className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-all duration-300 transform hover:scale-105 ${
                       node.isSelected 
-                        ? 'bg-white/20 border-2 border-white shadow-lg' 
+                        ? 'bg-white/20 border-2 border-white shadow-lg shadow-white/20' 
                         : 'bg-white/10 border border-white/30 hover:bg-white/15'
                     }`}
                     onClick={() => selectNode(node.id)}
                   >
-                    <div className={`p-2 bg-gradient-to-r ${node.color} rounded-lg text-white`}>
+                    <div className={`p-2 bg-gradient-to-r ${node.color} rounded-lg text-white shadow-lg`}>
                       {node.icon}
                     </div>
-                    <div>
+                    <div className="flex-1">
                       <div className="text-white font-medium">{node.label}</div>
                       <div className="text-white/60 text-xs">{node.description}</div>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                          node.category === 'core' ? 'bg-blue-500/20 text-blue-300' :
+                          node.category === 'feature' ? 'bg-green-500/20 text-green-300' :
+                          node.category === 'infrastructure' ? 'bg-purple-500/20 text-purple-300' :
+                          'bg-pink-500/20 text-pink-300'
+                        }`}>
+                          {node.category}
+                        </span>
+                        <span className="text-white/40 text-xs">優先度: {node.priority}</span>
+                      </div>
                     </div>
                   </div>
                   
                   {/* Selection indicator */}
                   {node.isSelected && (
                     <div className="absolute -right-2 -top-2">
-                      <div className="w-4 h-4 bg-green-400 rounded-full border-2 border-white animate-pulse" />
+                      <div className="w-6 h-6 bg-green-400 rounded-full border-2 border-white flex items-center justify-center animate-pulse">
+                        <CheckCircle className="h-3 w-3 text-white" />
+                      </div>
                     </div>
                   )}
                 </div>
@@ -392,8 +550,8 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack }) => {
             
             {/* Selected components */}
             <div className="mb-6">
-              <h4 className="text-white/80 text-sm font-medium mb-2">選択中のコンポーネント</h4>
-              <div className="space-y-2">
+              <h4 className="text-white/80 text-sm font-medium mb-2">選択中のコンポーネント ({selectedPath.length})</h4>
+              <div className="space-y-2 max-h-32 overflow-y-auto">
                 {selectedPath.length === 0 ? (
                   <p className="text-white/60 text-sm">コンポーネントを選択してください</p>
                 ) : (
@@ -404,7 +562,17 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack }) => {
                         <div className={`p-1 bg-gradient-to-r ${node.color} rounded text-white`}>
                           {node.icon}
                         </div>
-                        <span className="text-white text-sm">{node.label}</span>
+                        <div className="flex-1 min-w-0">
+                          <span className="text-white text-sm block truncate">{node.label}</span>
+                          <span className={`text-xs px-1 py-0.5 rounded ${
+                            node.category === 'core' ? 'bg-blue-500/20 text-blue-300' :
+                            node.category === 'feature' ? 'bg-green-500/20 text-green-300' :
+                            node.category === 'infrastructure' ? 'bg-purple-500/20 text-purple-300' :
+                            'bg-pink-500/20 text-pink-300'
+                          }`}>
+                            {node.category}
+                          </span>
+                        </div>
                       </div>
                     ) : null;
                   })
@@ -415,7 +583,7 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack }) => {
             {/* AI Suggestions */}
             <div className="mb-6">
               <h4 className="text-white/80 text-sm font-medium mb-2">AI提案</h4>
-              <div className="space-y-2">
+              <div className="space-y-2 max-h-40 overflow-y-auto">
                 {aiSuggestions.length === 0 ? (
                   <p className="text-white/60 text-sm">
                     コンポーネントを選択すると、AIが最適化提案を行います
@@ -424,7 +592,7 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack }) => {
                   aiSuggestions.map((suggestion, index) => (
                     <div
                       key={index}
-                      className="bg-white/10 rounded-lg p-3 text-white text-sm animate-fade-in"
+                      className="bg-white/10 rounded-lg p-3 text-white text-sm animate-fade-in border border-white/20"
                       style={{ animationDelay: `${index * 0.2}s` }}
                     >
                       {suggestion}
@@ -435,14 +603,78 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack }) => {
             </div>
             
             {/* Generate button */}
-            {selectedPath.length >= 2 && (
-              <button className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-3 px-6 rounded-xl font-medium hover:from-emerald-600 hover:to-teal-700 transition-all duration-200 transform hover:scale-105 shadow-lg">
+            {selectedPath.length >= 3 && (
+              <button className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-3 px-6 rounded-xl font-medium hover:from-emerald-600 hover:to-teal-700 transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2">
+                <Target className="h-5 w-5" />
                 この構成で企画書を生成
               </button>
             )}
           </div>
         </div>
       </div>
+
+      {/* Add Node Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-md">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">新しい要素を追加</h3>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">要素名</label>
+                <input
+                  type="text"
+                  value={newNodeData.label}
+                  onChange={(e) => setNewNodeData(prev => ({ ...prev, label: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  placeholder="例: チャット機能"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">説明</label>
+                <textarea
+                  value={newNodeData.description}
+                  onChange={(e) => setNewNodeData(prev => ({ ...prev, description: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  rows={3}
+                  placeholder="この要素の詳細説明..."
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">カテゴリ</label>
+                <select
+                  value={newNodeData.category}
+                  onChange={(e) => setNewNodeData(prev => ({ ...prev, category: e.target.value as any }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                >
+                  <option value="feature">機能</option>
+                  <option value="infrastructure">インフラ</option>
+                  <option value="design">デザイン</option>
+                  <option value="core">コア</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={() => setShowAddModal(false)}
+                className="flex-1 px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                キャンセル
+              </button>
+              <button
+                onClick={addNewNode}
+                disabled={!newNodeData.label.trim()}
+                className="flex-1 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                追加
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Custom CSS */}
       <style jsx>{`
