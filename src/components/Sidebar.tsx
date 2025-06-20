@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bot, Send } from 'lucide-react';
+import { Bot, Send, Sparkles, Zap } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface SidebarProps {
@@ -13,9 +13,16 @@ interface SidebarProps {
   onFormChange: (field: string, value: string | number) => void;
   onSubmit: () => void;
   isLoading: boolean;
+  onQuickGenerate?: () => void; // 新しいプロップ
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, isLoading }) => {
+const Sidebar: React.FC<SidebarProps> = ({ 
+  formData, 
+  onFormChange, 
+  onSubmit, 
+  isLoading,
+  onQuickGenerate 
+}) => {
   const { t } = useLanguage();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -24,8 +31,15 @@ const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, isL
     onSubmit();
   };
 
+  const handleQuickGenerate = () => {
+    if (!formData.purpose.trim()) return;
+    if (onQuickGenerate) {
+      onQuickGenerate();
+    }
+  };
+
   return (
-    <div className="w-80 bg-white border-r border-gray-200 h-screen overflow-y-auto">
+    <div className="w-full bg-white h-full overflow-y-auto">
       <div className="p-6">
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 bg-blue-100 rounded-lg">
@@ -38,12 +52,6 @@ const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, isL
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <h3 className="text-base font-medium text-gray-900 mb-4">
-              {t('form.purpose')}
-            </h3>
-          </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               {t('form.purpose')}
@@ -123,6 +131,24 @@ const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, isL
             </select>
           </div>
 
+          {/* クイック生成ボタン */}
+          {onQuickGenerate && (
+            <button
+              type="button"
+              onClick={handleQuickGenerate}
+              disabled={isLoading || !formData.purpose.trim()}
+              className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-4 rounded-md hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-medium transition-colors mb-3"
+            >
+              {isLoading ? (
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+              ) : (
+                <Sparkles className="h-4 w-4" />
+              )}
+              <span>{isLoading ? '生成中...' : 'クイック生成'}</span>
+            </button>
+          )}
+
+          {/* 従来の送信ボタン */}
           <button
             type="submit"
             disabled={isLoading || !formData.purpose.trim()}

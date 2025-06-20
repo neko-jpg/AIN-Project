@@ -135,6 +135,96 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  // Handle traditional form submission
+  const handleFormSubmit = async () => {
+    if (!formData.purpose.trim()) return;
+
+    setIsLoading(true);
+    setError(null);
+    setIsBottomPanelOpen(true);
+
+    try {
+      const payload = {
+        ...formData,
+        development_time: developmentTime,
+        language
+      };
+
+      const response = await analyzeProject(payload);
+      setAiResult(response.suggestion);
+    } catch (err) {
+      console.error('API Request Error (Form Submit):', err);
+      setError(err instanceof Error ? err.message : 'Unknown error occurred');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Handle quick generation (auto-generate prompt from form data)
+  const handleQuickGenerate = async () => {
+    if (!formData.purpose.trim()) return;
+
+    // Auto-generate prompt blocks from form data
+    const autoBlocks: PromptBlock[] = [
+      {
+        id: 'purpose-block',
+        content: `プロジェクト目的: ${formData.purpose}`,
+        priority: 0,
+        timestamp: new Date(),
+        type: 'text'
+      },
+      {
+        id: 'project-type-block',
+        content: `プロジェクト種類: ${formData.projectType}`,
+        priority: 1,
+        timestamp: new Date(),
+        type: 'text'
+      },
+      {
+        id: 'budget-block',
+        content: `月額予算: ${formData.budget}円`,
+        priority: 2,
+        timestamp: new Date(),
+        type: 'text'
+      },
+      {
+        id: 'experience-block',
+        content: `開発経験レベル: ${formData.experienceLevel}`,
+        priority: 3,
+        timestamp: new Date(),
+        type: 'text'
+      },
+      {
+        id: 'time-block',
+        content: `週間開発時間: ${formData.weeklyHours}、開発期間: ${developmentTime}ヶ月`,
+        priority: 4,
+        timestamp: new Date(),
+        type: 'text'
+      }
+    ];
+
+    setPromptBlocks(autoBlocks);
+
+    // Generate combined prompt
+    const combinedPrompt = autoBlocks.map(block => block.content).join('\n\n');
+    setCurrentPrompt(combinedPrompt);
+
+    // Execute immediately
+    setIsLoading(true);
+    setError(null);
+    setIsBottomPanelOpen(true);
+
+    try {
+      const response = await executeCustomPrompt(combinedPrompt, language);
+      setAiResult(response.suggestion);
+    } catch (err) {
+      console.error('API Request Error (Quick Generate):', err);
+      setError(err instanceof Error ? err.message : 'Unknown error occurred');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Handle prompt from composer
   const handlePromptFromComposer = (prompt: string) => {
     setCurrentPrompt(prompt);
@@ -275,6 +365,20 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                     </select>
                   </div>
                 </div>
+
+                {/* Quick Generate Button */}
+                <button
+                  onClick={handleQuickGenerate}
+                  disabled={isLoading || !formData.purpose.trim()}
+                  className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-4 rounded-lg hover:from-green-600 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2 font-medium"
+                >
+                  {isLoading ? (
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
+                  ) : (
+                    <Sparkles className="h-4 w-4" />
+                  )}
+                  {isLoading ? '生成中...' : 'クイック生成'}
+                </button>
               </div>
             </div>
           </div>
@@ -411,7 +515,8 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
             <Sidebar
               formData={formData}
               onFormChange={handleFormChange}
-              onSubmit={() => {}} // No submit needed in new design
+              onSubmit={handleFormSubmit}
+              onQuickGenerate={handleQuickGenerate}
               isLoading={isLoading}
             />
             
