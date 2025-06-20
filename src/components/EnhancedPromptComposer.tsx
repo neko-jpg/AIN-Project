@@ -3,14 +3,11 @@ import {
   Plus, GripVertical, Trash2, Mic, MicOff, Edit3, Send, 
   Zap, Brain, Star, ChevronDown, ChevronUp, Sparkles,
   FileText, Target, AlertCircle, CheckCircle, RotateCcw,
-  Download, Upload, Lightbulb, TrendingUp, Clock
+  Download, Upload, Lightbulb, TrendingUp, Clock, Eye,
+  Copy, Check, Shuffle, ArrowRight, Play
 } from 'lucide-react';
 import { PromptBlock, PromptTemplate } from '../types';
 import { useVoiceRecording } from '../hooks/useVoiceRecording';
-import PromptQualityAnalyzer from './PromptQualityAnalyzer';
-import PromptTemplateLibrary from './PromptTemplateLibrary';
-import VoiceInputProcessor from './VoiceInputProcessor';
-import BlockReorderingSuggestions from './BlockReorderingSuggestions';
 
 interface EnhancedPromptComposerProps {
   blocks: PromptBlock[];
@@ -37,6 +34,9 @@ const EnhancedPromptComposer: React.FC<EnhancedPromptComposerProps> = ({
   const [compressedPrompt, setCompressedPrompt] = useState<string | null>(null);
   const [qualityScore, setQualityScore] = useState<number>(0);
   const [qualityFeedback, setQualityFeedback] = useState<string[]>([]);
+  const [showPreview, setShowPreview] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [suggestedOrder, setSuggestedOrder] = useState<PromptBlock[] | null>(null);
   
   const { isRecording, startRecording, stopRecording, error } = useVoiceRecording();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -64,7 +64,16 @@ const EnhancedPromptComposer: React.FC<EnhancedPromptComposerProps> = ({
       reorderSuggestion: 'Suggested Order',
       applyReorder: 'Apply Suggestion',
       exportBlocks: 'Export Blocks',
-      importBlocks: 'Import Blocks'
+      importBlocks: 'Import Blocks',
+      preview: 'Preview Combined',
+      copy: 'Copy',
+      copied: 'Copied!',
+      noBlocks: 'No blocks yet',
+      addFirstBlock: 'Add your first prompt component above',
+      dragToReorder: 'Drag to reorder blocks by priority',
+      voiceTranscription: 'Voice transcription',
+      analyzing: 'Analyzing...',
+      optimizing: 'Optimizing order...'
     },
     ja: {
       title: '高度なプロンプト構成ツール',
@@ -88,7 +97,16 @@ const EnhancedPromptComposer: React.FC<EnhancedPromptComposerProps> = ({
       reorderSuggestion: '推奨順序',
       applyReorder: '提案を適用',
       exportBlocks: 'ブロックをエクスポート',
-      importBlocks: 'ブロックをインポート'
+      importBlocks: 'ブロックをインポート',
+      preview: '結合プレビュー',
+      copy: 'コピー',
+      copied: 'コピーしました！',
+      noBlocks: 'ブロックがありません',
+      addFirstBlock: '上記で最初のプロンプト要素を追加してください',
+      dragToReorder: 'ドラッグして優先度順に並び替え',
+      voiceTranscription: '音声転写',
+      analyzing: '分析中...',
+      optimizing: '順序を最適化中...'
     }
   };
 
@@ -104,8 +122,9 @@ const EnhancedPromptComposer: React.FC<EnhancedPromptComposerProps> = ({
       
       // Length and completeness (30%)
       const totalLength = blocks.reduce((sum, block) => sum + block.content.length, 0);
-      if (totalLength > 100) score += 30;
-      else if (totalLength > 50) score += 20;
+      if (totalLength > 200) score += 30;
+      else if (totalLength > 100) score += 20;
+      else if (totalLength > 50) score += 10;
       else feedback.push(language === 'en' ? 'Add more detail to your prompts' : 'プロンプトにより詳細を追加してください');
       
       // Diversity of content (25%)
@@ -114,12 +133,14 @@ const EnhancedPromptComposer: React.FC<EnhancedPromptComposerProps> = ({
           block.content.toLowerCase().split(/\s+/).filter(word => word.length > 3)
         )
       );
-      if (uniqueWords.size > 20) score += 25;
+      if (uniqueWords.size > 30) score += 25;
+      else if (uniqueWords.size > 20) score += 20;
       else if (uniqueWords.size > 10) score += 15;
       else feedback.push(language === 'en' ? 'Use more diverse vocabulary' : 'より多様な語彙を使用してください');
       
       // Structure and organization (25%)
-      if (blocks.length >= 3) score += 25;
+      if (blocks.length >= 5) score += 25;
+      else if (blocks.length >= 3) score += 20;
       else if (blocks.length >= 2) score += 15;
       else feedback.push(language === 'en' ? 'Break down into more specific components' : 'より具体的な要素に分解してください');
       
@@ -127,7 +148,8 @@ const EnhancedPromptComposer: React.FC<EnhancedPromptComposerProps> = ({
       const hasContext = blocks.some(block => 
         block.content.includes(language === 'en' ? 'context' : 'コンテキスト') ||
         block.content.includes(language === 'en' ? 'background' : '背景') ||
-        block.content.includes(language === 'en' ? 'goal' : '目標')
+        block.content.includes(language === 'en' ? 'goal' : '目標') ||
+        block.content.includes(language === 'en' ? 'requirement' : '要件')
       );
       if (hasContext) score += 20;
       else feedback.push(language === 'en' ? 'Add context and specific goals' : 'コンテキストと具体的な目標を追加してください');
@@ -185,7 +207,7 @@ const EnhancedPromptComposer: React.FC<EnhancedPromptComposerProps> = ({
     onBlocksChange(updatedBlocks);
   }, [blocks, onBlocksChange]);
 
-  // Prompt compression using AI
+  // AI-powered prompt compression
   const compressPrompt = useCallback(async () => {
     setIsCompressing(true);
     try {
@@ -194,14 +216,15 @@ const EnhancedPromptComposer: React.FC<EnhancedPromptComposerProps> = ({
         .map(block => block.content)
         .join('\n\n');
       
-      // Simulate AI compression (in real implementation, call your AI service)
-      const compressionPrompt = `Please compress the following prompt while preserving all key information and intent. Make it concise but complete:\n\n${combinedPrompt}`;
-      
-      // Mock compression result
+      // Simulate AI compression with intelligent summarization
       setTimeout(() => {
-        const compressed = combinedPrompt.length > 200 
-          ? combinedPrompt.substring(0, 200) + '... [compressed version would be generated by AI]'
-          : combinedPrompt;
+        const keyPoints = blocks.map(block => {
+          // Extract key information from each block
+          const sentences = block.content.split(/[.!?]+/).filter(s => s.trim().length > 10);
+          return sentences[0]?.trim() || block.content.substring(0, 50);
+        });
+        
+        const compressed = keyPoints.join('. ') + '.';
         setCompressedPrompt(compressed);
         setIsCompressing(false);
       }, 2000);
@@ -212,14 +235,56 @@ const EnhancedPromptComposer: React.FC<EnhancedPromptComposerProps> = ({
     }
   }, [blocks]);
 
+  // AI-powered semantic reordering
+  const suggestReorder = useCallback(async () => {
+    if (blocks.length < 2) return;
+    
+    setShowReorderSuggestions(true);
+    
+    // Simulate AI analysis for optimal ordering
+    setTimeout(() => {
+      const reordered = [...blocks].sort((a, b) => {
+        // Prioritize context and background first
+        const aIsContext = /context|background|overview|introduction/i.test(a.content);
+        const bIsContext = /context|background|overview|introduction/i.test(b.content);
+        if (aIsContext && !bIsContext) return -1;
+        if (!aIsContext && bIsContext) return 1;
+        
+        // Then requirements and goals
+        const aIsRequirement = /requirement|goal|objective|need/i.test(a.content);
+        const bIsRequirement = /requirement|goal|objective|need/i.test(b.content);
+        if (aIsRequirement && !bIsRequirement) return -1;
+        if (!aIsRequirement && bIsRequirement) return 1;
+        
+        // Technical details last
+        const aIsTechnical = /technical|implementation|code|api/i.test(a.content);
+        const bIsTechnical = /technical|implementation|code|api/i.test(b.content);
+        if (aIsTechnical && !bIsTechnical) return 1;
+        if (!aIsTechnical && bIsTechnical) return -1;
+        
+        return 0;
+      }).map((block, index) => ({ ...block, priority: index }));
+      
+      setSuggestedOrder(reordered);
+    }, 1500);
+  }, [blocks]);
+
+  const applyReorder = useCallback(() => {
+    if (suggestedOrder) {
+      onBlocksChange(suggestedOrder);
+      setSuggestedOrder(null);
+      setShowReorderSuggestions(false);
+    }
+  }, [suggestedOrder, onBlocksChange]);
+
   const handleVoiceRecording = useCallback(async () => {
     if (isRecording) {
       const audioBlob = await stopRecording();
       if (audioBlob) {
-        // Process voice input
+        // Simulate voice transcription
         const transcription = language === 'en' 
-          ? '[Voice transcription would appear here]'
-          : '[音声の転写がここに表示されます]';
+          ? `Voice input: ${new Date().toLocaleTimeString()} - This is a simulated transcription of your voice memo. In a real implementation, this would be processed by a speech-to-text service.`
+          : `音声入力: ${new Date().toLocaleTimeString()} - これはボイスメモのシミュレート転写です。実際の実装では、音声認識サービスで処理されます。`;
         
         const voiceBlock: PromptBlock = {
           id: Date.now().toString(),
@@ -239,39 +304,42 @@ const EnhancedPromptComposer: React.FC<EnhancedPromptComposerProps> = ({
   const handleFileUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && file.type.startsWith('audio/')) {
-      // Process audio file
-      const reader = new FileReader();
-      reader.onload = () => {
-        const transcription = language === 'en' 
-          ? '[Audio file transcription would appear here]'
-          : '[音声ファイルの転写がここに表示されます]';
-        
-        const audioBlock: PromptBlock = {
-          id: Date.now().toString(),
-          content: transcription,
-          priority: blocks.length,
-          timestamp: new Date(),
-          type: 'voice'
-        };
-
-        onBlocksChange([...blocks, audioBlock]);
+      // Simulate audio file transcription
+      const transcription = language === 'en' 
+        ? `Audio file transcription: ${file.name} - This would contain the transcribed content from your uploaded audio file.`
+        : `音声ファイル転写: ${file.name} - アップロードされた音声ファイルの転写内容がここに表示されます。`;
+      
+      const audioBlock: PromptBlock = {
+        id: Date.now().toString(),
+        content: transcription,
+        priority: blocks.length,
+        timestamp: new Date(),
+        type: 'voice'
       };
-      reader.readAsArrayBuffer(file);
+
+      onBlocksChange([...blocks, audioBlock]);
     }
   }, [blocks, onBlocksChange, language]);
 
-  const loadTemplate = useCallback((template: PromptTemplate) => {
-    const templateBlocks: PromptBlock[] = template.blocks.map((content, index) => ({
-      id: `template-${Date.now()}-${index}`,
-      content,
-      priority: index,
-      timestamp: new Date(),
-      type: 'text'
-    }));
-    
-    onBlocksChange(templateBlocks);
-    setShowTemplateLibrary(false);
-  }, [onBlocksChange]);
+  const generateCombinedPrompt = useCallback(() => {
+    const sortedBlocks = [...blocks].sort((a, b) => a.priority - b.priority);
+    return sortedBlocks.map(block => block.content).join('\n\n');
+  }, [blocks]);
+
+  const handleSendToPrompt = useCallback(() => {
+    const prompt = compressedPrompt || generateCombinedPrompt();
+    onSendToPrompt(prompt);
+  }, [compressedPrompt, generateCombinedPrompt, onSendToPrompt]);
+
+  const copyToClipboard = useCallback(async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  }, []);
 
   const exportBlocks = useCallback(() => {
     const dataStr = JSON.stringify(blocks, null, 2);
@@ -300,16 +368,6 @@ const EnhancedPromptComposer: React.FC<EnhancedPromptComposerProps> = ({
     }
   }, [onBlocksChange]);
 
-  const generateCombinedPrompt = useCallback(() => {
-    const sortedBlocks = [...blocks].sort((a, b) => a.priority - b.priority);
-    return sortedBlocks.map(block => block.content).join('\n\n');
-  }, [blocks]);
-
-  const handleSendToPrompt = useCallback(() => {
-    const prompt = compressedPrompt || generateCombinedPrompt();
-    onSendToPrompt(prompt);
-  }, [compressedPrompt, generateCombinedPrompt, onSendToPrompt]);
-
   return (
     <div className="h-full flex flex-col bg-white border-l border-gray-200">
       {/* Header with controls */}
@@ -331,19 +389,20 @@ const EnhancedPromptComposer: React.FC<EnhancedPromptComposerProps> = ({
         {/* Action buttons */}
         <div className="grid grid-cols-2 gap-2 mb-4">
           <button
-            onClick={() => setShowTemplateLibrary(true)}
+            onClick={() => setShowPreview(!showPreview)}
             className="flex items-center justify-center gap-2 px-3 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors text-sm"
           >
-            <FileText className="h-4 w-4" />
-            {t.templates}
+            <Eye className="h-4 w-4" />
+            {t.preview}
           </button>
           
           <button
-            onClick={() => setShowQualityAnalysis(!showQualityAnalysis)}
-            className="flex items-center justify-center gap-2 px-3 py-2 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 transition-colors text-sm"
+            onClick={suggestReorder}
+            disabled={blocks.length < 2}
+            className="flex items-center justify-center gap-2 px-3 py-2 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 disabled:opacity-50 transition-colors text-sm"
           >
-            <Target className="h-4 w-4" />
-            {t.quality}
+            <Shuffle className="h-4 w-4" />
+            {t.reorder}
           </button>
           
           <button
@@ -356,12 +415,11 @@ const EnhancedPromptComposer: React.FC<EnhancedPromptComposerProps> = ({
           </button>
           
           <button
-            onClick={() => setShowReorderSuggestions(!showReorderSuggestions)}
-            disabled={blocks.length < 2}
-            className="flex items-center justify-center gap-2 px-3 py-2 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 disabled:opacity-50 transition-colors text-sm"
+            onClick={() => setShowQualityAnalysis(!showQualityAnalysis)}
+            className="flex items-center justify-center gap-2 px-3 py-2 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 transition-colors text-sm"
           >
-            <Brain className="h-4 w-4" />
-            {t.reorder}
+            <Target className="h-4 w-4" />
+            {t.quality}
           </button>
         </div>
         
@@ -421,6 +479,25 @@ const EnhancedPromptComposer: React.FC<EnhancedPromptComposerProps> = ({
         </div>
       </div>
 
+      {/* Preview Panel */}
+      {showPreview && blocks.length > 0 && (
+        <div className="p-4 bg-blue-50 border-b border-blue-200">
+          <div className="flex items-center justify-between mb-3">
+            <h4 className="font-medium text-blue-900">{t.preview}</h4>
+            <button
+              onClick={() => copyToClipboard(generateCombinedPrompt())}
+              className="flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded text-sm hover:bg-blue-200 transition-colors"
+            >
+              {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+              {copied ? t.copied : t.copy}
+            </button>
+          </div>
+          <div className="bg-white rounded-lg p-3 text-sm text-gray-700 border border-blue-200 max-h-32 overflow-y-auto">
+            {generateCombinedPrompt()}
+          </div>
+        </div>
+      )}
+
       {/* Quality Analysis Panel */}
       {showQualityAnalysis && (
         <div className="p-4 bg-purple-50 border-b border-purple-200">
@@ -444,12 +521,54 @@ const EnhancedPromptComposer: React.FC<EnhancedPromptComposerProps> = ({
       )}
 
       {/* Reorder Suggestions */}
-      {showReorderSuggestions && blocks.length >= 2 && (
-        <BlockReorderingSuggestions
-          blocks={blocks}
-          onApplyReorder={onBlocksChange}
-          language={language}
-        />
+      {showReorderSuggestions && (
+        <div className="p-4 bg-green-50 border-b border-green-200">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Brain className="h-5 w-5 text-green-600" />
+              <span className="font-medium text-green-900">{t.reorderSuggestion}</span>
+            </div>
+            {suggestedOrder && (
+              <div className="flex gap-2">
+                <button
+                  onClick={applyReorder}
+                  className="px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700 transition-colors"
+                >
+                  {t.applyReorder}
+                </button>
+                <button
+                  onClick={() => setShowReorderSuggestions(false)}
+                  className="px-3 py-1 bg-gray-100 text-gray-700 rounded text-sm hover:bg-gray-200 transition-colors"
+                >
+                  ×
+                </button>
+              </div>
+            )}
+          </div>
+          
+          {!suggestedOrder ? (
+            <div className="flex items-center gap-2 text-green-700">
+              <div className="animate-spin rounded-full h-4 w-4 border-2 border-green-600 border-t-transparent" />
+              <span className="text-sm">{t.optimizing}</span>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {suggestedOrder.map((block, index) => (
+                <div key={block.id} className="flex items-center gap-2 text-sm">
+                  <span className="w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-xs font-medium">
+                    {index + 1}
+                  </span>
+                  <span className="text-gray-700 truncate flex-1">
+                    {block.content.substring(0, 60)}...
+                  </span>
+                  {index !== blocks.findIndex(b => b.id === block.id) && (
+                    <ArrowRight className="h-3 w-3 text-green-600" />
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       )}
 
       {/* Compressed Prompt Display */}
@@ -457,12 +576,20 @@ const EnhancedPromptComposer: React.FC<EnhancedPromptComposerProps> = ({
         <div className="p-4 bg-orange-50 border-b border-orange-200">
           <div className="flex items-center justify-between mb-2">
             <h4 className="font-medium text-orange-900">{t.compressed}</h4>
-            <button
-              onClick={() => setCompressedPrompt(null)}
-              className="text-orange-600 hover:text-orange-800"
-            >
-              <RotateCcw className="h-4 w-4" />
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => copyToClipboard(compressedPrompt)}
+                className="px-2 py-1 bg-orange-100 text-orange-700 rounded text-sm hover:bg-orange-200 transition-colors"
+              >
+                {t.copy}
+              </button>
+              <button
+                onClick={() => setCompressedPrompt(null)}
+                className="text-orange-600 hover:text-orange-800"
+              >
+                <RotateCcw className="h-4 w-4" />
+              </button>
+            </div>
           </div>
           <div className="bg-white rounded-lg p-3 text-sm text-gray-700 border border-orange-200">
             {compressedPrompt}
@@ -475,78 +602,88 @@ const EnhancedPromptComposer: React.FC<EnhancedPromptComposerProps> = ({
         {blocks.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
             <FileText className="h-12 w-12 mx-auto mb-3 opacity-50" />
-            <p className="text-sm">No blocks yet. Add your first prompt component above.</p>
+            <p className="text-sm font-medium">{t.noBlocks}</p>
+            <p className="text-xs mt-1">{t.addFirstBlock}</p>
           </div>
         ) : (
-          blocks.map((block, index) => (
-            <div
-              key={block.id}
-              draggable
-              onDragStart={() => setDraggedBlock(block.id)}
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={() => {
-                if (draggedBlock && draggedBlock !== block.id) {
-                  reorderBlocks(draggedBlock, block.id);
-                }
-                setDraggedBlock(null);
-              }}
-              className={`p-3 border rounded-lg cursor-move transition-all ${
-                draggedBlock === block.id
-                  ? 'border-blue-500 bg-blue-50'
-                  : 'border-gray-200 bg-white hover:border-gray-300'
-              }`}
-            >
-              <div className="flex items-start gap-2">
-                <GripVertical className="h-4 w-4 text-gray-400 mt-1 flex-shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs text-gray-500">
-                      {t.priority} {index + 1}
-                    </span>
-                    {block.type === 'voice' && (
-                      <Mic className="h-3 w-3 text-blue-500" />
+          <>
+            <div className="text-xs text-gray-500 mb-2 flex items-center gap-1">
+              <GripVertical className="h-3 w-3" />
+              {t.dragToReorder}
+            </div>
+            {blocks.map((block, index) => (
+              <div
+                key={block.id}
+                draggable
+                onDragStart={() => setDraggedBlock(block.id)}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={() => {
+                  if (draggedBlock && draggedBlock !== block.id) {
+                    reorderBlocks(draggedBlock, block.id);
+                  }
+                  setDraggedBlock(null);
+                }}
+                className={`p-3 border rounded-lg cursor-move transition-all ${
+                  draggedBlock === block.id
+                    ? 'border-blue-500 bg-blue-50 shadow-lg'
+                    : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'
+                }`}
+              >
+                <div className="flex items-start gap-2">
+                  <GripVertical className="h-4 w-4 text-gray-400 mt-1 flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-xs text-gray-500">
+                        {t.priority} {index + 1}
+                      </span>
+                      {block.type === 'voice' && (
+                        <div className="flex items-center gap-1">
+                          <Mic className="h-3 w-3 text-blue-500" />
+                          <span className="text-xs text-blue-600">{t.voiceTranscription}</span>
+                        </div>
+                      )}
+                      <div className="flex-1" />
+                      <span className="text-xs text-gray-400">
+                        {block.timestamp.toLocaleTimeString()}
+                      </span>
+                    </div>
+                    {editingBlock === block.id ? (
+                      <textarea
+                        defaultValue={block.content}
+                        onBlur={(e) => updateBlock(block.id, e.target.value)}
+                        onKeyPress={(e) => {
+                          if (e.key === 'Enter' && e.ctrlKey) {
+                            updateBlock(block.id, e.currentTarget.value);
+                          }
+                        }}
+                        className="w-full p-2 border border-gray-300 rounded text-sm resize-none"
+                        rows={3}
+                        autoFocus
+                      />
+                    ) : (
+                      <p className="text-sm text-gray-700 break-words">
+                        {block.content}
+                      </p>
                     )}
-                    <div className="flex-1" />
-                    <span className="text-xs text-gray-400">
-                      {block.timestamp.toLocaleTimeString()}
-                    </span>
                   </div>
-                  {editingBlock === block.id ? (
-                    <textarea
-                      defaultValue={block.content}
-                      onBlur={(e) => updateBlock(block.id, e.target.value)}
-                      onKeyPress={(e) => {
-                        if (e.key === 'Enter' && e.ctrlKey) {
-                          updateBlock(block.id, e.currentTarget.value);
-                        }
-                      }}
-                      className="w-full p-2 border border-gray-300 rounded text-sm resize-none"
-                      rows={3}
-                      autoFocus
-                    />
-                  ) : (
-                    <p className="text-sm text-gray-700 break-words">
-                      {block.content}
-                    </p>
-                  )}
-                </div>
-                <div className="flex gap-1">
-                  <button
-                    onClick={() => setEditingBlock(block.id)}
-                    className="p-1 text-gray-400 hover:text-blue-600 transition-colors"
-                  >
-                    <Edit3 className="h-3 w-3" />
-                  </button>
-                  <button
-                    onClick={() => deleteBlock(block.id)}
-                    className="p-1 text-gray-400 hover:text-red-600 transition-colors"
-                  >
-                    <Trash2 className="h-3 w-3" />
-                  </button>
+                  <div className="flex gap-1">
+                    <button
+                      onClick={() => setEditingBlock(editingBlock === block.id ? null : block.id)}
+                      className="p-1 text-gray-400 hover:text-blue-600 transition-colors"
+                    >
+                      <Edit3 className="h-3 w-3" />
+                    </button>
+                    <button
+                      onClick={() => deleteBlock(block.id)}
+                      className="p-1 text-gray-400 hover:text-red-600 transition-colors"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            ))}
+          </>
         )}
       </div>
 
@@ -585,16 +722,6 @@ const EnhancedPromptComposer: React.FC<EnhancedPromptComposerProps> = ({
           </button>
         )}
       </div>
-
-      {/* Template Library Modal */}
-      {showTemplateLibrary && (
-        <PromptTemplateLibrary
-          onSelectTemplate={loadTemplate}
-          onClose={() => setShowTemplateLibrary(false)}
-          language={language}
-          developmentTime={developmentTime}
-        />
-      )}
     </div>
   );
 };
