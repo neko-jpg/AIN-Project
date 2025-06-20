@@ -28,8 +28,6 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [newNodeData, setNewNodeData] = useState({ label: '', description: '', category: 'feature' as const });
-<<<<<<< HEAD
-=======
 
   const texts = {
     en: {
@@ -183,7 +181,6 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
   };
 
   const t = texts[language];
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
 
   // Initialize tree structure
   useEffect(() => {
@@ -197,11 +194,7 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
         isExpanded: true,
         isSelected: false,
         color: 'from-emerald-600 to-emerald-800',
-<<<<<<< HEAD
-        description: 'プロジェクトの全体構成',
-=======
         description: t.nodeDescriptions.root,
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         category: 'core',
         priority: 1
       },
@@ -216,11 +209,7 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
         isExpanded: false,
         isSelected: false,
         color: 'from-blue-500 to-blue-700',
-<<<<<<< HEAD
-        description: 'ユーザーインターフェース層',
-=======
         description: t.nodeDescriptions.frontend,
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         category: 'core',
         priority: 2
       },
@@ -234,11 +223,7 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
         isExpanded: false,
         isSelected: false,
         color: 'from-purple-500 to-purple-700',
-<<<<<<< HEAD
-        description: 'サーバーサイド処理',
-=======
         description: t.nodeDescriptions.backend,
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         category: 'core',
         priority: 3
       },
@@ -252,11 +237,7 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
         isExpanded: false,
         isSelected: false,
         color: 'from-orange-500 to-orange-700',
-<<<<<<< HEAD
-        description: 'AI機能の中核',
-=======
         description: t.nodeDescriptions['ai-core'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         category: 'core',
         priority: 4
       },
@@ -270,22 +251,14 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
         isExpanded: false,
         isSelected: false,
         color: 'from-gray-500 to-gray-700',
-<<<<<<< HEAD
-        description: 'システム基盤',
-=======
         description: t.nodeDescriptions.infrastructure,
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         category: 'infrastructure',
         priority: 5
       },
       // Level 2 - Detailed Components
       {
         id: 'react-app',
-<<<<<<< HEAD
-        label: 'React Webアプリ',
-=======
         label: t.nodeLabels['react-app'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         icon: <Code className="h-4 w-4" />,
         level: 2,
         parentId: 'frontend',
@@ -293,11 +266,7 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
         isExpanded: false,
         isSelected: false,
         color: 'from-cyan-400 to-cyan-600',
-<<<<<<< HEAD
-        description: 'Reactベースのウェブアプリケーション',
-=======
         description: t.nodeDescriptions['react-app'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         category: 'feature',
         priority: 6
       },
@@ -311,21 +280,13 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
         isExpanded: false,
         isSelected: false,
         color: 'from-pink-400 to-pink-600',
-<<<<<<< HEAD
-        description: 'iOS/Androidアプリ',
-=======
         description: t.nodeDescriptions['mobile-app'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         category: 'feature',
         priority: 7
       },
       {
         id: 'ui-design',
-<<<<<<< HEAD
-        label: 'UI/UXデザイン',
-=======
         label: t.nodeLabels['ui-design'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         icon: <Palette className="h-4 w-4" />,
         level: 2,
         parentId: 'frontend',
@@ -333,21 +294,13 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
         isExpanded: false,
         isSelected: false,
         color: 'from-rose-400 to-rose-600',
-<<<<<<< HEAD
-        description: 'ユーザーエクスペリエンス設計',
-=======
         description: t.nodeDescriptions['ui-design'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         category: 'design',
         priority: 8
       },
       {
         id: 'api-server',
-<<<<<<< HEAD
-        label: 'REST API',
-=======
         label: t.nodeLabels['api-server'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         icon: <Zap className="h-4 w-4" />,
         level: 2,
         parentId: 'backend',
@@ -355,11 +308,7 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
         isExpanded: false,
         isSelected: false,
         color: 'from-indigo-400 to-indigo-600',
-<<<<<<< HEAD
-        description: 'RESTful API設計',
-=======
         description: t.nodeDescriptions['api-server'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         category: 'feature',
         priority: 9
       },
@@ -373,21 +322,13 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
         isExpanded: false,
         isSelected: false,
         color: 'from-emerald-400 to-emerald-600',
-<<<<<<< HEAD
-        description: 'データ永続化層',
-=======
         description: t.nodeDescriptions.database,
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         category: 'infrastructure',
         priority: 10
       },
       {
         id: 'auth-system',
-<<<<<<< HEAD
-        label: '認証システム',
-=======
         label: t.nodeLabels['auth-system'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         icon: <Users className="h-4 w-4" />,
         level: 2,
         parentId: 'backend',
@@ -395,11 +336,7 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
         isExpanded: false,
         isSelected: false,
         color: 'from-violet-400 to-violet-600',
-<<<<<<< HEAD
-        description: 'ユーザー認証・認可',
-=======
         description: t.nodeDescriptions['auth-system'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         category: 'feature',
         priority: 11
       },
@@ -413,21 +350,13 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
         isExpanded: false,
         isSelected: false,
         color: 'from-yellow-400 to-yellow-600',
-<<<<<<< HEAD
-        description: '機械学習モデルの訓練',
-=======
         description: t.nodeDescriptions['model-training'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         category: 'feature',
         priority: 12
       },
       {
         id: 'inference-engine',
-<<<<<<< HEAD
-        label: '推論エンジン',
-=======
         label: t.nodeLabels['inference-engine'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         icon: <Zap className="h-4 w-4" />,
         level: 2,
         parentId: 'ai-core',
@@ -435,21 +364,13 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
         isExpanded: false,
         isSelected: false,
         color: 'from-red-400 to-red-600',
-<<<<<<< HEAD
-        description: 'リアルタイム推論処理',
-=======
         description: t.nodeDescriptions['inference-engine'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         category: 'feature',
         priority: 13
       },
       {
         id: 'data-pipeline',
-<<<<<<< HEAD
-        label: 'データパイプライン',
-=======
         label: t.nodeLabels['data-pipeline'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         icon: <Settings className="h-4 w-4" />,
         level: 2,
         parentId: 'ai-core',
@@ -457,21 +378,13 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
         isExpanded: false,
         isSelected: false,
         color: 'from-amber-400 to-amber-600',
-<<<<<<< HEAD
-        description: 'データ処理フロー',
-=======
         description: t.nodeDescriptions['data-pipeline'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         category: 'infrastructure',
         priority: 14
       },
       {
         id: 'cloud-platform',
-<<<<<<< HEAD
-        label: 'クラウド基盤',
-=======
         label: t.nodeLabels['cloud-platform'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         icon: <Cloud className="h-4 w-4" />,
         level: 2,
         parentId: 'infrastructure',
@@ -479,11 +392,7 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
         isExpanded: false,
         isSelected: false,
         color: 'from-sky-400 to-sky-600',
-<<<<<<< HEAD
-        description: 'AWS/GCP/Azure',
-=======
         description: t.nodeDescriptions['cloud-platform'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         category: 'infrastructure',
         priority: 15
       },
@@ -497,21 +406,13 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
         isExpanded: false,
         isSelected: false,
         color: 'from-slate-400 to-slate-600',
-<<<<<<< HEAD
-        description: '認証・認可・暗号化',
-=======
         description: t.nodeDescriptions.security,
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         category: 'infrastructure',
         priority: 16
       },
       {
         id: 'monitoring',
-<<<<<<< HEAD
-        label: 'モニタリング',
-=======
         label: t.nodeLabels.monitoring,
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         icon: <Target className="h-4 w-4" />,
         level: 2,
         parentId: 'infrastructure',
@@ -519,11 +420,7 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
         isExpanded: false,
         isSelected: false,
         color: 'from-teal-400 to-teal-600',
-<<<<<<< HEAD
-        description: 'システム監視・ログ管理',
-=======
         description: t.nodeDescriptions.monitoring,
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         category: 'infrastructure',
         priority: 17
       }
@@ -574,11 +471,7 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
       isExpanded: false,
       isSelected: false,
       color: 'from-green-400 to-green-600',
-<<<<<<< HEAD
-      description: newNodeData.description || '新しく追加された要素',
-=======
       description: newNodeData.description || t.insights.newElement,
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
       category: newNodeData.category,
       priority: nodes.length + 1
     };
@@ -611,17 +504,6 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
       
       // Category-based analysis
       if (categories.includes('core') && categories.includes('feature')) {
-<<<<<<< HEAD
-        suggestions.push("🎯 コア機能と追加機能のバランスが良好です");
-      }
-      
-      if (categories.includes('infrastructure')) {
-        suggestions.push("🏗️ インフラ要素が含まれており、スケーラブルな設計が可能です");
-      }
-      
-      if (categories.includes('design')) {
-        suggestions.push("🎨 UX/UIが考慮されており、ユーザー体験が向上します");
-=======
         suggestions.push(t.insights.coreFeature);
       }
       
@@ -631,34 +513,21 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
       
       if (categories.includes('design')) {
         suggestions.push(t.insights.design);
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
       }
       
       // Specific node analysis
       if (node.category === 'core') {
-<<<<<<< HEAD
-        suggestions.push(`🌟 ${node.label}は他のコンポーネントとの連携が重要です`);
-      } else if (node.category === 'feature') {
-        suggestions.push(`⚡ ${node.label}の実装優先度を検討しましょう`);
-=======
         suggestions.push(t.insights.coreImportant.replace('{label}', node.label));
       } else if (node.category === 'feature') {
         suggestions.push(t.insights.featurePriority.replace('{label}', node.label));
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
       }
       
       // Complexity analysis
       const complexity = selectedNodes.length;
       if (complexity >= 5) {
-<<<<<<< HEAD
-        suggestions.push("🚀 複雑なシステムですが、段階的な開発で実現可能です");
-      } else if (complexity >= 3) {
-        suggestions.push("💡 適度な複雑さで、実装しやすいプロジェクトです");
-=======
         suggestions.push(t.insights.complex);
       } else if (complexity >= 3) {
         suggestions.push(t.insights.moderate);
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
       }
       
       setAiSuggestions(prev => [...prev.slice(-3), ...suggestions.slice(0, 3)]);
@@ -742,11 +611,7 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
             className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all duration-200"
           >
             <Plus className="h-5 w-5" />
-<<<<<<< HEAD
-            <span className="hidden sm:inline">要素を追加</span>
-=======
             <span className="hidden sm:inline">{t.addElement}</span>
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
           </button>
         </div>
       </div>
@@ -803,17 +668,11 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
                           node.category === 'infrastructure' ? 'bg-purple-500/20 text-purple-300' :
                           'bg-pink-500/20 text-pink-300'
                         }`}>
-<<<<<<< HEAD
-                          {node.category}
-                        </span>
-                        <span className="text-white/40 text-xs">優先度: {node.priority}</span>
-=======
                           {t.categories[node.category]}
                         </span>
                         <span className="text-white/40 text-xs">
                           {language === 'en' ? `Priority: ${node.priority}` : `優先度: ${node.priority}`}
                         </span>
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
                       </div>
                     </div>
                   </div>
@@ -847,13 +706,9 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
             
             {/* Selected components */}
             <div className="mb-6">
-<<<<<<< HEAD
-              <h4 className="text-white/80 text-sm font-medium mb-2">選択中のコンポーネント ({selectedPath.length})</h4>
-=======
               <h4 className="text-white/80 text-sm font-medium mb-2">
                 {t.selectedComponents} ({selectedPath.length})
               </h4>
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
               <div className="space-y-2 max-h-32 overflow-y-auto">
                 {selectedPath.length === 0 ? (
                   <p className="text-white/60 text-sm">{t.selectComponentsPrompt}</p>
@@ -873,11 +728,7 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
                             node.category === 'infrastructure' ? 'bg-purple-500/20 text-purple-300' :
                             'bg-pink-500/20 text-pink-300'
                           }`}>
-<<<<<<< HEAD
-                            {node.category}
-=======
                             {t.categories[node.category]}
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
                           </span>
                         </div>
                       </div>
@@ -889,11 +740,7 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
             
             {/* AI Suggestions */}
             <div className="mb-6">
-<<<<<<< HEAD
-              <h4 className="text-white/80 text-sm font-medium mb-2">AI提案</h4>
-=======
               <h4 className="text-white/80 text-sm font-medium mb-2">{t.aiSuggestions}</h4>
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
               <div className="space-y-2 max-h-40 overflow-y-auto">
                 {aiSuggestions.length === 0 ? (
                   <p className="text-white/60 text-sm">
@@ -917,11 +764,7 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
             {selectedPath.length >= 3 && (
               <button className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-3 px-6 rounded-xl font-medium hover:from-emerald-600 hover:to-teal-700 transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2">
                 <Target className="h-5 w-5" />
-<<<<<<< HEAD
-                この構成で企画書を生成
-=======
                 {t.generateProposal}
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
               </button>
             )}
           </div>
@@ -932,73 +775,42 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
       {showAddModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl p-6 w-full max-w-md">
-<<<<<<< HEAD
-            <h3 className="text-xl font-bold text-gray-900 mb-4">新しい要素を追加</h3>
-            
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">要素名</label>
-=======
             <h3 className="text-xl font-bold text-gray-900 mb-4">{t.addNewElement}</h3>
             
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">{t.elementName}</label>
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
                 <input
                   type="text"
                   value={newNodeData.label}
                   onChange={(e) => setNewNodeData(prev => ({ ...prev, label: e.target.value }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-<<<<<<< HEAD
-                  placeholder="例: チャット機能"
-=======
                   placeholder={t.elementNamePlaceholder}
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
                 />
               </div>
               
               <div>
-<<<<<<< HEAD
-                <label className="block text-sm font-medium text-gray-700 mb-1">説明</label>
-=======
                 <label className="block text-sm font-medium text-gray-700 mb-1">{t.description}</label>
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
                 <textarea
                   value={newNodeData.description}
                   onChange={(e) => setNewNodeData(prev => ({ ...prev, description: e.target.value }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   rows={3}
-<<<<<<< HEAD
-                  placeholder="この要素の詳細説明..."
-=======
                   placeholder={t.descriptionPlaceholder}
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
                 />
               </div>
               
               <div>
-<<<<<<< HEAD
-                <label className="block text-sm font-medium text-gray-700 mb-1">カテゴリ</label>
-=======
                 <label className="block text-sm font-medium text-gray-700 mb-1">{t.category}</label>
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
                 <select
                   value={newNodeData.category}
                   onChange={(e) => setNewNodeData(prev => ({ ...prev, category: e.target.value as any }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 >
-<<<<<<< HEAD
-                  <option value="feature">機能</option>
-                  <option value="infrastructure">インフラ</option>
-                  <option value="design">デザイン</option>
-                  <option value="core">コア</option>
-=======
                   <option value="feature">{t.categories.feature}</option>
                   <option value="infrastructure">{t.categories.infrastructure}</option>
                   <option value="design">{t.categories.design}</option>
                   <option value="core">{t.categories.core}</option>
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
                 </select>
               </div>
             </div>
@@ -1008,22 +820,14 @@ const TreeModeScreen: React.FC<TreeModeScreenProps> = ({ onBack, language }) => 
                 onClick={() => setShowAddModal(false)}
                 className="flex-1 px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
               >
-<<<<<<< HEAD
-                キャンセル
-=======
                 {t.cancel}
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
               </button>
               <button
                 onClick={addNewNode}
                 disabled={!newNodeData.label.trim()}
                 className="flex-1 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-<<<<<<< HEAD
-                追加
-=======
                 {t.add}
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
               </button>
             </div>
           </div>

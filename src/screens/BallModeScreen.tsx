@@ -27,8 +27,6 @@ const BallModeScreen: React.FC<BallModeScreenProps> = ({ onBack, language }) => 
   const [insights, setInsights] = useState<string[]>([]);
   const [animationFrame, setAnimationFrame] = useState(0);
 
-<<<<<<< HEAD
-=======
   const texts = {
     en: {
       title: 'Ball Mode',
@@ -92,7 +90,6 @@ const BallModeScreen: React.FC<BallModeScreenProps> = ({ onBack, language }) => 
 
   const t = texts[language];
 
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
   // Initialize balls with beautiful floating animation
   useEffect(() => {
     const initialBalls: Ball[] = [
@@ -103,11 +100,7 @@ const BallModeScreen: React.FC<BallModeScreenProps> = ({ onBack, language }) => 
         y: 25,
         size: 90,
         color: 'from-blue-400 via-blue-500 to-blue-600',
-<<<<<<< HEAD
-        label: 'AI・機械学習',
-=======
         label: t.ballLabels['ai-ml'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         icon: <Brain className="h-7 w-7 text-white" />,
         isActive: false,
         energy: 0,
@@ -120,11 +113,7 @@ const BallModeScreen: React.FC<BallModeScreenProps> = ({ onBack, language }) => 
         y: 15,
         size: 85,
         color: 'from-emerald-400 via-emerald-500 to-emerald-600',
-<<<<<<< HEAD
-        label: 'Web開発',
-=======
         label: t.ballLabels['web-dev'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         icon: <Globe className="h-6 w-6 text-white" />,
         isActive: false,
         energy: 0,
@@ -137,11 +126,7 @@ const BallModeScreen: React.FC<BallModeScreenProps> = ({ onBack, language }) => 
         y: 65,
         size: 80,
         color: 'from-purple-400 via-purple-500 to-purple-600',
-<<<<<<< HEAD
-        label: 'モバイルアプリ',
-=======
         label: t.ballLabels['mobile'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         icon: <Rocket className="h-6 w-6 text-white" />,
         isActive: false,
         energy: 0,
@@ -154,11 +139,7 @@ const BallModeScreen: React.FC<BallModeScreenProps> = ({ onBack, language }) => 
         y: 75,
         size: 88,
         color: 'from-orange-400 via-orange-500 to-orange-600',
-<<<<<<< HEAD
-        label: 'データ分析',
-=======
         label: t.ballLabels['data'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         icon: <Database className="h-6 w-6 text-white" />,
         isActive: false,
         energy: 0,
@@ -172,11 +153,7 @@ const BallModeScreen: React.FC<BallModeScreenProps> = ({ onBack, language }) => 
         y: 45,
         size: 75,
         color: 'from-pink-400 via-pink-500 to-pink-600',
-<<<<<<< HEAD
-        label: '自動化',
-=======
         label: t.ballLabels['automation'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         icon: <Zap className="h-5 w-5 text-white" />,
         isActive: false,
         energy: 0,
@@ -189,11 +166,7 @@ const BallModeScreen: React.FC<BallModeScreenProps> = ({ onBack, language }) => 
         y: 85,
         size: 70,
         color: 'from-red-400 via-red-500 to-red-600',
-<<<<<<< HEAD
-        label: 'セキュリティ',
-=======
         label: t.ballLabels['security'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         icon: <Shield className="h-5 w-5 text-white" />,
         isActive: false,
         energy: 0,
@@ -206,11 +179,7 @@ const BallModeScreen: React.FC<BallModeScreenProps> = ({ onBack, language }) => 
         y: 20,
         size: 65,
         color: 'from-indigo-400 via-indigo-500 to-indigo-600',
-<<<<<<< HEAD
-        label: 'UI/UXデザイン',
-=======
         label: t.ballLabels['design'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         icon: <Palette className="h-4 w-4 text-white" />,
         isActive: false,
         energy: 0,
@@ -224,11 +193,7 @@ const BallModeScreen: React.FC<BallModeScreenProps> = ({ onBack, language }) => 
         y: 35,
         size: 72,
         color: 'from-cyan-400 via-cyan-500 to-cyan-600',
-<<<<<<< HEAD
-        label: 'クラウド',
-=======
         label: t.ballLabels['cloud'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         icon: <Cloud className="h-5 w-5 text-white" />,
         isActive: false,
         energy: 0,
@@ -241,11 +206,7 @@ const BallModeScreen: React.FC<BallModeScreenProps> = ({ onBack, language }) => 
         y: 70,
         size: 68,
         color: 'from-teal-400 via-teal-500 to-teal-600',
-<<<<<<< HEAD
-        label: 'API開発',
-=======
         label: t.ballLabels['api'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         icon: <Code className="h-5 w-5 text-white" />,
         isActive: false,
         energy: 0,
@@ -258,11 +219,7 @@ const BallModeScreen: React.FC<BallModeScreenProps> = ({ onBack, language }) => 
         y: 50,
         size: 63,
         color: 'from-yellow-400 via-yellow-500 to-yellow-600',
-<<<<<<< HEAD
-        label: 'パフォーマンス',
-=======
         label: t.ballLabels['performance'],
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
         icon: <Cpu className="h-4 w-4 text-white" />,
         isActive: false,
         energy: 0,
@@ -306,42 +263,6 @@ const BallModeScreen: React.FC<BallModeScreenProps> = ({ onBack, language }) => 
     return () => clearInterval(interval);
   }, []);
 
-<<<<<<< HEAD
-  // Animation loop for floating balls
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setAnimationFrame(prev => prev + 1);
-      
-      setBalls(prev => prev.map(ball => {
-        let newX = ball.x + ball.velocity.x * 0.1;
-        let newY = ball.y + ball.velocity.y * 0.1;
-        let newVelocityX = ball.velocity.x;
-        let newVelocityY = ball.velocity.y;
-
-        // Bounce off walls with some randomness
-        if (newX <= 5 || newX >= 90) {
-          newVelocityX = -ball.velocity.x + (Math.random() - 0.5) * 0.2;
-          newX = Math.max(5, Math.min(90, newX));
-        }
-        if (newY <= 5 || newY >= 90) {
-          newVelocityY = -ball.velocity.y + (Math.random() - 0.5) * 0.2;
-          newY = Math.max(5, Math.min(90, newY));
-        }
-
-        return {
-          ...ball,
-          x: newX,
-          y: newY,
-          velocity: { x: newVelocityX, y: newVelocityY }
-        };
-      }));
-    }, 50);
-
-    return () => clearInterval(interval);
-  }, []);
-
-=======
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
   // Handle ball click with beautiful interaction
   const handleBallClick = (ballId: string) => {
     setBalls(prev => prev.map(ball => {
@@ -386,22 +307,6 @@ const BallModeScreen: React.FC<BallModeScreenProps> = ({ onBack, language }) => 
       let newInsights: string[] = [];
       
       if (categories.includes('tech') && categories.includes('domain')) {
-<<<<<<< HEAD
-        newInsights.push("🎯 技術とドメインの組み合わせを検出しました");
-        newInsights.push("💡 実用的なソリューションの可能性が高いです");
-      }
-      
-      if (selectedBallsData.some(ball => ball.id === 'ai-ml')) {
-        newInsights.push("🤖 AI・機械学習が中心的な役割を果たします");
-      }
-      
-      if (selectedBallsData.length >= 3) {
-        newInsights.push("🚀 複合的なアプローチで革新的なプロジェクトが期待できます");
-      }
-      
-      const interestLevel = Math.min(95, 60 + selectedBallsData.length * 8);
-      newInsights.push(`📊 あなたの技術的関心度: ${interestLevel}%`);
-=======
         newInsights.push(t.insights.techDomain);
         newInsights.push(t.insights.practical);
       }
@@ -416,7 +321,6 @@ const BallModeScreen: React.FC<BallModeScreenProps> = ({ onBack, language }) => 
       
       const interestLevel = Math.min(95, 60 + selectedBallsData.length * 8);
       newInsights.push(`${t.insights.interest}: ${interestLevel}%`);
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
       
       setInsights(prev => {
         const combined = [...prev, ...newInsights];
@@ -556,13 +460,9 @@ const BallModeScreen: React.FC<BallModeScreenProps> = ({ onBack, language }) => 
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="text-center text-white/60 animate-pulse">
                 <Sparkles className="h-8 w-8 mx-auto mb-2" />
-<<<<<<< HEAD
-                <p className="text-lg font-medium">ボールをタップして始めよう</p>
-=======
                 <p className="text-lg font-medium">
                   {language === 'en' ? 'Tap balls to get started' : 'ボールをタップして始めよう'}
                 </p>
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
               </div>
             </div>
           )}
@@ -580,11 +480,7 @@ const BallModeScreen: React.FC<BallModeScreenProps> = ({ onBack, language }) => 
             {aiThinking && (
               <div className="flex items-center gap-2 text-white/80">
                 <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
-<<<<<<< HEAD
-                <span className="text-sm">パターン分析中...</span>
-=======
                 <span className="text-sm">{t.patternAnalyzing}</span>
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
               </div>
             )}
           </div>
@@ -592,11 +488,7 @@ const BallModeScreen: React.FC<BallModeScreenProps> = ({ onBack, language }) => 
           {/* Selected balls display */}
           {selectedBalls.length > 0 && (
             <div className="mb-4">
-<<<<<<< HEAD
-              <h4 className="text-white/80 text-sm font-medium mb-2">選択されたボール</h4>
-=======
               <h4 className="text-white/80 text-sm font-medium mb-2">{t.selectedBalls}</h4>
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
               <div className="flex flex-wrap gap-2">
                 {selectedBalls.map(ballId => {
                   const ball = balls.find(b => b.id === ballId);
@@ -636,11 +528,7 @@ const BallModeScreen: React.FC<BallModeScreenProps> = ({ onBack, language }) => 
             <div className="mt-6 pt-4 border-t border-white/20">
               <button className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-6 rounded-xl font-medium hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2">
                 <Target className="h-5 w-5" />
-<<<<<<< HEAD
-                この組み合わせで企画書を生成
-=======
                 {t.generateProposal}
->>>>>>> 4ffaeaabc3b194f96d7b33931b04bd0b577a7ce3
               </button>
             </div>
           )}
