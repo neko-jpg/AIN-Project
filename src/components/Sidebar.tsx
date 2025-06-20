@@ -1,7 +1,8 @@
-import React from 'react';
+// src/components/Sidebar.tsx （修正版）
 
-import { Bot, Send, Sparkles, Zap } from 'lucide-react';
-import { useLanguage } from '../contexts/LanguageContext';
+import React from 'react';
+import { Bot, Send, Sparkles } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext'; // [修正点1] useLanguageをインポート
 
 interface SidebarProps {
   formData: {
@@ -11,42 +12,44 @@ interface SidebarProps {
     experienceLevel: string;
     weeklyHours: string;
   };
-  // [修正点1] onFormChangeの型をより厳密にします
   onFormChange: (field: keyof SidebarProps['formData'], value: string | number) => void;
   onSubmit: () => void;
-  // [修正点2] onQuickGenerateをpropsとして受け取る定義を追加します
-  // これにより、先ほどのTypeScriptエラーが解消されます。
-  onQuickGenerate?: () => void; // 新しいプロップ
+  onQuickGenerate: () => void;
   isLoading: boolean;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, isLoading, onQuickGenerate }) => {
+const Sidebar: React.FC<SidebarProps> = ({ 
+  formData, 
+  onFormChange, 
+  onSubmit, 
+  isLoading, 
+  onQuickGenerate 
+}) => {
+  // [修正点2] useLanguageフックを呼び出して、t関数を使えるようにします
+  const { t } = useLanguage();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.purpose.trim()) return;
     onSubmit();
   };
 
-  function t(arg0: string): React.ReactNode {
-    throw new Error('Function not implemented.');
-  }
-
-  function handleQuickGenerateClick(event: React.MouseEvent<HTMLButtonElement>): void {
-    throw new Error('Function not implemented.');
-  }
-
-  function handleQuickGenerate(event: React.MouseEvent<HTMLButtonElement>): void {
-    throw new Error('Function not implemented.');
+  // [修正点3] クイック生成ボタンがクリックされたときの処理を正しく定義します
+  const handleQuickGenerateClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault(); // フォーム全体の送信を防ぎます
+    if (!formData.purpose.trim()) return;
+    onQuickGenerate(); // 親から渡された関数を実行します
   }
 
   return (
-    <div className="w-80 bg-white border-r border-gray-200 h-screen overflow-y-auto">
-      <div className="p-6">
+    <div className="w-80 bg-white border-r border-gray-200 h-full flex flex-col">
+      <div className="p-6 overflow-y-auto">
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 bg-blue-100 rounded-lg">
             <Bot className="h-6 w-6 text-blue-600" />
           </div>
           <div>
+            {/* [修正点4] t関数を正しく使ってテキストを表示します */}
             <h2 className="text-lg font-semibold text-gray-900">{t('app.title')}</h2>
             <p className="text-sm text-gray-500">{t('app.subtitle')}</p>
           </div>
@@ -60,7 +63,7 @@ const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, isL
             <textarea
               value={formData.purpose}
               onChange={(e) => onFormChange('purpose', e.target.value)}
-              placeholder={String(t('form.purposePlaceholder'))}
+              placeholder={t('form.purposePlaceholder')}
               className="w-full h-32 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
               required
             />
@@ -90,7 +93,6 @@ const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, isL
             <input
               type="number"
               value={formData.budget}
-              // [修正点4] より安全な数値変換にします
               onChange={(e) => onFormChange('budget', Number(e.target.value) || 0)}
               min="0"
               max="100000"
@@ -133,9 +135,8 @@ const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, isL
             </select>
           </div>
           
-          {/* [修正点5] クイック生成ボタンを追加します */}
           <button
-            type="button" // type="submit" ではないことに注意
+            type="button" 
             onClick={handleQuickGenerateClick}
             disabled={isLoading || !formData.purpose.trim()}
             className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-2.5 px-4 rounded-md hover:from-green-600 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-medium transition-all duration-200"
@@ -148,25 +149,6 @@ const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, isL
             <span>{isLoading ? '生成中...' : 'クイック生成'}</span>
           </button>
 
-
-          {/* クイック生成ボタン */}
-          {onQuickGenerate && (
-            <button
-              type="button"
-              onClick={handleQuickGenerate}
-              disabled={isLoading || !formData.purpose.trim()}
-              className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-4 rounded-md hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-medium transition-colors mb-3"
-            >
-              {isLoading ? (
-                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-              ) : (
-                <Sparkles className="h-4 w-4" />
-              )}
-              <span>{isLoading ? '生成中...' : 'クイック生成'}</span>
-            </button>
-          )}
-
-          {/* 従来の送信ボタン */}
           <button
             type="submit"
             disabled={isLoading || !formData.purpose.trim()}
@@ -177,7 +159,7 @@ const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, isL
             ) : (
               <Send className="h-4 w-4" />
             )}
-            <span>{isLoading ? '分析中...' : '最適な技術スタックを提案してもらう'}</span>
+            <span>{isLoading ? '分析中...' : '詳細プロンプトで実行'}</span>
           </button>
         </form>
       </div>
