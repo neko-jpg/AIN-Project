@@ -184,21 +184,11 @@ function App() {
   }
 
   if (currentMode === 'ball') {
-    return (
-      <>
-        <BallModeScreen onBack={() => setCurrentMode('intro')} />
-        <BoltBadge />
-      </>
-    );
+    return <BallModeScreen onBack={() => setCurrentMode('intro')} language={language} />;
   }
 
   if (currentMode === 'tree') {
-    return (
-      <>
-        <TreeModeScreen onBack={() => setCurrentMode('intro')} />
-        <BoltBadge />
-      </>
-    );
+    return <TreeModeScreen onBack={() => setCurrentMode('intro')} language={language} />;
   }
 
   // Main intro screen
@@ -399,7 +389,7 @@ function App() {
       <BoltBadge />
 
       {/* Custom CSS for animations */}
-      <style jsx>{`
+      <style>{`
         @keyframes blob {
           0% { transform: translate(0px, 0px) scale(1); }
           33% { transform: translate(30px, -50px) scale(1.1); }
