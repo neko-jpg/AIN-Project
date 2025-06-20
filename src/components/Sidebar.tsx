@@ -1,5 +1,6 @@
 import React from 'react';
 import { Bot, Send } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface SidebarProps {
   formData: {
@@ -15,6 +16,8 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, isLoading }) => {
+  const { t } = useLanguage();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.purpose.trim()) return;
@@ -29,26 +32,26 @@ const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, isL
             <Bot className="h-6 w-6 text-blue-600" />
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">AIN Navigator</h2>
-            <p className="text-sm text-gray-500">Your AI Project Partner</p>
+            <h2 className="text-lg font-semibold text-gray-900">{t('app.title')}</h2>
+            <p className="text-sm text-gray-500">{t('app.subtitle')}</p>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <h3 className="text-base font-medium text-gray-900 mb-4">
-              プロジェクトの概要を教えてください
+              {t('form.purpose')}
             </h3>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              AIを使って実現したいことは何ですか？
+              {t('form.purpose')}
             </label>
             <textarea
               value={formData.purpose}
               onChange={(e) => onFormChange('purpose', e.target.value)}
-              placeholder="例：顧客データを分析して売上予測を行うシステムを作りたい"
+              placeholder={t('form.purposePlaceholder')}
               className="w-full h-32 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
               required
             />
@@ -56,24 +59,24 @@ const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, isL
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              プロジェクトの種類
+              {t('form.projectType')}
             </label>
             <select
               value={formData.projectType}
               onChange={(e) => onFormChange('projectType', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="Webアプリケーション">Webアプリケーション</option>
-              <option value="モバイルアプリケーション">モバイルアプリケーション</option>
-              <option value="APIバックエンド">APIバックエンド</option>
-              <option value="データ分析基盤">データ分析基盤</option>
-              <option value="その他">その他</option>
+              <option value="Webアプリケーション">{t('form.projectTypes.webApp')}</option>
+              <option value="モバイルアプリケーション">{t('form.projectTypes.mobileApp')}</option>
+              <option value="APIバックエンド">{t('form.projectTypes.apiBackend')}</option>
+              <option value="データ分析基盤">{t('form.projectTypes.dataAnalysis')}</option>
+              <option value="その他">{t('form.projectTypes.other')}</option>
             </select>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              月額予算（円）
+              {t('form.budget')}
             </label>
             <input
               type="number"
@@ -92,31 +95,31 @@ const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, isL
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              あなたの開発経験レベル
+              {t('form.experienceLevel')}
             </label>
             <select
               value={formData.experienceLevel}
               onChange={(e) => onFormChange('experienceLevel', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="初心者">初心者</option>
-              <option value="中級者">中級者</option>
-              <option value="上級者">上級者</option>
+              <option value="初心者">{t('form.experienceLevels.beginner')}</option>
+              <option value="中級者">{t('form.experienceLevels.intermediate')}</option>
+              <option value="上級者">{t('form.experienceLevels.advanced')}</option>
             </select>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              週に使える開発時間
+              {t('form.weeklyHours')}
             </label>
             <select
               value={formData.weeklyHours}
               onChange={(e) => onFormChange('weeklyHours', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="〜5時間">〜5時間</option>
-              <option value="5〜20時間">5〜20時間</option>
-              <option value="20時間以上">20時間以上</option>
+              <option value="〜5時間">{t('form.weeklyHours.low')}</option>
+              <option value="5〜20時間">{t('form.weeklyHours.medium')}</option>
+              <option value="20時間以上">{t('form.weeklyHours.high')}</option>
             </select>
           </div>
 
@@ -125,13 +128,12 @@ const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, isL
             disabled={isLoading || !formData.purpose.trim()}
             className="w-full bg-blue-600 text-white py-2.5 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-medium transition-colors"
           >
-            {/* [修正点] isLoading状態に応じて、要素の構造を変えずにアイコンとテキストの中身だけを切り替える */}
             {isLoading ? (
               <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
             ) : (
               <Send className="h-4 w-4" />
             )}
-            <span>{isLoading ? '分析中...' : '最適な技術スタックを提案してもらう'}</span>
+            <span>{isLoading ? t('loading.generating') : t('form.submit')}</span>
           </button>
         </form>
       </div>

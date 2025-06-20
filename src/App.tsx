@@ -7,146 +7,76 @@ import BallModeScreen from './screens/BallModeScreen';
 import TreeModeScreen from './screens/TreeModeScreen';
 import BoltBadge from './components/BoltBadge';
 import LanguageSelector from './components/LanguageSelector';
-import { useLocalStorage } from './hooks/useLocalStorage';
+import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 
 type AppMode = 'language' | 'intro' | 'dialog' | 'ball' | 'tree';
 
 interface ModeCard {
   id: AppMode;
-  title: string;
-  subtitle: string;
-  description: string;
+  titleKey: string;
+  subtitleKey: string;
+  descriptionKey: string;
   icon: React.ReactNode;
   gradient: string;
-  features: string[];
+  featuresKeys: string[];
   difficulty: 'beginner' | 'intermediate' | 'advanced';
-  estimatedTime: string;
+  estimatedTimeKey: string;
   isNew?: boolean;
 }
 
-function App() {
-  const [language, setLanguage] = useLocalStorage<'en' | 'ja'>('ain-language', 'ja');
+function AppContent() {
+  const { language, setLanguage, t } = useLanguage();
   const [currentMode, setCurrentMode] = useState<AppMode>('language');
-
-  const texts = {
-    en: {
-      chooseMode: 'Choose Your AI Navigation Style',
-      subtitle: 'Select the interaction mode that best fits your thinking style',
-      features: 'Free to start',
-      autoGenerate: 'Auto-generate proposals',
-      aiOptimized: 'AI-optimized suggestions',
-      modes: {
-        'dialog': {
-          title: 'Dialog Mode',
-          subtitle: 'AI Navigator with Prompt Engineering',
-          description: 'Chat with AI to create optimal technology stacks and comprehensive project proposals. Now with advanced prompt composition and editing capabilities.',
-          features: ['Step-by-step guidance', 'Prompt engineering workspace', 'Interactive refinement', 'Visual prompt composition'],
-          difficulty: 'beginner',
-          estimatedTime: '10-15 min'
-        },
-        'ball': {
-          title: 'Ball Mode',
-          subtitle: 'Interactive Discovery',
-          description: 'Tap interesting balls to let AI learn your interest patterns and suggest optimal projects.',
-          features: ['Intuitive interaction', 'Visual-focused', 'Pattern learning', 'New discoveries'],
-          difficulty: 'intermediate',
-          estimatedTime: '5-10 min'
-        },
-        'tree': {
-          title: 'Tree Mode',
-          subtitle: 'Structured Planning',
-          description: 'Organize project elements in a tree structure while AI suggests optimal combinations and implementation order.',
-          features: ['Structured thinking', 'Dependency visualization', 'Phased planning', 'Advanced users'],
-          difficulty: 'advanced',
-          estimatedTime: '15-20 min'
-        }
-      },
-      difficulties: {
-        beginner: 'Beginner',
-        intermediate: 'Intermediate',
-        advanced: 'Advanced'
-      },
-      selectMode: 'Select This Mode',
-      freeExperience: 'All modes are free to experience'
-    },
-    ja: {
-      chooseMode: 'あなたのAIナビゲーションスタイルを選択',
-      subtitle: 'あなたの思考スタイルに最適なインタラクションモードを選んでください',
-      features: '無料で利用開始',
-      autoGenerate: '企画書自動生成',
-      aiOptimized: 'AI最適化提案',
-      modes: {
-        'dialog': {
-          title: '対話モード',
-          subtitle: 'プロンプトエンジニアリング対応',
-          description: 'AIと対話しながら、あなたのプロジェクトに最適な技術スタックと企画書を作成します。高度なプロンプト構成・編集機能を搭載。',
-          features: ['ステップバイステップガイド', 'プロンプトエンジニアリング', '対話型調整', 'ビジュアルプロンプト構成'],
-          difficulty: 'beginner',
-          estimatedTime: '10-15分'
-        },
-        'ball': {
-          title: 'ボールモード',
-          subtitle: 'Interactive Discovery',
-          description: '興味のあるボールをタップして、AIがあなたの関心パターンを学習し、最適なプロジェクトを提案します。',
-          features: ['直感的な操作', 'ビジュアル重視', 'パターン学習', '新しい発見'],
-          difficulty: 'intermediate',
-          estimatedTime: '5-10分'
-        },
-        'tree': {
-          title: '木モード',
-          subtitle: 'Structured Planning',
-          description: 'プロジェクトの要素をツリー構造で整理し、AIが最適な組み合わせと実装順序を提案します。',
-          features: ['構造化された思考', '依存関係の可視化', '段階的な計画', '上級者向け'],
-          difficulty: 'advanced',
-          estimatedTime: '15-20分'
-        }
-      },
-      difficulties: {
-        beginner: '初心者向け',
-        intermediate: '中級者向け',
-        advanced: '上級者向け'
-      },
-      selectMode: 'このモードを選択',
-      freeExperience: 'どのモードも無料で体験できます'
-    }
-  };
-
-  const t = texts[language];
 
   const modes: ModeCard[] = [
     {
       id: 'dialog',
-      title: t.modes.dialog.title,
-      subtitle: t.modes.dialog.subtitle,
-      description: t.modes.dialog.description,
+      titleKey: 'dialog.title',
+      subtitleKey: 'dialog.subtitle',
+      descriptionKey: 'dialog.description',
       icon: <MessageCircle className="h-8 w-8" />,
       gradient: 'from-blue-500 via-blue-600 to-purple-600',
-      features: t.modes.dialog.features,
+      featuresKeys: [
+        'dialog.features.stepByStep',
+        'dialog.features.promptEngineering',
+        'dialog.features.interactiveRefinement',
+        'dialog.features.visualComposition'
+      ],
       difficulty: 'beginner',
-      estimatedTime: t.modes.dialog.estimatedTime,
+      estimatedTimeKey: 'dialog.estimatedTime',
       isNew: true
     },
     {
       id: 'ball',
-      title: t.modes.ball.title,
-      subtitle: t.modes.ball.subtitle,
-      description: t.modes.ball.description,
+      titleKey: 'ball.title',
+      subtitleKey: 'ball.subtitle',
+      descriptionKey: 'ball.description',
       icon: <Sparkles className="h-8 w-8" />,
       gradient: 'from-purple-500 via-pink-500 to-orange-500',
-      features: t.modes.ball.features,
+      featuresKeys: [
+        'ball.features.intuitive',
+        'ball.features.visual',
+        'ball.features.patternLearning',
+        'ball.features.discoveries'
+      ],
       difficulty: 'intermediate',
-      estimatedTime: t.modes.ball.estimatedTime
+      estimatedTimeKey: 'ball.estimatedTime'
     },
     {
       id: 'tree',
-      title: t.modes.tree.title,
-      subtitle: t.modes.tree.subtitle,
-      description: t.modes.tree.description,
+      titleKey: 'tree.title',
+      subtitleKey: 'tree.subtitle',
+      descriptionKey: 'tree.description',
       icon: <GitBranch className="h-8 w-8" />,
       gradient: 'from-green-500 via-emerald-500 to-teal-600',
-      features: t.modes.tree.features,
+      featuresKeys: [
+        'tree.features.structured',
+        'tree.features.visualization',
+        'tree.features.phased',
+        'tree.features.advanced'
+      ],
       difficulty: 'advanced',
-      estimatedTime: t.modes.tree.estimatedTime
+      estimatedTimeKey: 'tree.estimatedTime'
     }
   ];
 
@@ -211,10 +141,10 @@ function App() {
               </div>
               <div>
                 <h1 className="text-2xl lg:text-3xl font-bold text-white">
-                  AI Navigator
+                  {t('app.title')}
                 </h1>
                 <p className="text-white/70 text-sm lg:text-base">
-                  Your AI Project Partner
+                  {t('app.subtitle')}
                 </p>
               </div>
             </div>
@@ -270,21 +200,21 @@ function App() {
             </h2>
             
             <p className="text-lg lg:text-2xl text-white/80 mb-8 max-w-3xl mx-auto leading-relaxed">
-              {t.subtitle}
+              {t('app.tagline')}
             </p>
             
             <div className="flex flex-wrap items-center justify-center gap-4 text-white/60">
               <div className="flex items-center gap-2">
                 <Target className="h-4 w-4" />
-                <span className="text-sm">{t.features}</span>
+                <span className="text-sm">{t('modes.features')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <TreePine className="h-4 w-4" />
-                <span className="text-sm">{t.autoGenerate}</span>
+                <span className="text-sm">{t('modes.autoGenerate')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Brain className="h-4 w-4" />
-                <span className="text-sm">{t.aiOptimized}</span>
+                <span className="text-sm">{t('modes.aiOptimized')}</span>
               </div>
             </div>
           </div>
@@ -318,7 +248,7 @@ function App() {
                       </div>
                       <div className="text-right">
                         <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${getDifficultyColor(mode.difficulty)}`}>
-                          {t.difficulties[mode.difficulty]}
+                          {t(`difficulty.${mode.difficulty}`)}
                         </span>
                       </div>
                     </div>
@@ -326,16 +256,16 @@ function App() {
                     {/* Title and subtitle */}
                     <div className="mb-4">
                       <h3 className="text-xl lg:text-2xl font-bold text-white mb-1">
-                        {mode.title}
+                        {t(mode.titleKey)}
                       </h3>
                       <p className="text-white/60 text-sm font-medium">
-                        {mode.subtitle}
+                        {t(mode.subtitleKey)}
                       </p>
                     </div>
                     
                     {/* Description */}
                     <p className="text-white/80 text-sm lg:text-base leading-relaxed mb-6 flex-grow">
-                      {mode.description}
+                      {t(mode.descriptionKey)}
                     </p>
                     
                     {/* Features */}
@@ -344,10 +274,10 @@ function App() {
                         {language === 'en' ? 'Key Features' : '主な機能'}
                       </h4>
                       <ul className="space-y-2">
-                        {mode.features.map((feature, featureIndex) => (
+                        {mode.featuresKeys.map((featureKey, featureIndex) => (
                           <li key={featureIndex} className="flex items-center gap-2 text-white/70 text-sm">
                             <div className="w-1.5 h-1.5 bg-white/50 rounded-full"></div>
-                            {feature}
+                            {t(featureKey)}
                           </li>
                         ))}
                       </ul>
@@ -357,7 +287,7 @@ function App() {
                     <div className="flex items-center gap-2 text-white/60 text-sm mb-6">
                       <Zap className="h-4 w-4" />
                       <span>
-                        {language === 'en' ? 'Time required: ' : '所要時間: '}{mode.estimatedTime}
+                        {language === 'en' ? 'Time required: ' : '所要時間: '}{t(mode.estimatedTimeKey)}
                       </span>
                     </div>
                     
@@ -366,7 +296,7 @@ function App() {
                       onClick={() => setCurrentMode(mode.id)}
                       className={`w-full bg-gradient-to-r ${mode.gradient} text-white py-4 px-6 rounded-2xl font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 group-hover:shadow-xl mt-auto`}
                     >
-                      <span>{t.selectMode}</span>
+                      <span>{t('button.selectMode')}</span>
                       <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
                     </button>
                   </div>
@@ -379,7 +309,7 @@ function App() {
           <div className="text-center mt-12 lg:mt-16">
             <div className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-white/80">
               <Brain className="h-5 w-5" />
-              <span className="text-sm">{t.freeExperience}</span>
+              <span className="text-sm">{t('modes.freeExperience')}</span>
             </div>
           </div>
         </div>
@@ -407,6 +337,14 @@ function App() {
         }
       `}</style>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
   );
 }
 

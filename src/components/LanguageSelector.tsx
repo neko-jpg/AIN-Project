@@ -1,5 +1,6 @@
 import React from 'react';
 import { Globe, Check } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface LanguageSelectorProps {
   selectedLanguage: 'en' | 'ja';
@@ -12,18 +13,20 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   onLanguageChange,
   onContinue
 }) => {
+  const { t } = useLanguage();
+
   const languages = [
     {
       code: 'en' as const,
-      name: 'English',
+      name: t('language.english'),
       flag: '🇺🇸',
-      description: 'Interface and AI responses in English'
+      description: t('language.englishDesc')
     },
     {
       code: 'ja' as const,
-      name: '日本語',
+      name: t('language.japanese'),
       flag: '🇯🇵',
-      description: 'インターフェースとAI応答を日本語で表示'
+      description: t('language.japaneseDesc')
     }
   ];
 
@@ -35,10 +38,10 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
             <Globe className="h-8 w-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">
-            Choose Your Language
+            {t('language.title')}
           </h1>
           <p className="text-white/70">
-            Select your preferred language for the AI Navigator experience
+            {t('language.description')}
           </p>
         </div>
 
@@ -73,7 +76,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
           onClick={onContinue}
           className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
         >
-          Continue to AI Navigator
+          {t('language.continue')}
         </button>
       </div>
     </div>
