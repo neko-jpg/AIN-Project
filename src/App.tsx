@@ -186,7 +186,10 @@ function App() {
   if (currentMode === 'ball') {
     return (
       <>
-        <BallModeScreen onBack={() => setCurrentMode('intro')} />
+        <BallModeScreen 
+          onBack={() => setCurrentMode('intro')} 
+          language={language}
+        />
         <BoltBadge />
       </>
     );
@@ -195,7 +198,10 @@ function App() {
   if (currentMode === 'tree') {
     return (
       <>
-        <TreeModeScreen onBack={() => setCurrentMode('intro')} />
+        <TreeModeScreen 
+          onBack={() => setCurrentMode('intro')} 
+          language={language}
+        />
         <BoltBadge />
       </>
     );
