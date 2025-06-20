@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Search, FileText, Zap, Brain, Globe, Smartphone, Database, Shield, Code } from 'lucide-react';
+import { X, Search, FileText, Zap, Brain, Globe, Smartphone, Database, Shield, Code, Layers, Target, Sparkles, Clock, Users, TrendingUp } from 'lucide-react';
 import { PromptTemplate } from '../types';
 
 interface PromptTemplateLibraryProps {
@@ -32,7 +32,11 @@ const PromptTemplateLibrary: React.FC<PromptTemplateLibraryProps> = ({
       productivity: 'Productivity',
       security: 'Security',
       useTemplate: 'Use Template',
-      close: 'Close'
+      close: 'Close',
+      preview: 'Preview',
+      difficulty: 'Difficulty',
+      estimatedTime: 'Est. Time',
+      features: 'Features'
     },
     ja: {
       title: 'プロンプトテンプレートライブラリ',
@@ -47,7 +51,11 @@ const PromptTemplateLibrary: React.FC<PromptTemplateLibraryProps> = ({
       productivity: '生産性',
       security: 'セキュリティ',
       useTemplate: 'テンプレートを使用',
-      close: '閉じる'
+      close: '閉じる',
+      preview: 'プレビュー',
+      difficulty: '難易度',
+      estimatedTime: '推定時間',
+      features: '特徴'
     }
   };
 
@@ -62,6 +70,11 @@ const PromptTemplateLibrary: React.FC<PromptTemplateLibraryProps> = ({
         : 'ユーザー管理機能付きSaaS Webアプリケーション構築用の完全テンプレート',
       category: 'webApp',
       icon: <Globe className="h-5 w-5" />,
+      difficulty: 'intermediate',
+      estimatedTime: `${developmentTime}ヶ月`,
+      features: language === 'en' 
+        ? ['User Authentication', 'Subscription Management', 'Dashboard', 'API Integration']
+        : ['ユーザー認証', 'サブスクリプション管理', 'ダッシュボード', 'API統合'],
       blocks: [
         language === 'en' 
           ? `Project Context: Build a SaaS web application for ${developmentTime} months development timeline`
@@ -85,6 +98,11 @@ const PromptTemplateLibrary: React.FC<PromptTemplateLibraryProps> = ({
         : '自然言語処理機能を持つインテリジェントチャットボット',
       category: 'aiAssistant',
       icon: <Brain className="h-5 w-5" />,
+      difficulty: 'advanced',
+      estimatedTime: `${Math.max(4, developmentTime - 2)}ヶ月`,
+      features: language === 'en'
+        ? ['NLP Processing', 'Context Awareness', 'Multi-turn Conversations', 'Intent Recognition']
+        : ['自然言語処理', 'コンテキスト認識', 'マルチターン会話', '意図認識'],
       blocks: [
         language === 'en'
           ? `AI Assistant Context: Develop an intelligent chatbot for ${developmentTime} months timeline`
@@ -108,6 +126,11 @@ const PromptTemplateLibrary: React.FC<PromptTemplateLibraryProps> = ({
         : 'オフライン機能とプッシュ通知付きReact Nativeアプリ',
       category: 'mobileApp',
       icon: <Smartphone className="h-5 w-5" />,
+      difficulty: 'intermediate',
+      estimatedTime: `${Math.max(3, developmentTime - 1)}ヶ月`,
+      features: language === 'en'
+        ? ['Cross-Platform', 'Offline Sync', 'Push Notifications', 'App Store Ready']
+        : ['クロスプラットフォーム', 'オフライン同期', 'プッシュ通知', 'アプリストア対応'],
       blocks: [
         language === 'en'
           ? `Mobile App Context: Create cross-platform mobile application in ${developmentTime} months`
@@ -131,6 +154,11 @@ const PromptTemplateLibrary: React.FC<PromptTemplateLibraryProps> = ({
         : 'リアルタイムデータ可視化付きビジネスインテリジェンスダッシュボード',
       category: 'dataAnalysis',
       icon: <Database className="h-5 w-5" />,
+      difficulty: 'advanced',
+      estimatedTime: `${Math.max(6, developmentTime + 2)}ヶ月`,
+      features: language === 'en'
+        ? ['Real-time Analytics', 'Data Visualization', 'ETL Pipelines', 'ML Integration']
+        : ['リアルタイム分析', 'データ可視化', 'ETLパイプライン', 'ML統合'],
       blocks: [
         language === 'en'
           ? `Analytics Platform Context: Build comprehensive data analytics solution in ${developmentTime} months`
@@ -154,6 +182,11 @@ const PromptTemplateLibrary: React.FC<PromptTemplateLibraryProps> = ({
         : '決済処理と在庫管理機能付きフル機能オンラインストア',
       category: 'ecommerce',
       icon: <Zap className="h-5 w-5" />,
+      difficulty: 'intermediate',
+      estimatedTime: `${Math.max(5, developmentTime + 1)}ヶ月`,
+      features: language === 'en'
+        ? ['Payment Processing', 'Inventory Management', 'Order Tracking', 'Admin Panel']
+        : ['決済処理', '在庫管理', '注文追跡', '管理パネル'],
       blocks: [
         language === 'en'
           ? `E-commerce Context: Develop complete online store platform in ${developmentTime} months`
@@ -177,6 +210,11 @@ const PromptTemplateLibrary: React.FC<PromptTemplateLibraryProps> = ({
         : 'チーム機能付きタスク管理・コラボレーションツール',
       category: 'productivity',
       icon: <FileText className="h-5 w-5" />,
+      difficulty: 'beginner',
+      estimatedTime: `${Math.max(3, developmentTime - 1)}ヶ月`,
+      features: language === 'en'
+        ? ['Task Management', 'Team Collaboration', 'Time Tracking', 'Reporting']
+        : ['タスク管理', 'チームコラボレーション', '時間追跡', 'レポート'],
       blocks: [
         language === 'en'
           ? `Productivity App Context: Create team productivity solution in ${developmentTime} months`
@@ -211,13 +249,36 @@ const PromptTemplateLibrary: React.FC<PromptTemplateLibraryProps> = ({
     return matchesSearch && matchesCategory;
   });
 
+  const getDifficultyColor = (difficulty: string) => {
+    switch (difficulty) {
+      case 'beginner': return 'bg-green-100 text-green-800';
+      case 'intermediate': return 'bg-yellow-100 text-yellow-800';
+      case 'advanced': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getDifficultyText = (difficulty: string) => {
+    switch (difficulty) {
+      case 'beginner': return language === 'en' ? 'Beginner' : '初心者';
+      case 'intermediate': return language === 'en' ? 'Intermediate' : '中級者';
+      case 'advanced': return language === 'en' ? 'Advanced' : '上級者';
+      default: return difficulty;
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
+      <div className="bg-white rounded-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden">
         {/* Header */}
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold text-gray-900">{t.title}</h2>
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg text-white">
+                <Layers className="h-6 w-6" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900">{t.title}</h2>
+            </div>
             <button
               onClick={onClose}
               className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
@@ -267,24 +328,51 @@ const PromptTemplateLibrary: React.FC<PromptTemplateLibraryProps> = ({
               {filteredTemplates.map(template => (
                 <div
                   key={template.id}
-                  className="border border-gray-200 rounded-xl p-6 hover:border-blue-300 hover:shadow-lg transition-all duration-200"
+                  className="border border-gray-200 rounded-xl p-6 hover:border-blue-300 hover:shadow-lg transition-all duration-200 bg-white"
                 >
                   <div className="flex items-start gap-4 mb-4">
                     <div className="p-3 bg-blue-100 rounded-lg text-blue-600">
                       {template.icon}
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                        {template.name}
-                      </h3>
-                      <p className="text-sm text-gray-600">
+                      <div className="flex items-start justify-between mb-2">
+                        <h3 className="text-lg font-semibold text-gray-900">
+                          {template.name}
+                        </h3>
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(template.difficulty)}`}>
+                          {getDifficultyText(template.difficulty)}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-600 mb-3">
                         {template.description}
                       </p>
+                      
+                      {/* Features */}
+                      <div className="mb-4">
+                        <h4 className="text-xs font-medium text-gray-700 mb-2">{t.features}:</h4>
+                        <div className="flex flex-wrap gap-1">
+                          {template.features.map((feature, index) => (
+                            <span
+                              key={index}
+                              className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs"
+                            >
+                              {feature}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      {/* Time estimate */}
+                      <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                        <Clock className="h-4 w-4" />
+                        <span>{t.estimatedTime}: {template.estimatedTime}</span>
+                      </div>
                     </div>
                   </div>
                   
                   {/* Preview blocks */}
                   <div className="space-y-2 mb-4">
+                    <h4 className="text-sm font-medium text-gray-700">{t.preview}:</h4>
                     {template.blocks.slice(0, 2).map((block, index) => (
                       <div key={index} className="bg-gray-50 rounded-lg p-3">
                         <p className="text-xs text-gray-600 line-clamp-2">
@@ -301,8 +389,9 @@ const PromptTemplateLibrary: React.FC<PromptTemplateLibraryProps> = ({
                   
                   <button
                     onClick={() => onSelectTemplate(template)}
-                    className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium flex items-center justify-center gap-2"
                   >
+                    <Sparkles className="h-4 w-4" />
                     {t.useTemplate}
                   </button>
                 </div>

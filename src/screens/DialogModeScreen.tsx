@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, MessageCircle, Send, Sparkles, Brain, Lightbulb, Zap, Plus, Settings, Eye, Edit3, Copy, Check, Mic, MicOff, GripVertical, Trash2, FileText, Clock, TrendingUp, Target, AlertTriangle, User, Briefcase, ChevronDown, ChevronRight, Download as DownloadIcon, Menu, X, Bot } from 'lucide-react';
+import { ArrowLeft, MessageCircle, Send, Sparkles, Brain, Lightbulb, Zap, Plus, Settings, Eye, Edit3, Copy, Check, Mic, MicOff, GripVertical, Trash2, FileText, Clock, TrendingUp, Target, AlertTriangle, User, Briefcase, ChevronDown, ChevronRight, Download as DownloadIcon, Menu, X, Bot, Layers, Maximize2, Minimize2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
@@ -44,6 +44,8 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobilePromptPanelOpen, setIsMobilePromptPanelOpen] = useState(false);
+  const [mobileView, setMobileView] = useState<'main' | 'prompt' | 'preview'>('main');
   
   // Form data
   const [formData, setFormData] = useState({
@@ -97,7 +99,12 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
       promptEngineering: 'Prompt Engineering',
       promptEngineeringDesc: 'Design and optimize your AI prompts',
       executePrompt: 'Execute Prompt',
-      promptResult: 'Prompt Result'
+      promptResult: 'Prompt Result',
+      mobileViews: {
+        main: 'Main',
+        prompt: 'Prompt',
+        preview: 'Preview'
+      }
     },
     ja: {
       title: '対話モード',
@@ -120,7 +127,12 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
       promptEngineering: 'プロンプトエンジニアリング',
       promptEngineeringDesc: 'AIプロンプトを設計・最適化',
       executePrompt: 'プロンプトを実行',
-      promptResult: 'プロンプト結果'
+      promptResult: 'プロンプト結果',
+      mobileViews: {
+        main: 'メイン',
+        prompt: 'プロンプト',
+        preview: 'プレビュー'
+      }
     }
   };
 
@@ -278,13 +290,13 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row">
       {/* Mobile menu overlay */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden">
           <div className="fixed inset-y-0 left-0 w-80 bg-white shadow-xl">
             <div className="flex items-center justify-between p-4 border-b">
-              <h2 className="text-lg font-semibold">Settings</h2>
+              <h2 className="text-lg font-semibold">設定</h2>
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="p-2 hover:bg-gray-100 rounded-lg"
@@ -339,9 +351,28 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
               
               <div>
                 <h1 className="text-xl lg:text-2xl font-bold text-gray-900">{t.title}</h1>
-                <p className="text-sm text-gray-600">{t.subtitle}</p>
+                <p className="text-sm text-gray-600 hidden sm:block">{t.subtitle}</p>
               </div>
             </div>
+
+            {/* Mobile View Switcher for Prompt Engineering */}
+            {currentStep === 'prompt-engineering' && (
+              <div className="flex lg:hidden bg-gray-100 rounded-lg p-1">
+                {(['main', 'prompt', 'preview'] as const).map((view) => (
+                  <button
+                    key={view}
+                    onClick={() => setMobileView(view)}
+                    className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+                      mobileView === view
+                        ? 'bg-white text-gray-900 shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    {t.mobileViews[view]}
+                  </button>
+                ))}
+              </div>
+            )}
 
             {/* Step Navigation */}
             <div className="hidden md:flex items-center gap-2">
@@ -377,11 +408,11 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
 
         {/* Content Area */}
         <div className="flex-1 flex">
-          {/* Main Content */}
-          <div className="flex-1 flex flex-col">
-            {currentStep === 'prompt-engineering' ? (
-              /* Prompt Engineering Mode */
-              <div className="flex-1 flex">
+          {currentStep === 'prompt-engineering' ? (
+            /* Prompt Engineering Mode */
+            <div className="flex-1 flex">
+              {/* Desktop Layout */}
+              <div className="hidden lg:flex flex-1">
                 {/* Left Panel - Prompt Composer */}
                 <ResizablePanel
                   position="left"
@@ -447,229 +478,311 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                   )}
                 </div>
               </div>
-            ) : (
-              /* Regular Dialog Mode */
-              <div className="flex-1 overflow-hidden">
-                <div className="h-full overflow-y-auto">
-                  <div className="max-w-6xl mx-auto p-3 lg:p-6">
-                    {/* Error Display */}
-                    {error && (
-                      <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
-                        <div className="flex items-center gap-3">
-                          <AlertTriangle className="h-5 w-5 text-red-600 flex-shrink-0" />
-                          <div className="flex-1">
-                            <p className="text-red-800 font-medium">{t.error}</p>
-                            <p className="text-red-700 text-sm mt-1">{error}</p>
+
+              {/* Mobile Layout */}
+              <div className="flex-1 lg:hidden">
+                {mobileView === 'prompt' && (
+                  <EnhancedPromptComposer
+                    blocks={promptBlocks}
+                    onBlocksChange={setPromptBlocks}
+                    onSendToPrompt={handlePromptFromComposer}
+                    language={language}
+                    developmentTime={developmentTime}
+                  />
+                )}
+
+                {mobileView === 'preview' && (
+                  <div className="p-4 space-y-4">
+                    <PromptPreview
+                      prompt={currentPrompt}
+                      onPromptChange={setCurrentPrompt}
+                      onExecute={handleExecutePrompt}
+                      isLoading={isLoading}
+                      language={language}
+                    />
+                  </div>
+                )}
+
+                {mobileView === 'main' && (
+                  <div className="p-4 space-y-6">
+                    {/* Development Time Slider */}
+                    <DevelopmentTimeSlider
+                      value={developmentTime}
+                      onChange={setDevelopmentTime}
+                      language={language}
+                    />
+
+                    {/* Quick Actions */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        onClick={() => setMobileView('prompt')}
+                        className="flex items-center justify-center gap-2 p-4 bg-blue-50 text-blue-700 rounded-xl hover:bg-blue-100 transition-colors"
+                      >
+                        <Layers className="h-5 w-5" />
+                        <span className="font-medium">プロンプト構成</span>
+                      </button>
+                      <button
+                        onClick={() => setMobileView('preview')}
+                        className="flex items-center justify-center gap-2 p-4 bg-green-50 text-green-700 rounded-xl hover:bg-green-100 transition-colors"
+                      >
+                        <Eye className="h-5 w-5" />
+                        <span className="font-medium">プレビュー</span>
+                      </button>
+                    </div>
+
+                    {/* Prompt Result */}
+                    {promptResult && (
+                      <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+                        <div className="p-4 border-b border-gray-200">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <Sparkles className="h-5 w-5 text-purple-600" />
+                              <h3 className="text-lg font-semibold text-gray-900">{t.promptResult}</h3>
+                            </div>
+                            <DownloadButton
+                              content={promptResult}
+                              filename="prompt-result.md"
+                              className="text-sm"
+                            >
+                              <DownloadIcon className="h-4 w-4" />
+                            </DownloadButton>
                           </div>
-                          <button
-                            onClick={() => setError(null)}
-                            className="text-red-600 hover:text-red-800"
-                          >
-                            <X className="h-5 w-5" />
-                          </button>
+                        </div>
+                        <div className="p-6">
+                          <div className="prose max-w-none">
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                              {promptResult}
+                            </ReactMarkdown>
+                          </div>
                         </div>
                       </div>
                     )}
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            /* Regular Dialog Mode */
+            <div className="flex-1 overflow-hidden">
+              <div className="h-full overflow-y-auto">
+                <div className="max-w-6xl mx-auto p-3 lg:p-6">
+                  {/* Error Display */}
+                  {error && (
+                    <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
+                      <div className="flex items-center gap-3">
+                        <AlertTriangle className="h-5 w-5 text-red-600 flex-shrink-0" />
+                        <div className="flex-1">
+                          <p className="text-red-800 font-medium">{t.error}</p>
+                          <p className="text-red-700 text-sm mt-1">{error}</p>
+                        </div>
+                        <button
+                          onClick={() => setError(null)}
+                          className="text-red-600 hover:text-red-800"
+                        >
+                          <X className="h-5 w-5" />
+                        </button>
+                      </div>
+                    </div>
+                  )}
 
-                    {/* Loading State */}
-                    {isLoading && (
-                      <LoadingSpinner 
-                        message={
-                          currentStep === 'initial' ? t.generating :
-                          currentStep === 'proposal' ? t.generatingProposal :
-                          t.refining
-                        } 
-                      />
-                    )}
+                  {/* Loading State */}
+                  {isLoading && (
+                    <LoadingSpinner 
+                      message={
+                        currentStep === 'initial' ? t.generating :
+                        currentStep === 'proposal' ? t.generatingProposal :
+                        t.refining
+                      } 
+                    />
+                  )}
 
-                    {/* Initial Analysis Result */}
-                    {initialSuggestion && currentStep === 'proposal' && !isLoading && (
-                      <div className="mb-8">
-                        <div className="flex items-center gap-4 mb-6">
+                  {/* Initial Analysis Result */}
+                  {initialSuggestion && currentStep === 'proposal' && !isLoading && (
+                    <div className="mb-8">
+                      <div className="flex items-center gap-4 mb-6">
+                        <InteractiveAvatar state="happy" />
+                        <div>
+                          <h2 className="text-2xl font-bold text-gray-900 mb-2">初期分析完了！</h2>
+                          <p className="text-gray-600">あなたのプロジェクトに最適な技術スタックを分析しました。</p>
+                        </div>
+                      </div>
+
+                      <SpeechBubble className="mb-6">
+                        <div className="prose max-w-none">
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                            {initialSuggestion}
+                          </ReactMarkdown>
+                        </div>
+                      </SpeechBubble>
+
+                      <div className="flex flex-col sm:flex-row gap-4">
+                        <button
+                          onClick={handleGenerateFullProposal}
+                          className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2"
+                        >
+                          <FileText className="h-5 w-5" />
+                          {t.viewFullProposal}
+                        </button>
+                        
+                        <button
+                          onClick={() => setCurrentStep('prompt-engineering')}
+                          className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2"
+                        >
+                          <Brain className="h-5 w-5" />
+                          {t.promptEngineering}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Full Proposal Display */}
+                  {fullProposal && (currentStep === 'refinement' || currentStep === 'proposal') && !isLoading && (
+                    <div className="mb-8">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
+                        <div className="flex items-center gap-4">
                           <InteractiveAvatar state="happy" />
                           <div>
-                            <h2 className="text-2xl font-bold text-gray-900 mb-2">初期分析完了！</h2>
-                            <p className="text-gray-600">あなたのプロジェクトに最適な技術スタックを分析しました。</p>
+                            <h2 className="text-2xl font-bold text-gray-900 mb-2">完全企画書が完成しました！</h2>
+                            <p className="text-gray-600">詳細な技術スタックと実装計画をご確認ください。</p>
                           </div>
                         </div>
-
-                        <SpeechBubble className="mb-6">
-                          <div className="prose max-w-none">
-                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                              {initialSuggestion}
-                            </ReactMarkdown>
-                          </div>
-                        </SpeechBubble>
-
-                        <div className="flex flex-col sm:flex-row gap-4">
-                          <button
-                            onClick={handleGenerateFullProposal}
-                            className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2"
+                        
+                        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                          <DownloadButton
+                            content={fullProposal}
+                            filename="ai-project-proposal.md"
+                            className="bg-gray-100 hover:bg-gray-200 text-gray-700 justify-center"
                           >
-                            <FileText className="h-5 w-5" />
-                            {t.viewFullProposal}
-                          </button>
+                            <DownloadIcon className="h-4 w-4" />
+                            <span className="ml-2">{t.downloadProposal}</span>
+                          </DownloadButton>
                           
                           <button
                             onClick={() => setCurrentStep('prompt-engineering')}
-                            className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2"
+                            className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2 px-4 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200 flex items-center justify-center gap-2"
                           >
-                            <Brain className="h-5 w-5" />
-                            {t.promptEngineering}
+                            <Brain className="h-4 w-4" />
+                            <span>{t.promptEngineering}</span>
                           </button>
                         </div>
                       </div>
-                    )}
 
-                    {/* Full Proposal Display */}
-                    {fullProposal && (currentStep === 'refinement' || currentStep === 'proposal') && !isLoading && (
-                      <div className="mb-8">
-                        <div className="flex items-center justify-between mb-6">
-                          <div className="flex items-center gap-4">
-                            <InteractiveAvatar state="happy" />
-                            <div>
-                              <h2 className="text-2xl font-bold text-gray-900 mb-2">完全企画書が完成しました！</h2>
-                              <p className="text-gray-600">詳細な技術スタックと実装計画をご確認ください。</p>
-                            </div>
-                          </div>
-                          
-                          <div className="flex gap-3">
-                            <DownloadButton
-                              content={fullProposal}
-                              filename="ai-project-proposal.md"
-                              className="bg-gray-100 hover:bg-gray-200 text-gray-700"
-                            >
-                              <DownloadIcon className="h-4 w-4" />
-                              <span className="hidden sm:inline ml-2">{t.downloadProposal}</span>
-                            </DownloadButton>
-                            
-                            <button
-                              onClick={() => setCurrentStep('prompt-engineering')}
-                              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2 px-4 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200 flex items-center gap-2"
-                            >
-                              <Brain className="h-4 w-4" />
-                              <span className="hidden sm:inline">{t.promptEngineering}</span>
-                            </button>
-                          </div>
-                        </div>
+                      {/* Executive Summary */}
+                      <ExecutiveSummary
+                        budget={formData.budget}
+                        duration={developmentTime}
+                        experienceLevel={formData.experienceLevel}
+                        projectType={formData.projectType}
+                      />
 
-                        {/* Executive Summary */}
-                        <ExecutiveSummary
-                          budget={formData.budget}
-                          duration={developmentTime}
-                          experienceLevel={formData.experienceLevel}
-                          projectType={formData.projectType}
+                      {/* Metrics Cards */}
+                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                        <MetricCard
+                          title="予算"
+                          value={formData.budget.toLocaleString()}
+                          unit="円/月"
+                          icon={<Briefcase className="h-5 w-5" />}
+                          color="blue"
                         />
+                        <MetricCard
+                          title="開発期間"
+                          value={developmentTime}
+                          unit="ヶ月"
+                          icon={<Clock className="h-5 w-5" />}
+                          color="green"
+                        />
+                        <MetricCard
+                          title="経験レベル"
+                          value={formData.experienceLevel}
+                          icon={<User className="h-5 w-5" />}
+                          color="orange"
+                        />
+                        <MetricCard
+                          title="週間時間"
+                          value={formData.weeklyHours}
+                          icon={<TrendingUp className="h-5 w-5" />}
+                          color="purple"
+                        />
+                      </div>
 
-                        {/* Metrics Cards */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                          <MetricCard
-                            title="予算"
-                            value={formData.budget.toLocaleString()}
-                            unit="円/月"
-                            icon={<Briefcase className="h-5 w-5" />}
-                            color="blue"
-                          />
-                          <MetricCard
-                            title="開発期間"
-                            value={developmentTime}
-                            unit="ヶ月"
-                            icon={<Clock className="h-5 w-5" />}
-                            color="green"
-                          />
-                          <MetricCard
-                            title="経験レベル"
-                            value={formData.experienceLevel}
-                            icon={<User className="h-5 w-5" />}
-                            color="orange"
-                          />
-                          <MetricCard
-                            title="週間時間"
-                            value={formData.weeklyHours}
-                            icon={<TrendingUp className="h-5 w-5" />}
-                            color="purple"
-                          />
-                        </div>
+                      {/* Charts */}
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                        <BudgetBreakdownChart budget={formData.budget} />
+                        <TimelineChart duration={developmentTime} />
+                      </div>
 
-                        {/* Charts */}
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                          <BudgetBreakdownChart budget={formData.budget} />
-                          <TimelineChart duration={developmentTime} />
-                        </div>
+                      {/* Expandable Sections */}
+                      <div className="space-y-4 mb-8">
+                        {proposalSections.map((section, index) => (
+                          <ExpandableSection
+                            key={index}
+                            title={section.title}
+                            defaultExpanded={index === 0}
+                          >
+                            <div className="prose max-w-none">
+                              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                {section.content}
+                              </ReactMarkdown>
+                            </div>
+                          </ExpandableSection>
+                        ))}
+                      </div>
 
-                        {/* Expandable Sections */}
-                        <div className="space-y-4 mb-8">
-                          {proposalSections.map((section, index) => (
-                            <ExpandableSection
-                              key={index}
-                              title={section.title}
-                              defaultExpanded={index === 0}
-                            >
-                              <div className="prose max-w-none">
-                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                  {section.content}
-                                </ReactMarkdown>
-                              </div>
-                            </ExpandableSection>
-                          ))}
-                        </div>
+                      {currentStep === 'refinement' && (
+                        <>
+                          {/* Conversation History */}
+                          {conversationHistory.length > 0 && (
+                            <div className="mb-8">
+                              <ConversationHistory history={conversationHistory} />
+                            </div>
+                          )}
 
-                        {currentStep === 'refinement' && (
-                          <>
-                            {/* Conversation History */}
-                            {conversationHistory.length > 0 && (
-                              <div className="mb-8">
-                                <ConversationHistory history={conversationHistory} />
-                              </div>
-                            )}
+                          {/* Quick Suggestions */}
+                          <QuickSuggestions onSuggestionClick={handleQuickSuggestion} />
 
-                            {/* Quick Suggestions */}
-                            <QuickSuggestions onSuggestionClick={handleQuickSuggestion} />
-
-                            {/* Refinement Input */}
-                            <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-                              <div className="flex items-center gap-3 mb-4">
-                                <MessageCircle className="h-6 w-6 text-blue-600" />
-                                <h3 className="text-lg font-semibold text-gray-900">企画書を調整・改善</h3>
-                              </div>
+                          {/* Refinement Input */}
+                          <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+                            <div className="flex items-center gap-3 mb-4">
+                              <MessageCircle className="h-6 w-6 text-blue-600" />
+                              <h3 className="text-lg font-semibold text-gray-900">企画書を調整・改善</h3>
+                            </div>
+                            
+                            <div className="space-y-4">
+                              <textarea
+                                ref={refinementInputRef}
+                                value={refinementInput}
+                                onChange={(e) => setRefinementInput(e.target.value)}
+                                placeholder={t.askQuestion}
+                                className="w-full h-32 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                                disabled={isRefining}
+                              />
                               
-                              <div className="space-y-4">
-                                <textarea
-                                  ref={refinementInputRef}
-                                  value={refinementInput}
-                                  onChange={(e) => setRefinementInput(e.target.value)}
-                                  placeholder={t.askQuestion}
-                                  className="w-full h-32 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                                  disabled={isRefining}
-                                />
-                                
-                                <div className="flex justify-end">
-                                  <button
-                                    onClick={handleRefinement}
-                                    disabled={isRefining || !refinementInput.trim()}
-                                    className="bg-blue-600 text-white py-2.5 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-medium transition-colors"
-                                  >
-                                    {isRefining ? (
-                                      <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-                                    ) : (
-                                      <Send className="h-4 w-4" />
-                                    )}
-                                    <span>{isRefining ? t.refining : t.send}</span>
-                                  </button>
-                                </div>
+                              <div className="flex justify-end">
+                                <button
+                                  onClick={handleRefinement}
+                                  disabled={isRefining || !refinementInput.trim()}
+                                  className="bg-blue-600 text-white py-2.5 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-medium transition-colors"
+                                >
+                                  {isRefining ? (
+                                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                                  ) : (
+                                    <Send className="h-4 w-4" />
+                                  )}
+                                  <span>{isRefining ? t.refining : t.send}</span>
+                                </button>
                               </div>
                             </div>
-                          </>
-                        )}
-                      </div>
-                    )}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
 
-                    <div ref={chatEndRef} />
-                  </div>
+                  <div ref={chatEndRef} />
                 </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
