@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, MessageCircle, Send, Sparkles, Brain, Lightbulb, Zap, Plus, Settings, Eye, Edit3, Copy, Check, Mic, MicOff, GripVertical, Trash2, FileText, Clock, TrendingUp, Target, AlertTriangle, User, Briefcase, ChevronDown, ChevronRight, Download as DownloadIcon } from 'lucide-react';
+import { ArrowLeft, MessageCircle, Send, Sparkles, Brain, Lightbulb, Zap, Plus, Settings, Eye, Edit3, Copy, Check, Mic, MicOff, GripVertical, Trash2, FileText, Clock, TrendingUp, Target, AlertTriangle, User, Briefcase, ChevronDown, ChevronRight, Download as DownloadIcon, Menu, X, Bot } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { analyzeProject, generateFullProposal, refineProposal, UserPayload, ApiResponse, RefinementRequest, RefinementResponse } from '../utils/api';
@@ -37,9 +37,12 @@ interface DialogModeScreenProps {
 }
 
 const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language }) => {
+  // Panel states
+  const [leftPanelOpen, setLeftPanelOpen] = useState(false);
+  const [rightPanelOpen, setRightPanelOpen] = useState(false);
+  
   // Prompt Engineering State
   const [promptBlocks, setPromptBlocks] = useLocalStorage<PromptBlock[]>('ain-prompt-blocks', []);
-  const [rightPanelOpen, setRightPanelOpen] = useState(false);
   const [currentPrompt, setCurrentPrompt] = useState('');
   const [showPromptPreview, setShowPromptPreview] = useState(false);
   const [newBlockContent, setNewBlockContent] = useState('');
@@ -79,6 +82,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
       welcomeSubtitle: 'Let\'s build your perfect AI project together',
       startMessage: 'What would you like to create with AI today?',
       promptComposer: 'Prompt Composer',
+      traditionalMode: 'Traditional Mode',
       addBlock: 'Add prompt block',
       placeholder: 'Enter your prompt component...',
       voiceMemo: 'Voice memo',
@@ -92,13 +96,21 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
       executing: 'Executing...',
       quickStarters: 'Quick Starters',
       examples: [
-        'Create a web application with AI features',
-        'Build a mobile app for data analysis',
-        'Design an automated workflow system',
-        'Develop a machine learning pipeline'
+        '🚀 Create a web application with AI features',
+        '📱 Build a mobile app for data analysis',
+        '⚡ Design an automated workflow system',
+        '🧠 Develop a machine learning pipeline'
       ],
       generateProposal: 'Generate Full Proposal',
-      refineProposal: 'Refine Proposal'
+      refineProposal: 'Refine Proposal',
+      projectOverview: 'Tell us about your project',
+      purposeLabel: 'What do you want to achieve with AI?',
+      purposePlaceholder: 'e.g., Analyze customer data to predict sales trends',
+      projectTypeLabel: 'Project Type',
+      budgetLabel: 'Monthly Budget (USD)',
+      experienceLabel: 'Your Development Experience',
+      weeklyHoursLabel: 'Weekly Development Time',
+      submitButton: 'Get AI Recommendations'
     },
     ja: {
       title: '対話モード',
@@ -107,6 +119,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
       welcomeSubtitle: '一緒に完璧なAIプロジェクトを構築しましょう',
       startMessage: '今日はAIで何を作りたいですか？',
       promptComposer: 'プロンプトコンポーザー',
+      traditionalMode: '従来モード',
       addBlock: 'プロンプトブロックを追加',
       placeholder: 'プロンプト要素を入力...',
       voiceMemo: 'ボイスメモ',
@@ -120,13 +133,21 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
       executing: '実行中...',
       quickStarters: 'クイックスタート',
       examples: [
-        'AI機能を持つWebアプリケーションを作成',
-        'データ分析用のモバイルアプリを構築',
-        '自動化ワークフローシステムを設計',
-        '機械学習パイプラインを開発'
+        '🚀 AI機能を持つWebアプリケーションを作成',
+        '📱 データ分析用のモバイルアプリを構築',
+        '⚡ 自動化ワークフローシステムを設計',
+        '🧠 機械学習パイプラインを開発'
       ],
       generateProposal: '本格企画書を生成',
-      refineProposal: '企画書を調整'
+      refineProposal: '企画書を調整',
+      projectOverview: 'プロジェクトについて教えてください',
+      purposeLabel: 'AIを使って実現したいことは何ですか？',
+      purposePlaceholder: '例：顧客データを分析して売上予測を行うシステムを作りたい',
+      projectTypeLabel: 'プロジェクトの種類',
+      budgetLabel: '月額予算（円）',
+      experienceLabel: 'あなたの開発経験レベル',
+      weeklyHoursLabel: '週に使える開発時間',
+      submitButton: '最適な技術スタックを提案してもらう'
     }
   };
 
@@ -224,6 +245,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
     const combinedPrompt = generateCombinedPrompt();
     setCurrentPrompt(combinedPrompt);
     setShowPromptPreview(true);
+    setRightPanelOpen(false); // Close right panel on mobile
   };
 
   const handleCopy = async () => {
@@ -257,6 +279,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
       return;
     }
     setState(prev => ({ ...prev, isLoadingInitial: true, error: '', initialSuggestion: '', fullProposal: '', conversationHistory: [], refineCount: 0 }));
+    setLeftPanelOpen(false); // Close left panel on mobile
     
     const payload: UserPayload = { 
       purpose: formData.purpose, 
@@ -471,23 +494,157 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
 
   return (
     <div className="h-screen flex bg-gray-50">
+      {/* Left Panel - Traditional Mode */}
+      {leftPanelOpen && (
+        <>
+          <div 
+            className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+            onClick={() => setLeftPanelOpen(false)}
+          />
+          <div className="fixed lg:static inset-y-0 left-0 z-50 lg:z-auto w-80 bg-white border-r border-gray-200 flex flex-col shadow-lg transform transition-transform duration-300 ease-in-out lg:transform-none">
+            <div className="p-4 border-b border-gray-200">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">{t.traditionalMode}</h3>
+                <button
+                  onClick={() => setLeftPanelOpen(false)}
+                  className="lg:hidden p-2 rounded-lg hover:bg-gray-100"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              <p className="text-sm text-gray-600">{t.projectOverview}</p>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-4">
+              <form onSubmit={(e) => { e.preventDefault(); handleSubmitInitial(); }} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {t.purposeLabel}
+                  </label>
+                  <textarea
+                    value={formData.purpose}
+                    onChange={(e) => handleFormChange('purpose', e.target.value)}
+                    placeholder={t.purposePlaceholder}
+                    className="w-full h-24 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm resize-none"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {t.projectTypeLabel}
+                  </label>
+                  <select
+                    value={formData.projectType}
+                    onChange={(e) => handleFormChange('projectType', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  >
+                    <option value="Webアプリケーション">Webアプリケーション</option>
+                    <option value="モバイルアプリケーション">モバイルアプリケーション</option>
+                    <option value="APIバックエンド">APIバックエンド</option>
+                    <option value="データ分析基盤">データ分析基盤</option>
+                    <option value="その他">その他</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {t.budgetLabel}
+                  </label>
+                  <input
+                    type="number"
+                    value={formData.budget}
+                    onChange={(e) => handleFormChange('budget', parseInt(e.target.value))}
+                    min="0"
+                    max="100000"
+                    step="1000"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  />
+                  <div className="flex justify-between text-xs text-gray-500 mt-1">
+                    <span>¥0</span>
+                    <span>¥100,000</span>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {t.experienceLabel}
+                  </label>
+                  <select
+                    value={formData.experienceLevel}
+                    onChange={(e) => handleFormChange('experienceLevel', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  >
+                    <option value="初心者">初心者</option>
+                    <option value="中級者">中級者</option>
+                    <option value="上級者">上級者</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {t.weeklyHoursLabel}
+                  </label>
+                  <select
+                    value={formData.weeklyHours}
+                    onChange={(e) => handleFormChange('weeklyHours', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  >
+                    <option value="〜5時間">〜5時間</option>
+                    <option value="5〜20時間">5〜20時間</option>
+                    <option value="20時間以上">20時間以上</option>
+                  </select>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={state.isLoadingInitial || !formData.purpose.trim()}
+                  className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-medium transition-colors text-sm"
+                >
+                  {state.isLoadingInitial ? (
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                  ) : (
+                    <Bot className="h-4 w-4" />
+                  )}
+                  <span>{state.isLoadingInitial ? '分析中...' : t.submitButton}</span>
+                </button>
+              </form>
+            </div>
+          </div>
+        </>
+      )}
+
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
         <div className="bg-white border-b border-gray-200 p-4">
           <div className="flex items-center justify-between">
-            <button
-              onClick={onBack}
-              className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <ArrowLeft className="h-5 w-5" />
-              <span>{language === 'en' ? 'Back' : '戻る'}</span>
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={onBack}
+                className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <ArrowLeft className="h-5 w-5" />
+                <span className="hidden sm:inline">{language === 'en' ? 'Back' : '戻る'}</span>
+              </button>
+              
+              <button
+                onClick={() => setLeftPanelOpen(!leftPanelOpen)}
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+                  leftPanelOpen 
+                    ? 'bg-blue-100 text-blue-700' 
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                }`}
+              >
+                <Menu className="h-5 w-5" />
+                <span className="hidden sm:inline">{t.traditionalMode}</span>
+              </button>
+            </div>
             
             <div className="text-center flex items-center gap-4">
               <InteractiveAvatar state={avatarState} />
-              <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <div className="hidden sm:block">
+                <h1 className="text-xl lg:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   {t.title}
                 </h1>
                 <p className="text-gray-600 text-sm">{t.subtitle}</p>
@@ -498,7 +655,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
               onClick={() => setRightPanelOpen(!rightPanelOpen)}
               className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
                 rightPanelOpen 
-                  ? 'bg-blue-100 text-blue-700' 
+                  ? 'bg-purple-100 text-purple-700' 
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
               }`}
             >
@@ -519,20 +676,32 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
         <div className="flex-1 overflow-y-auto">
           {state.conversationHistory.length === 0 && !showPromptPreview ? (
             // Welcome Screen (ChatGPT/Gemini inspired)
-            <div className="h-full flex flex-col items-center justify-center p-8">
+            <div className="h-full flex flex-col items-center justify-center p-4 lg:p-8">
               <div className="max-w-2xl w-full text-center">
                 {/* Welcome Header */}
-                <div className="mb-12">
-                  <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                <div className="mb-8 lg:mb-12">
+                  <h2 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-4">
                     {t.welcomeTitle}
                   </h2>
-                  <p className="text-xl text-gray-600 mb-8">
+                  <p className="text-lg lg:text-xl text-gray-600 mb-6 lg:mb-8">
                     {t.welcomeSubtitle}
                   </p>
+                  
+                  {/* Mode indicators */}
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8">
+                    <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-full">
+                      <Menu className="h-4 w-4 text-blue-600" />
+                      <span className="text-sm text-blue-700 font-medium">{t.traditionalMode}</span>
+                    </div>
+                    <div className="flex items-center gap-2 px-4 py-2 bg-purple-50 rounded-full">
+                      <Settings className="h-4 w-4 text-purple-600" />
+                      <span className="text-sm text-purple-700 font-medium">{t.promptComposer}</span>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Quick Starters */}
-                <div className="mb-8">
+                <div className="mb-6 lg:mb-8">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">
                     {t.quickStarters}
                   </h3>
@@ -589,7 +758,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
             </div>
           ) : (
             // Conversation or Prompt Preview
-            <div className="p-6">
+            <div className="p-4 lg:p-6">
               {showPromptPreview && (
                 // Prompt Preview & Editor
                 <div className="max-w-4xl mx-auto mb-6">
@@ -616,7 +785,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                       <textarea
                         value={currentPrompt}
                         onChange={(e) => setCurrentPrompt(e.target.value)}
-                        className="w-full h-64 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm resize-none"
+                        className="w-full h-48 lg:h-64 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm resize-none"
                       />
 
                       <div className="mt-4 flex justify-end">
@@ -864,132 +1033,146 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
 
       {/* Right Panel - Prompt Composer */}
       {rightPanelOpen && (
-        <div className="w-80 bg-white border-l border-gray-200 flex flex-col shadow-lg">
-          <div className="p-4 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.promptComposer}</h3>
-            
-            {/* Add new block */}
-            <div className="space-y-3">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={newBlockContent}
-                  onChange={(e) => setNewBlockContent(e.target.value)}
-                  placeholder={t.placeholder}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                  onKeyPress={(e) => e.key === 'Enter' && addBlock()}
-                />
+        <>
+          <div 
+            className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+            onClick={() => setRightPanelOpen(false)}
+          />
+          <div className="fixed lg:static inset-y-0 right-0 z-50 lg:z-auto w-80 bg-white border-l border-gray-200 flex flex-col shadow-lg transform transition-transform duration-300 ease-in-out lg:transform-none">
+            <div className="p-4 border-b border-gray-200">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">{t.promptComposer}</h3>
                 <button
-                  onClick={addBlock}
-                  className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  onClick={() => setRightPanelOpen(false)}
+                  className="lg:hidden p-2 rounded-lg hover:bg-gray-100"
                 >
-                  <Plus className="h-4 w-4" />
+                  <X className="h-5 w-5" />
                 </button>
               </div>
               
-              {/* Voice recording button */}
-              <button
-                onClick={handleVoiceRecording}
-                className={`w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg border transition-colors ${
-                  isRecording
-                    ? 'bg-red-50 border-red-300 text-red-700'
-                    : 'bg-gray-50 border-gray-300 text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                {isRecording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-                <span className="text-sm">
-                  {isRecording ? 'Stop Recording' : t.voiceMemo}
-                </span>
-              </button>
-              
-              {error && (
-                <p className="text-red-600 text-xs">{error}</p>
-              )}
+              {/* Add new block */}
+              <div className="space-y-3">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={newBlockContent}
+                    onChange={(e) => setNewBlockContent(e.target.value)}
+                    placeholder={t.placeholder}
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    onKeyPress={(e) => e.key === 'Enter' && addBlock()}
+                  />
+                  <button
+                    onClick={addBlock}
+                    className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </button>
+                </div>
+                
+                {/* Voice recording button */}
+                <button
+                  onClick={handleVoiceRecording}
+                  className={`w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg border transition-colors ${
+                    isRecording
+                      ? 'bg-red-50 border-red-300 text-red-700'
+                      : 'bg-gray-50 border-gray-300 text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  {isRecording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+                  <span className="text-sm">
+                    {isRecording ? 'Stop Recording' : t.voiceMemo}
+                  </span>
+                </button>
+                
+                {error && (
+                  <p className="text-red-600 text-xs">{error}</p>
+                )}
+              </div>
             </div>
-          </div>
 
-          {/* Blocks list */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-3">
-            {promptBlocks.map((block, index) => (
-              <div
-                key={block.id}
-                draggable
-                onDragStart={() => setDraggedBlock(block.id)}
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={() => {
-                  if (draggedBlock && draggedBlock !== block.id) {
-                    reorderBlocks(draggedBlock, block.id);
-                  }
-                  setDraggedBlock(null);
-                }}
-                className={`p-3 border rounded-lg cursor-move transition-all ${
-                  draggedBlock === block.id
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 bg-white hover:border-gray-300'
-                }`}
-              >
-                <div className="flex items-start gap-2">
-                  <GripVertical className="h-4 w-4 text-gray-400 mt-1 flex-shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs text-gray-500">
-                        Priority {index + 1}
-                      </span>
-                      {block.type === 'voice' && (
-                        <Mic className="h-3 w-3 text-blue-500" />
+            {/* Blocks list */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-3">
+              {promptBlocks.map((block, index) => (
+                <div
+                  key={block.id}
+                  draggable
+                  onDragStart={() => setDraggedBlock(block.id)}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={() => {
+                    if (draggedBlock && draggedBlock !== block.id) {
+                      reorderBlocks(draggedBlock, block.id);
+                    }
+                    setDraggedBlock(null);
+                  }}
+                  className={`p-3 border rounded-lg cursor-move transition-all ${
+                    draggedBlock === block.id
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 bg-white hover:border-gray-300'
+                  }`}
+                >
+                  <div className="flex items-start gap-2">
+                    <GripVertical className="h-4 w-4 text-gray-400 mt-1 flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xs text-gray-500">
+                          Priority {index + 1}
+                        </span>
+                        {block.type === 'voice' && (
+                          <Mic className="h-3 w-3 text-blue-500" />
+                        )}
+                      </div>
+                      {editingBlock === block.id ? (
+                        <textarea
+                          defaultValue={block.content}
+                          onBlur={(e) => updateBlock(block.id, e.target.value)}
+                          onKeyPress={(e) => {
+                            if (e.key === 'Enter' && e.ctrlKey) {
+                              updateBlock(block.id, e.currentTarget.value);
+                            }
+                          }}
+                          className="w-full p-2 border border-gray-300 rounded text-sm resize-none"
+                          rows={3}
+                          autoFocus
+                        />
+                      ) : (
+                        <p className="text-sm text-gray-700 break-words">
+                          {block.content}
+                        </p>
                       )}
                     </div>
-                    {editingBlock === block.id ? (
-                      <textarea
-                        defaultValue={block.content}
-                        onBlur={(e) => updateBlock(block.id, e.target.value)}
-                        onKeyPress={(e) => {
-                          if (e.key === 'Enter' && e.ctrlKey) {
-                            updateBlock(block.id, e.currentTarget.value);
-                          }
-                        }}
-                        className="w-full p-2 border border-gray-300 rounded text-sm resize-none"
-                        rows={3}
-                        autoFocus
-                      />
-                    ) : (
-                      <p className="text-sm text-gray-700 break-words">
-                        {block.content}
-                      </p>
-                    )}
-                  </div>
-                  <div className="flex gap-1">
-                    <button
-                      onClick={() => setEditingBlock(block.id)}
-                      className="p-1 text-gray-400 hover:text-blue-600 transition-colors"
-                    >
-                      <Edit3 className="h-3 w-3" />
-                    </button>
-                    <button
-                      onClick={() => deleteBlock(block.id)}
-                      className="p-1 text-gray-400 hover:text-red-600 transition-colors"
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </button>
+                    <div className="flex gap-1">
+                      <button
+                        onClick={() => setEditingBlock(block.id)}
+                        className="p-1 text-gray-400 hover:text-blue-600 transition-colors"
+                      >
+                        <Edit3 className="h-3 w-3" />
+                      </button>
+                      <button
+                        onClick={() => deleteBlock(block.id)}
+                        className="p-1 text-gray-400 hover:text-red-600 transition-colors"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Send to prompt button */}
-          {promptBlocks.length > 0 && (
-            <div className="p-4 border-t border-gray-200">
-              <button
-                onClick={handleSendToPrompt}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 flex items-center justify-center gap-2 font-medium"
-              >
-                <Send className="h-4 w-4" />
-                {t.sendToPrompt}
-              </button>
+              ))}
             </div>
-          )}
-        </div>
+
+            {/* Send to prompt button */}
+            {promptBlocks.length > 0 && (
+              <div className="p-4 border-t border-gray-200">
+                <button
+                  onClick={handleSendToPrompt}
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 flex items-center justify-center gap-2 font-medium"
+                >
+                  <Send className="h-4 w-4" />
+                  {t.sendToPrompt}
+                </button>
+              </div>
+            )}
+          </div>
+        </>
       )}
     </div>
   );

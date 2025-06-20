@@ -212,7 +212,7 @@ function App() {
       </div>
 
       {/* Header */}
-      <header className="relative z-10 p-6 lg:p-8">
+      <header className="relative z-10 p-4 lg:p-8">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -246,10 +246,10 @@ function App() {
       </header>
 
       {/* Hero Section */}
-      <main className="relative z-10 px-6 lg:px-8 pb-12">
+      <main className="relative z-10 px-4 lg:px-8 pb-8 lg:pb-12">
         <div className="max-w-7xl mx-auto">
           {/* Hero content */}
-          <div className="text-center mb-16 lg:mb-20">
+          <div className="text-center mb-12 lg:mb-16">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-6">
               <Zap className="h-4 w-4 text-yellow-400" />
               <span className="text-white text-sm font-medium">
@@ -257,7 +257,7 @@ function App() {
               </span>
             </div>
             
-            <h2 className="text-4xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+            <h2 className="text-3xl lg:text-6xl font-bold text-white mb-6 leading-tight">
               {language === 'en' ? (
                 <>
                   Realize Your
@@ -279,7 +279,7 @@ function App() {
               )}
             </h2>
             
-            <p className="text-xl lg:text-2xl text-white/80 mb-8 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg lg:text-2xl text-white/80 mb-8 max-w-3xl mx-auto leading-relaxed">
               {t.subtitle}
             </p>
             
@@ -299,8 +299,8 @@ function App() {
             </div>
           </div>
 
-          {/* Mode Selection Cards */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+          {/* Mode Selection Cards - Optimized for Mobile */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
             {modes.map((mode, index) => (
               <div
                 key={mode.id}
@@ -308,7 +308,7 @@ function App() {
                 style={{ animationDelay: `${index * 0.2}s` }}
               >
                 {/* Card */}
-                <div className="relative bg-white/10 backdrop-blur-md rounded-3xl border border-white/20 p-8 hover:bg-white/15 transition-all duration-500 transform hover:-translate-y-2 hover:shadow-2xl">
+                <div className="relative bg-white/10 backdrop-blur-md rounded-3xl border border-white/20 p-6 lg:p-8 hover:bg-white/15 transition-all duration-500 transform hover:-translate-y-2 hover:shadow-2xl h-full flex flex-col">
                   {/* New badge */}
                   {mode.isNew && (
                     <div className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full">
@@ -320,7 +320,7 @@ function App() {
                   <div className={`absolute inset-0 bg-gradient-to-br ${mode.gradient} opacity-0 group-hover:opacity-10 rounded-3xl transition-opacity duration-500`}></div>
                   
                   {/* Content */}
-                  <div className="relative z-10">
+                  <div className="relative z-10 flex flex-col h-full">
                     {/* Header */}
                     <div className="flex items-start justify-between mb-6">
                       <div className={`p-4 bg-gradient-to-r ${mode.gradient} rounded-2xl text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}>
@@ -335,7 +335,7 @@ function App() {
                     
                     {/* Title and subtitle */}
                     <div className="mb-4">
-                      <h3 className="text-2xl font-bold text-white mb-1">
+                      <h3 className="text-xl lg:text-2xl font-bold text-white mb-1">
                         {mode.title}
                       </h3>
                       <p className="text-white/60 text-sm font-medium">
@@ -344,7 +344,7 @@ function App() {
                     </div>
                     
                     {/* Description */}
-                    <p className="text-white/80 text-base leading-relaxed mb-6">
+                    <p className="text-white/80 text-sm lg:text-base leading-relaxed mb-6 flex-grow">
                       {mode.description}
                     </p>
                     
@@ -374,7 +374,7 @@ function App() {
                     {/* CTA Button */}
                     <button
                       onClick={() => setCurrentMode(mode.id)}
-                      className={`w-full bg-gradient-to-r ${mode.gradient} text-white py-4 px-6 rounded-2xl font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 group-hover:shadow-xl`}
+                      className={`w-full bg-gradient-to-r ${mode.gradient} text-white py-4 px-6 rounded-2xl font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 group-hover:shadow-xl mt-auto`}
                     >
                       <span>{t.selectMode}</span>
                       <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
@@ -386,7 +386,7 @@ function App() {
           </div>
 
           {/* Bottom CTA */}
-          <div className="text-center mt-16 lg:mt-20">
+          <div className="text-center mt-12 lg:mt-16">
             <div className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-white/80">
               <Brain className="h-5 w-5" />
               <span className="text-sm">{t.freeExperience}</span>
