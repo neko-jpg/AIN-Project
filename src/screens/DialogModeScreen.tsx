@@ -40,12 +40,10 @@ interface ConversationItem {
 
 const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language }) => {
   // Core state
-  const [currentStep, setCurrentStep] = useState<'initial' | 'proposal' | 'refinement' | 'prompt-engineering'>('initial');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMobilePromptPanelOpen, setIsMobilePromptPanelOpen] = useState(false);
-  const [mobileView, setMobileView] = useState<'main' | 'prompt' | 'preview'>('main');
+  const [mobileView, setMobileView] = useState<'form' | 'prompt' | 'preview'>('form');
   
   // Form data
   const [formData, setFormData] = useState({
@@ -58,81 +56,52 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
   const [developmentTime, setDevelopmentTime] = useState(6);
 
   // AI responses
-  const [initialSuggestion, setInitialSuggestion] = useState<string>('');
-  const [fullProposal, setFullProposal] = useState<string>('');
-  const [conversationHistory, setConversationHistory] = useState<ConversationItem[]>([]);
+  const [aiResult, setAiResult] = useState<string>('');
   
-  // Refinement
-  const [refinementInput, setRefinementInput] = useState('');
-  const [isRefining, setIsRefining] = useState(false);
-
   // Prompt Engineering
   const [promptBlocks, setPromptBlocks] = useState<PromptBlock[]>([]);
   const [currentPrompt, setCurrentPrompt] = useState('');
-  const [promptResult, setPromptResult] = useState<string>('');
   const [isPromptComposerOpen, setIsPromptComposerOpen] = useState(true);
-  const [isPromptPreviewOpen, setIsPromptPreviewOpen] = useState(true);
 
   // Refs
   const chatEndRef = useRef<HTMLDivElement>(null);
-  const refinementInputRef = useRef<HTMLTextAreaElement>(null);
 
   const texts = {
     en: {
       title: 'Dialog Mode',
       subtitle: 'AI Navigator with Advanced Prompt Engineering',
       back: 'Back',
-      step1: 'Initial Analysis',
-      step2: 'Full Proposal',
-      step3: 'Interactive Refinement',
-      step4: 'Prompt Engineering',
       generating: 'Generating AI analysis...',
-      generatingProposal: 'Creating comprehensive proposal...',
-      refining: 'Processing refinement...',
       error: 'Error occurred',
       tryAgain: 'Try Again',
-      askQuestion: 'Ask a question or request changes...',
-      send: 'Send',
-      downloadProposal: 'Download Proposal',
-      viewFullProposal: 'View Full Proposal',
-      backToProposal: 'Back to Proposal',
-      promptEngineering: 'Prompt Engineering',
-      promptEngineeringDesc: 'Design and optimize your AI prompts',
       executePrompt: 'Execute Prompt',
-      promptResult: 'Prompt Result',
+      promptResult: 'AI Result',
       mobileViews: {
-        main: 'Main',
+        form: 'Form',
         prompt: 'Prompt',
         preview: 'Preview'
-      }
+      },
+      promptPlaceholder: 'Your combined prompt will appear here. Edit as needed before sending to AI.',
+      noPromptYet: 'No prompt generated yet. Use the prompt composer on the right to build your prompt.',
+      sendToAI: 'Send to AI'
     },
     ja: {
       title: '対話モード',
       subtitle: '高度なプロンプトエンジニアリング対応AIナビゲーター',
       back: '戻る',
-      step1: '初期分析',
-      step2: '完全企画書',
-      step3: '対話型調整',
-      step4: 'プロンプトエンジニアリング',
       generating: 'AI分析を生成中...',
-      generatingProposal: '包括的な企画書を作成中...',
-      refining: '調整を処理中...',
       error: 'エラーが発生しました',
       tryAgain: '再試行',
-      askQuestion: '質問や変更要求を入力...',
-      send: '送信',
-      downloadProposal: '企画書をダウンロード',
-      viewFullProposal: '完全企画書を表示',
-      backToProposal: '企画書に戻る',
-      promptEngineering: 'プロンプトエンジニアリング',
-      promptEngineeringDesc: 'AIプロンプトを設計・最適化',
       executePrompt: 'プロンプトを実行',
-      promptResult: 'プロンプト結果',
+      promptResult: 'AI結果',
       mobileViews: {
-        main: 'メイン',
+        form: 'フォーム',
         prompt: 'プロンプト',
         preview: 'プレビュー'
-      }
+      },
+      promptPlaceholder: '結合されたプロンプトがここに表示されます。必要に応じて編集してからAIに送信してください。',
+      noPromptYet: 'まだプロンプトが生成されていません。右側のプロンプト構成ツールを使用してプロンプトを作成してください。',
+      sendToAI: 'AIに送信'
     }
   };
 
@@ -141,120 +110,19 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
   // Auto-scroll to bottom of chat
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [conversationHistory, fullProposal, promptResult]);
+  }, [aiResult]);
 
   // Handle form changes
   const handleFormChange = (field: string, value: string | number) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  // Initial submission
-  const handleSubmitInitial = async () => {
-    if (!formData.purpose.trim()) return;
-
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const payload = {
-        ...formData,
-        development_time: developmentTime,
-        language
-      };
-
-      const response = await analyzeProject(payload);
-      setInitialSuggestion(response.suggestion);
-      
-      // Extract development time from AI response
-      const extractedTime = extractDurationFromText(response.suggestion);
-      if (extractedTime !== developmentTime) {
-        setDevelopmentTime(extractedTime);
-      }
-
-      setCurrentStep('proposal');
-    } catch (err) {
-      console.error('API Request Error (Initial):', err);
-      setError(err instanceof Error ? err.message : 'Unknown error occurred');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Generate full proposal
-  const handleGenerateFullProposal = async () => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const payload = {
-        ...formData,
-        development_time: developmentTime,
-        language
-      };
-
-      const response = await generateFullProposal(payload);
-      setFullProposal(response.suggestion);
-      setCurrentStep('refinement');
-    } catch (err) {
-      console.error('API Request Error (Full Proposal):', err);
-      setError(err instanceof Error ? err.message : 'Unknown error occurred');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Handle refinement
-  const handleRefinement = async () => {
-    if (!refinementInput.trim()) return;
-
-    setIsRefining(true);
-    setError(null);
-
-    const userMessage: ConversationItem = {
-      type: 'user',
-      content: refinementInput,
-      timestamp: new Date()
-    };
-
-    setConversationHistory(prev => [...prev, userMessage]);
-
-    try {
-      const response = await refineProposal({
-        user_payload: {
-          ...formData,
-          development_time: developmentTime,
-          language
-        },
-        current_proposal: fullProposal,
-        refinement_request: refinementInput
-      });
-
-      const aiMessage: ConversationItem = {
-        type: 'ai',
-        content: response.content,
-        timestamp: new Date()
-      };
-
-      setConversationHistory(prev => [...prev, aiMessage]);
-
-      if (response.type === 'proposal') {
-        setFullProposal(response.content);
-      }
-
-      setRefinementInput('');
-    } catch (err) {
-      console.error('API Request Error (Refinement):', err);
-      setError(err instanceof Error ? err.message : 'Unknown error occurred');
-    } finally {
-      setIsRefining(false);
-    }
-  };
-
-  // Handle prompt engineering
+  // Handle prompt from composer
   const handlePromptFromComposer = (prompt: string) => {
     setCurrentPrompt(prompt);
   };
 
+  // Execute prompt
   const handleExecutePrompt = async () => {
     if (!currentPrompt.trim()) return;
 
@@ -263,7 +131,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
 
     try {
       const response = await executeCustomPrompt(currentPrompt, language);
-      setPromptResult(response.suggestion);
+      setAiResult(response.suggestion);
     } catch (err) {
       console.error('API Request Error (Custom Prompt):', err);
       setError(err instanceof Error ? err.message : 'Unknown error occurred');
@@ -271,23 +139,6 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
       setIsLoading(false);
     }
   };
-
-  // Quick suggestion handler
-  const handleQuickSuggestion = (suggestion: string) => {
-    setRefinementInput(suggestion);
-    refinementInputRef.current?.focus();
-  };
-
-  // Get sections for expandable display
-  const proposalSections = fullProposal ? splitProposalIntoSections(fullProposal) : [];
-
-  // Navigation steps
-  const steps = [
-    { id: 'initial', label: t.step1, completed: currentStep !== 'initial' },
-    { id: 'proposal', label: t.step2, completed: ['refinement', 'prompt-engineering'].includes(currentStep) },
-    { id: 'refinement', label: t.step3, completed: currentStep === 'prompt-engineering' },
-    { id: 'prompt-engineering', label: t.step4, completed: false }
-  ];
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row">
@@ -308,7 +159,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
               <Sidebar
                 formData={formData}
                 onFormChange={handleFormChange}
-                onSubmit={handleSubmitInitial}
+                onSubmit={() => {}} // No submit needed in new design
                 isLoading={isLoading}
               />
             </div>
@@ -316,12 +167,12 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
         </div>
       )}
 
-      {/* Desktop Sidebar */}
+      {/* Desktop Left Panel - Form */}
       <div className="hidden lg:block">
         <Sidebar
           formData={formData}
           onFormChange={handleFormChange}
-          onSubmit={handleSubmitInitial}
+          onSubmit={() => {}} // No submit needed in new design
           isLoading={isLoading}
         />
       </div>
@@ -355,52 +206,20 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
               </div>
             </div>
 
-            {/* Mobile View Switcher for Prompt Engineering */}
-            {currentStep === 'prompt-engineering' && (
-              <div className="flex lg:hidden bg-gray-100 rounded-lg p-1">
-                {(['main', 'prompt', 'preview'] as const).map((view) => (
-                  <button
-                    key={view}
-                    onClick={() => setMobileView(view)}
-                    className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-                      mobileView === view
-                        ? 'bg-white text-gray-900 shadow-sm'
-                        : 'text-gray-600 hover:text-gray-900'
-                    }`}
-                  >
-                    {t.mobileViews[view]}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* Step Navigation */}
-            <div className="hidden md:flex items-center gap-2">
-              {steps.map((step, index) => (
-                <div key={step.id} className="flex items-center">
-                  <button
-                    onClick={() => {
-                      if (step.id === 'prompt-engineering') {
-                        setCurrentStep('prompt-engineering');
-                      } else if (step.completed || step.id === currentStep) {
-                        setCurrentStep(step.id as any);
-                      }
-                    }}
-                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                      currentStep === step.id
-                        ? 'bg-blue-100 text-blue-700'
-                        : step.completed
-                        ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                        : 'bg-gray-100 text-gray-500'
-                    }`}
-                    disabled={!step.completed && step.id !== currentStep && step.id !== 'prompt-engineering'}
-                  >
-                    {step.label}
-                  </button>
-                  {index < steps.length - 1 && (
-                    <ChevronRight className="h-4 w-4 text-gray-400 mx-1" />
-                  )}
-                </div>
+            {/* Mobile View Switcher */}
+            <div className="flex lg:hidden bg-gray-100 rounded-lg p-1">
+              {(['form', 'prompt', 'preview'] as const).map((view) => (
+                <button
+                  key={view}
+                  onClick={() => setMobileView(view)}
+                  className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+                    mobileView === view
+                      ? 'bg-white text-gray-900 shadow-sm'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  {t.mobileViews[view]}
+                </button>
               ))}
             </div>
           </div>
@@ -408,381 +227,308 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
 
         {/* Content Area */}
         <div className="flex-1 flex">
-          {currentStep === 'prompt-engineering' ? (
-            /* Prompt Engineering Mode */
-            <div className="flex-1 flex">
-              {/* Desktop Layout */}
-              <div className="hidden lg:flex flex-1">
-                {/* Left Panel - Prompt Composer */}
-                <ResizablePanel
-                  position="left"
-                  isCollapsed={!isPromptComposerOpen}
-                  onToggle={() => setIsPromptComposerOpen(!isPromptComposerOpen)}
-                  defaultWidth={400}
-                  minWidth={320}
-                  maxWidth={600}
-                >
-                  <EnhancedPromptComposer
-                    blocks={promptBlocks}
-                    onBlocksChange={setPromptBlocks}
-                    onSendToPrompt={handlePromptFromComposer}
-                    language={language}
-                    developmentTime={developmentTime}
-                  />
-                </ResizablePanel>
+          {/* Desktop Layout */}
+          <div className="hidden lg:flex flex-1">
+            {/* Right Panel - Prompt Composer */}
+            <ResizablePanel
+              position="right"
+              isCollapsed={!isPromptComposerOpen}
+              onToggle={() => setIsPromptComposerOpen(!isPromptComposerOpen)}
+              defaultWidth={400}
+              minWidth={320}
+              maxWidth={600}
+            >
+              <EnhancedPromptComposer
+                blocks={promptBlocks}
+                onBlocksChange={setPromptBlocks}
+                onSendToPrompt={handlePromptFromComposer}
+                language={language}
+                developmentTime={developmentTime}
+              />
+            </ResizablePanel>
 
-                {/* Center - Prompt Preview & Editor */}
-                <div className="flex-1 flex flex-col p-6 space-y-6">
-                  <PromptPreview
-                    prompt={currentPrompt}
-                    onPromptChange={setCurrentPrompt}
-                    onExecute={handleExecutePrompt}
-                    isLoading={isLoading}
-                    language={language}
-                  />
+            {/* Center - Prompt Preview & Editor */}
+            <div className="flex-1 flex flex-col p-6 space-y-6">
+              {/* Development Time Slider */}
+              <DevelopmentTimeSlider
+                value={developmentTime}
+                onChange={setDevelopmentTime}
+                language={language}
+              />
 
-                  {/* Development Time Slider */}
-                  <DevelopmentTimeSlider
-                    value={developmentTime}
-                    onChange={setDevelopmentTime}
-                    language={language}
-                  />
-
-                  {/* Prompt Result */}
-                  {promptResult && (
-                    <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-                      <div className="p-4 border-b border-gray-200">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <Sparkles className="h-5 w-5 text-purple-600" />
-                            <h3 className="text-lg font-semibold text-gray-900">{t.promptResult}</h3>
-                          </div>
-                          <DownloadButton
-                            content={promptResult}
-                            filename="prompt-result.md"
-                            className="text-sm"
-                          >
-                            <DownloadIcon className="h-4 w-4" />
-                            Download
-                          </DownloadButton>
-                        </div>
-                      </div>
-                      <div className="p-6">
-                        <div className="prose max-w-none">
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                            {promptResult}
-                          </ReactMarkdown>
-                        </div>
-                      </div>
+              {/* Prompt Editor */}
+              <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+                <div className="p-4 border-b border-gray-200">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Edit3 className="h-5 w-5 text-blue-600" />
+                      <h3 className="text-lg font-semibold text-gray-900">プロンプトエディター</h3>
                     </div>
-                  )}
+                    <button
+                      onClick={handleExecutePrompt}
+                      disabled={isLoading || !currentPrompt.trim()}
+                      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium"
+                    >
+                      {isLoading ? (
+                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
+                      ) : (
+                        <Send className="h-4 w-4" />
+                      )}
+                      {isLoading ? t.generating : t.sendToAI}
+                    </button>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <textarea
+                    value={currentPrompt}
+                    onChange={(e) => setCurrentPrompt(e.target.value)}
+                    placeholder={currentPrompt ? t.promptPlaceholder : t.noPromptYet}
+                    className="w-full h-64 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm resize-none"
+                  />
                 </div>
               </div>
 
-              {/* Mobile Layout */}
-              <div className="flex-1 lg:hidden">
-                {mobileView === 'prompt' && (
-                  <EnhancedPromptComposer
-                    blocks={promptBlocks}
-                    onBlocksChange={setPromptBlocks}
-                    onSendToPrompt={handlePromptFromComposer}
-                    language={language}
-                    developmentTime={developmentTime}
-                  />
-                )}
-
-                {mobileView === 'preview' && (
-                  <div className="p-4 space-y-4">
-                    <PromptPreview
-                      prompt={currentPrompt}
-                      onPromptChange={setCurrentPrompt}
-                      onExecute={handleExecutePrompt}
-                      isLoading={isLoading}
-                      language={language}
-                    />
+              {/* Error Display */}
+              {error && (
+                <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <AlertTriangle className="h-5 w-5 text-red-600 flex-shrink-0" />
+                    <div className="flex-1">
+                      <p className="text-red-800 font-medium">{t.error}</p>
+                      <p className="text-red-700 text-sm mt-1">{error}</p>
+                    </div>
+                    <button
+                      onClick={() => setError(null)}
+                      className="text-red-600 hover:text-red-800"
+                    >
+                      <X className="h-5 w-5" />
+                    </button>
                   </div>
-                )}
+                </div>
+              )}
 
-                {mobileView === 'main' && (
-                  <div className="p-4 space-y-6">
-                    {/* Development Time Slider */}
+              {/* AI Result */}
+              {aiResult && (
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+                  <div className="p-4 border-b border-gray-200">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="h-5 w-5 text-purple-600" />
+                        <h3 className="text-lg font-semibold text-gray-900">{t.promptResult}</h3>
+                      </div>
+                      <DownloadButton
+                        content={aiResult}
+                        filename="ai-result.md"
+                        className="text-sm"
+                      >
+                        <DownloadIcon className="h-4 w-4" />
+                        Download
+                      </DownloadButton>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <div className="prose max-w-none">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {aiResult}
+                      </ReactMarkdown>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div ref={chatEndRef} />
+            </div>
+          </div>
+
+          {/* Mobile Layout */}
+          <div className="flex-1 lg:hidden">
+            {mobileView === 'form' && (
+              <div className="p-4">
+                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">プロジェクト設定</h3>
+                  
+                  {/* Development Time Slider */}
+                  <div className="mb-6">
                     <DevelopmentTimeSlider
                       value={developmentTime}
                       onChange={setDevelopmentTime}
                       language={language}
                     />
+                  </div>
 
-                    {/* Quick Actions */}
-                    <div className="grid grid-cols-2 gap-3">
-                      <button
-                        onClick={() => setMobileView('prompt')}
-                        className="flex items-center justify-center gap-2 p-4 bg-blue-50 text-blue-700 rounded-xl hover:bg-blue-100 transition-colors"
-                      >
-                        <Layers className="h-5 w-5" />
-                        <span className="font-medium">プロンプト構成</span>
-                      </button>
-                      <button
-                        onClick={() => setMobileView('preview')}
-                        className="flex items-center justify-center gap-2 p-4 bg-green-50 text-green-700 rounded-xl hover:bg-green-100 transition-colors"
-                      >
-                        <Eye className="h-5 w-5" />
-                        <span className="font-medium">プレビュー</span>
-                      </button>
+                  {/* Form fields */}
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        AIを使って実現したいことは何ですか？
+                      </label>
+                      <textarea
+                        value={formData.purpose}
+                        onChange={(e) => handleFormChange('purpose', e.target.value)}
+                        placeholder="例：顧客データを分析して売上予測を行うシステムを作りたい"
+                        className="w-full h-32 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                      />
                     </div>
 
-                    {/* Prompt Result */}
-                    {promptResult && (
-                      <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-                        <div className="p-4 border-b border-gray-200">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <Sparkles className="h-5 w-5 text-purple-600" />
-                              <h3 className="text-lg font-semibold text-gray-900">{t.promptResult}</h3>
-                            </div>
-                            <DownloadButton
-                              content={promptResult}
-                              filename="prompt-result.md"
-                              className="text-sm"
-                            >
-                              <DownloadIcon className="h-4 w-4" />
-                            </DownloadButton>
-                          </div>
-                        </div>
-                        <div className="p-6">
-                          <div className="prose max-w-none">
-                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                              {promptResult}
-                            </ReactMarkdown>
-                          </div>
-                        </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        プロジェクトの種類
+                      </label>
+                      <select
+                        value={formData.projectType}
+                        onChange={(e) => handleFormChange('projectType', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      >
+                        <option value="Webアプリケーション">Webアプリケーション</option>
+                        <option value="モバイルアプリケーション">モバイルアプリケーション</option>
+                        <option value="APIバックエンド">APIバックエンド</option>
+                        <option value="データ分析基盤">データ分析基盤</option>
+                        <option value="その他">その他</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        月額予算（円）
+                      </label>
+                      <input
+                        type="number"
+                        value={formData.budget}
+                        onChange={(e) => handleFormChange('budget', parseInt(e.target.value))}
+                        min="0"
+                        max="100000"
+                        step="1000"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        あなたの開発経験レベル
+                      </label>
+                      <select
+                        value={formData.experienceLevel}
+                        onChange={(e) => handleFormChange('experienceLevel', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      >
+                        <option value="初心者">初心者</option>
+                        <option value="中級者">中級者</option>
+                        <option value="上級者">上級者</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        週に使える開発時間
+                      </label>
+                      <select
+                        value={formData.weeklyHours}
+                        onChange={(e) => handleFormChange('weeklyHours', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      >
+                        <option value="〜5時間">〜5時間</option>
+                        <option value="5〜20時間">5〜20時間</option>
+                        <option value="20時間以上">20時間以上</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {mobileView === 'prompt' && (
+              <EnhancedPromptComposer
+                blocks={promptBlocks}
+                onBlocksChange={setPromptBlocks}
+                onSendToPrompt={handlePromptFromComposer}
+                language={language}
+                developmentTime={developmentTime}
+              />
+            )}
+
+            {mobileView === 'preview' && (
+              <div className="p-4 space-y-4">
+                {/* Prompt Editor */}
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+                  <div className="p-4 border-b border-gray-200">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Edit3 className="h-5 w-5 text-blue-600" />
+                        <h3 className="text-lg font-semibold text-gray-900">プロンプトエディター</h3>
                       </div>
-                    )}
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <textarea
+                      value={currentPrompt}
+                      onChange={(e) => setCurrentPrompt(e.target.value)}
+                      placeholder={currentPrompt ? t.promptPlaceholder : t.noPromptYet}
+                      className="w-full h-48 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm resize-none"
+                    />
+                    <button
+                      onClick={handleExecutePrompt}
+                      disabled={isLoading || !currentPrompt.trim()}
+                      className="w-full mt-4 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium"
+                    >
+                      {isLoading ? (
+                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
+                      ) : (
+                        <Send className="h-4 w-4" />
+                      )}
+                      {isLoading ? t.generating : t.sendToAI}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Error Display */}
+                {error && (
+                  <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <AlertTriangle className="h-5 w-5 text-red-600 flex-shrink-0" />
+                      <div className="flex-1">
+                        <p className="text-red-800 font-medium">{t.error}</p>
+                        <p className="text-red-700 text-sm mt-1">{error}</p>
+                      </div>
+                      <button
+                        onClick={() => setError(null)}
+                        className="text-red-600 hover:text-red-800"
+                      >
+                        <X className="h-5 w-5" />
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* AI Result */}
+                {aiResult && (
+                  <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+                    <div className="p-4 border-b border-gray-200">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Sparkles className="h-5 w-5 text-purple-600" />
+                          <h3 className="text-lg font-semibold text-gray-900">{t.promptResult}</h3>
+                        </div>
+                        <DownloadButton
+                          content={aiResult}
+                          filename="ai-result.md"
+                          className="text-sm"
+                        >
+                          <DownloadIcon className="h-4 w-4" />
+                        </DownloadButton>
+                      </div>
+                    </div>
+                    <div className="p-6">
+                      <div className="prose max-w-none">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {aiResult}
+                        </ReactMarkdown>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
-            </div>
-          ) : (
-            /* Regular Dialog Mode */
-            <div className="flex-1 overflow-hidden">
-              <div className="h-full overflow-y-auto">
-                <div className="max-w-6xl mx-auto p-3 lg:p-6">
-                  {/* Error Display */}
-                  {error && (
-                    <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
-                      <div className="flex items-center gap-3">
-                        <AlertTriangle className="h-5 w-5 text-red-600 flex-shrink-0" />
-                        <div className="flex-1">
-                          <p className="text-red-800 font-medium">{t.error}</p>
-                          <p className="text-red-700 text-sm mt-1">{error}</p>
-                        </div>
-                        <button
-                          onClick={() => setError(null)}
-                          className="text-red-600 hover:text-red-800"
-                        >
-                          <X className="h-5 w-5" />
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Loading State */}
-                  {isLoading && (
-                    <LoadingSpinner 
-                      message={
-                        currentStep === 'initial' ? t.generating :
-                        currentStep === 'proposal' ? t.generatingProposal :
-                        t.refining
-                      } 
-                    />
-                  )}
-
-                  {/* Initial Analysis Result */}
-                  {initialSuggestion && currentStep === 'proposal' && !isLoading && (
-                    <div className="mb-8">
-                      <div className="flex items-center gap-4 mb-6">
-                        <InteractiveAvatar state="happy" />
-                        <div>
-                          <h2 className="text-2xl font-bold text-gray-900 mb-2">初期分析完了！</h2>
-                          <p className="text-gray-600">あなたのプロジェクトに最適な技術スタックを分析しました。</p>
-                        </div>
-                      </div>
-
-                      <SpeechBubble className="mb-6">
-                        <div className="prose max-w-none">
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                            {initialSuggestion}
-                          </ReactMarkdown>
-                        </div>
-                      </SpeechBubble>
-
-                      <div className="flex flex-col sm:flex-row gap-4">
-                        <button
-                          onClick={handleGenerateFullProposal}
-                          className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2"
-                        >
-                          <FileText className="h-5 w-5" />
-                          {t.viewFullProposal}
-                        </button>
-                        
-                        <button
-                          onClick={() => setCurrentStep('prompt-engineering')}
-                          className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2"
-                        >
-                          <Brain className="h-5 w-5" />
-                          {t.promptEngineering}
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Full Proposal Display */}
-                  {fullProposal && (currentStep === 'refinement' || currentStep === 'proposal') && !isLoading && (
-                    <div className="mb-8">
-                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
-                        <div className="flex items-center gap-4">
-                          <InteractiveAvatar state="happy" />
-                          <div>
-                            <h2 className="text-2xl font-bold text-gray-900 mb-2">完全企画書が完成しました！</h2>
-                            <p className="text-gray-600">詳細な技術スタックと実装計画をご確認ください。</p>
-                          </div>
-                        </div>
-                        
-                        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-                          <DownloadButton
-                            content={fullProposal}
-                            filename="ai-project-proposal.md"
-                            className="bg-gray-100 hover:bg-gray-200 text-gray-700 justify-center"
-                          >
-                            <DownloadIcon className="h-4 w-4" />
-                            <span className="ml-2">{t.downloadProposal}</span>
-                          </DownloadButton>
-                          
-                          <button
-                            onClick={() => setCurrentStep('prompt-engineering')}
-                            className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2 px-4 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200 flex items-center justify-center gap-2"
-                          >
-                            <Brain className="h-4 w-4" />
-                            <span>{t.promptEngineering}</span>
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Executive Summary */}
-                      <ExecutiveSummary
-                        budget={formData.budget}
-                        duration={developmentTime}
-                        experienceLevel={formData.experienceLevel}
-                        projectType={formData.projectType}
-                      />
-
-                      {/* Metrics Cards */}
-                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                        <MetricCard
-                          title="予算"
-                          value={formData.budget.toLocaleString()}
-                          unit="円/月"
-                          icon={<Briefcase className="h-5 w-5" />}
-                          color="blue"
-                        />
-                        <MetricCard
-                          title="開発期間"
-                          value={developmentTime}
-                          unit="ヶ月"
-                          icon={<Clock className="h-5 w-5" />}
-                          color="green"
-                        />
-                        <MetricCard
-                          title="経験レベル"
-                          value={formData.experienceLevel}
-                          icon={<User className="h-5 w-5" />}
-                          color="orange"
-                        />
-                        <MetricCard
-                          title="週間時間"
-                          value={formData.weeklyHours}
-                          icon={<TrendingUp className="h-5 w-5" />}
-                          color="purple"
-                        />
-                      </div>
-
-                      {/* Charts */}
-                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                        <BudgetBreakdownChart budget={formData.budget} />
-                        <TimelineChart duration={developmentTime} />
-                      </div>
-
-                      {/* Expandable Sections */}
-                      <div className="space-y-4 mb-8">
-                        {proposalSections.map((section, index) => (
-                          <ExpandableSection
-                            key={index}
-                            title={section.title}
-                            defaultExpanded={index === 0}
-                          >
-                            <div className="prose max-w-none">
-                              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                {section.content}
-                              </ReactMarkdown>
-                            </div>
-                          </ExpandableSection>
-                        ))}
-                      </div>
-
-                      {currentStep === 'refinement' && (
-                        <>
-                          {/* Conversation History */}
-                          {conversationHistory.length > 0 && (
-                            <div className="mb-8">
-                              <ConversationHistory history={conversationHistory} />
-                            </div>
-                          )}
-
-                          {/* Quick Suggestions */}
-                          <QuickSuggestions onSuggestionClick={handleQuickSuggestion} />
-
-                          {/* Refinement Input */}
-                          <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-                            <div className="flex items-center gap-3 mb-4">
-                              <MessageCircle className="h-6 w-6 text-blue-600" />
-                              <h3 className="text-lg font-semibold text-gray-900">企画書を調整・改善</h3>
-                            </div>
-                            
-                            <div className="space-y-4">
-                              <textarea
-                                ref={refinementInputRef}
-                                value={refinementInput}
-                                onChange={(e) => setRefinementInput(e.target.value)}
-                                placeholder={t.askQuestion}
-                                className="w-full h-32 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                                disabled={isRefining}
-                              />
-                              
-                              <div className="flex justify-end">
-                                <button
-                                  onClick={handleRefinement}
-                                  disabled={isRefining || !refinementInput.trim()}
-                                  className="bg-blue-600 text-white py-2.5 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-medium transition-colors"
-                                >
-                                  {isRefining ? (
-                                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-                                  ) : (
-                                    <Send className="h-4 w-4" />
-                                  )}
-                                  <span>{isRefining ? t.refining : t.send}</span>
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  )}
-
-                  <div ref={chatEndRef} />
-                </div>
-              </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>
