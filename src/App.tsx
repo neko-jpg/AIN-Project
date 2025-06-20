@@ -3,14 +3,13 @@ import { MessageCircle, Sparkles, GitBranch, Brain, Zap, TreePine, Target, Arrow
 
 // Screen components
 import DialogModeScreen from './screens/DialogModeScreen';
-import EnhancedDialogModeScreen from './screens/EnhancedDialogModeScreen';
 import BallModeScreen from './screens/BallModeScreen';
 import TreeModeScreen from './screens/TreeModeScreen';
 import BoltBadge from './components/BoltBadge';
 import LanguageSelector from './components/LanguageSelector';
 import { useLocalStorage } from './hooks/useLocalStorage';
 
-type AppMode = 'language' | 'intro' | 'dialog' | 'enhanced-dialog' | 'ball' | 'tree';
+type AppMode = 'language' | 'intro' | 'dialog' | 'ball' | 'tree';
 
 interface ModeCard {
   id: AppMode;
@@ -37,19 +36,11 @@ function App() {
       autoGenerate: 'Auto-generate proposals',
       aiOptimized: 'AI-optimized suggestions',
       modes: {
-        'enhanced-dialog': {
-          title: 'Enhanced Dialog Mode',
-          subtitle: 'Advanced Prompt Engineering',
-          description: 'Professional prompt engineering workspace with visual composition, voice memos, and advanced customization controls.',
-          features: ['Visual prompt composition', 'Voice memo integration', 'Advanced customization', 'Prompt preview & editing'],
-          difficulty: 'advanced',
-          estimatedTime: '15-25 min'
-        },
         'dialog': {
-          title: 'Classic Dialog Mode',
-          subtitle: 'AI Navigator Classic',
-          description: 'Chat with AI to create optimal technology stacks and comprehensive project proposals through guided conversation.',
-          features: ['Step-by-step guidance', 'Detailed proposal generation', 'Interactive refinement', 'PDF export support'],
+          title: 'Dialog Mode',
+          subtitle: 'AI Navigator with Prompt Engineering',
+          description: 'Chat with AI to create optimal technology stacks and comprehensive project proposals. Now with advanced prompt composition and editing capabilities.',
+          features: ['Step-by-step guidance', 'Prompt engineering workspace', 'Interactive refinement', 'Visual prompt composition'],
           difficulty: 'beginner',
           estimatedTime: '10-15 min'
         },
@@ -85,19 +76,11 @@ function App() {
       autoGenerate: '企画書自動生成',
       aiOptimized: 'AI最適化提案',
       modes: {
-        'enhanced-dialog': {
-          title: '拡張対話モード',
-          subtitle: '高度なプロンプトエンジニアリング',
-          description: 'ビジュアル構成、ボイスメモ、高度なカスタマイズ制御を備えたプロフェッショナルなプロンプトエンジニアリングワークスペース。',
-          features: ['ビジュアルプロンプト構成', 'ボイスメモ統合', '高度なカスタマイズ', 'プロンプトプレビュー & 編集'],
-          difficulty: 'advanced',
-          estimatedTime: '15-25分'
-        },
         'dialog': {
           title: '対話モード',
-          subtitle: 'AI Navigator Classic',
-          description: 'AIと対話しながら、あなたのプロジェクトに最適な技術スタックと企画書を作成します。',
-          features: ['ステップバイステップガイド', '詳細な企画書生成', '対話型調整', 'PDF出力対応'],
+          subtitle: 'プロンプトエンジニアリング対応',
+          description: 'AIと対話しながら、あなたのプロジェクトに最適な技術スタックと企画書を作成します。高度なプロンプト構成・編集機能を搭載。',
+          features: ['ステップバイステップガイド', 'プロンプトエンジニアリング', '対話型調整', 'ビジュアルプロンプト構成'],
           difficulty: 'beginner',
           estimatedTime: '10-15分'
         },
@@ -132,18 +115,6 @@ function App() {
 
   const modes: ModeCard[] = [
     {
-      id: 'enhanced-dialog',
-      title: t.modes['enhanced-dialog'].title,
-      subtitle: t.modes['enhanced-dialog'].subtitle,
-      description: t.modes['enhanced-dialog'].description,
-      icon: <Brain className="h-8 w-8" />,
-      gradient: 'from-purple-500 via-pink-500 to-red-500',
-      features: t.modes['enhanced-dialog'].features,
-      difficulty: 'advanced',
-      estimatedTime: t.modes['enhanced-dialog'].estimatedTime,
-      isNew: true
-    },
-    {
       id: 'dialog',
       title: t.modes.dialog.title,
       subtitle: t.modes.dialog.subtitle,
@@ -152,7 +123,8 @@ function App() {
       gradient: 'from-blue-500 via-blue-600 to-purple-600',
       features: t.modes.dialog.features,
       difficulty: 'beginner',
-      estimatedTime: t.modes.dialog.estimatedTime
+      estimatedTime: t.modes.dialog.estimatedTime,
+      isNew: true
     },
     {
       id: 'ball',
@@ -199,22 +171,13 @@ function App() {
   }
 
   // Render different screens based on current mode
-  if (currentMode === 'enhanced-dialog') {
-    return (
-      <>
-        <EnhancedDialogModeScreen 
-          onBack={() => setCurrentMode('intro')} 
-          language={language}
-        />
-        <BoltBadge />
-      </>
-    );
-  }
-
   if (currentMode === 'dialog') {
     return (
       <>
-        <DialogModeScreen onBack={() => setCurrentMode('intro')} />
+        <DialogModeScreen 
+          onBack={() => setCurrentMode('intro')} 
+          language={language}
+        />
         <BoltBadge />
       </>
     );
@@ -275,7 +238,7 @@ function App() {
               </button>
               <div className="hidden lg:flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
                 <Star className="h-4 w-4 text-yellow-400" />
-                <span className="text-white text-sm font-medium">v2.0 Beta</span>
+                <span className="text-white text-sm font-medium">v2.0 Enhanced</span>
               </div>
             </div>
           </div>
@@ -290,7 +253,7 @@ function App() {
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-6">
               <Zap className="h-4 w-4 text-yellow-400" />
               <span className="text-white text-sm font-medium">
-                {language === 'en' ? '4 Revolutionary Approaches' : '4つの革新的なアプローチ'}
+                {language === 'en' ? '3 Revolutionary Approaches' : '3つの革新的なアプローチ'}
               </span>
             </div>
             
@@ -337,7 +300,7 @@ function App() {
           </div>
 
           {/* Mode Selection Cards */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
             {modes.map((mode, index) => (
               <div
                 key={mode.id}
@@ -349,7 +312,7 @@ function App() {
                   {/* New badge */}
                   {mode.isNew && (
                     <div className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                      NEW
+                      ENHANCED
                     </div>
                   )}
                   
