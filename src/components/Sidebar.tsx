@@ -1,5 +1,6 @@
 import React from 'react';
-import { Bot, Send } from 'lucide-react';
+// [修正点] Sparkles アイコンをインポートします
+import { Bot, Send, Sparkles } from 'lucide-react';
 
 interface SidebarProps {
   formData: {
@@ -9,21 +10,34 @@ interface SidebarProps {
     experienceLevel: string;
     weeklyHours: string;
   };
-  onFormChange: (field: string, value: string | number) => void;
+  // [修正点1] onFormChangeの型をより厳密にします
+  onFormChange: (field: keyof SidebarProps['formData'], value: string | number) => void;
   onSubmit: () => void;
+  // [修正点2] onQuickGenerateをpropsとして受け取る定義を追加します
+  // これにより、先ほどのTypeScriptエラーが解消されます。
+  onQuickGenerate: () => void;
   isLoading: boolean;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, isLoading }) => {
+// [修正点3] onQuickGenerate を引数として受け取ります
+const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, onQuickGenerate, isLoading }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.purpose.trim()) return;
     onSubmit();
   };
+  
+  // クイック生成ボタンがクリックされたときの処理
+  const handleQuickGenerateClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault(); // formの送信を防ぐ
+    if (!formData.purpose.trim()) return;
+    onQuickGenerate();
+  }
 
   return (
-    <div className="w-80 bg-white border-r border-gray-200 h-screen overflow-y-auto">
-      <div className="p-6">
+    // h-screen だと親要素のレイアウトによっては画面全体を覆ってしまうため、h-full に変更して親に追従するようにします
+    <div className="w-80 bg-white border-r border-gray-200 h-full flex flex-col">
+      <div className="p-6 overflow-y-auto"> {/* スクロールは内側の要素に任せます */}
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 bg-blue-100 rounded-lg">
             <Bot className="h-6 w-6 text-blue-600" />
@@ -78,7 +92,8 @@ const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, isL
             <input
               type="number"
               value={formData.budget}
-              onChange={(e) => onFormChange('budget', parseInt(e.target.value))}
+              // [修正点4] より安全な数値変換にします
+              onChange={(e) => onFormChange('budget', Number(e.target.value) || 0)}
               min="0"
               max="100000"
               step="1000"
@@ -119,19 +134,34 @@ const Sidebar: React.FC<SidebarProps> = ({ formData, onFormChange, onSubmit, isL
               <option value="20時間以上">20時間以上</option>
             </select>
           </div>
+          
+          {/* [修正点5] クイック生成ボタンを追加します */}
+          <button
+            type="button" // type="submit" ではないことに注意
+            onClick={handleQuickGenerateClick}
+            disabled={isLoading || !formData.purpose.trim()}
+            className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-2.5 px-4 rounded-md hover:from-green-600 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-medium transition-all duration-200"
+          >
+            {isLoading ? (
+              <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+            ) : (
+              <Sparkles className="h-4 w-4" />
+            )}
+            <span>{isLoading ? '生成中...' : 'クイック生成'}</span>
+          </button>
+
 
           <button
             type="submit"
             disabled={isLoading || !formData.purpose.trim()}
             className="w-full bg-blue-600 text-white py-2.5 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-medium transition-colors"
           >
-            {/* [修正点] isLoading状態に応じて、要素の構造を変えずにアイコンとテキストの中身だけを切り替える */}
             {isLoading ? (
               <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
             ) : (
               <Send className="h-4 w-4" />
             )}
-            <span>{isLoading ? '分析中...' : '最適な技術スタックを提案してもらう'}</span>
+            <span>{isLoading ? '分析中...' : '詳細プロンプトで実行'}</span>
           </button>
         </form>
       </div>
