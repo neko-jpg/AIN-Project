@@ -86,7 +86,14 @@ const EnhancedPromptComposer: React.FC<EnhancedPromptComposerProps> = ({
       bulkActions: 'Bulk Actions',
       selectAll: 'Select All',
       deleteSelected: 'Delete Selected',
-      archiveSelected: 'Archive Selected'
+      archiveSelected: 'Archive Selected',
+      all: 'All',
+      text: 'Text',
+      voice: 'Voice',
+      template: 'Template',
+      prioritySort: 'Priority',
+      timestampSort: 'Created',
+      lengthSort: 'Length'
     },
     ja: {
       title: '高度なプロンプト構成ツール',
@@ -127,7 +134,14 @@ const EnhancedPromptComposer: React.FC<EnhancedPromptComposerProps> = ({
       bulkActions: '一括操作',
       selectAll: 'すべて選択',
       deleteSelected: '選択項目を削除',
-      archiveSelected: '選択項目をアーカイブ'
+      archiveSelected: '選択項目をアーカイブ',
+      all: 'すべて',
+      text: 'テキスト',
+      voice: '音声',
+      template: 'テンプレート',
+      prioritySort: '優先度',
+      timestampSort: '作成日時',
+      lengthSort: '文字数'
     }
   };
 
@@ -502,10 +516,10 @@ const EnhancedPromptComposer: React.FC<EnhancedPromptComposerProps> = ({
                   onChange={(e) => setFilterCategory(e.target.value)}
                   className="text-sm border border-gray-300 rounded px-2 py-1"
                 >
-                  <option value="all">すべて</option>
-                  <option value="text">テキスト</option>
-                  <option value="voice">音声</option>
-                  <option value="template">テンプレート</option>
+                  <option value="all">{t.all}</option>
+                  <option value="text">{t.text}</option>
+                  <option value="voice">{t.voice}</option>
+                  <option value="template">{t.template}</option>
                 </select>
               </div>
               
@@ -516,9 +530,9 @@ const EnhancedPromptComposer: React.FC<EnhancedPromptComposerProps> = ({
                   onChange={(e) => setSortBy(e.target.value as any)}
                   className="text-sm border border-gray-300 rounded px-2 py-1"
                 >
-                  <option value="priority">優先度</option>
-                  <option value="timestamp">作成日時</option>
-                  <option value="length">文字数</option>
+                  <option value="priority">{t.prioritySort}</option>
+                  <option value="timestamp">{t.timestampSort}</option>
+                  <option value="length">{t.lengthSort}</option>
                 </select>
                 <button
                   onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
@@ -529,7 +543,7 @@ const EnhancedPromptComposer: React.FC<EnhancedPromptComposerProps> = ({
               </div>
               
               <div className="text-sm text-gray-500 ml-auto">
-                {filteredAndSortedBlocks.length} / {blocks.length} ブロック
+                {filteredAndSortedBlocks.length} / {blocks.length} blocks
               </div>
             </div>
             
@@ -761,7 +775,7 @@ const EnhancedPromptComposer: React.FC<EnhancedPromptComposerProps> = ({
                             {block.timestamp.toLocaleTimeString()}
                           </span>
                           <span className="text-xs text-gray-400">
-                            {block.content.length}文字
+                            {block.content.length} chars
                           </span>
                         </div>
                         {editingBlock === block.id ? (

@@ -219,12 +219,6 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
               </div>
               
               <div className="space-y-4">
-                <DevelopmentTimeSlider
-                  value={developmentTime}
-                  onChange={setDevelopmentTime}
-                  language="en"
-                />
-
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     What do you want to achieve with AI?
@@ -300,6 +294,13 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                     <option value="20+ hours">20+ hours</option>
                   </select>
                 </div>
+
+                {/* Development Time Slider - Moved here */}
+                <DevelopmentTimeSlider
+                  value={developmentTime}
+                  onChange={setDevelopmentTime}
+                  language="en"
+                />
 
                 <button
                   onClick={handleQuickGenerate}
