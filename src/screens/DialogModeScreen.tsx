@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { ArrowLeft, Send, Sparkles, Edit3, AlertTriangle, X, Download as DownloadIcon, PanelLeftOpen, PanelRightOpen, PanelTopOpen } from 'lucide-react';
+import { ArrowLeft, Send, Sparkles, Edit3, AlertTriangle, X, Download as DownloadIcon, PanelLeftOpen, PanelRightOpen, PanelTopOpen, Zap } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
@@ -8,7 +8,7 @@ import Sidebar from '../components/Sidebar';
 import DownloadButton from '../components/DownloadButton';
 import DevelopmentTimeSlider from '../components/DevelopmentTimeSlider';
 import EnhancedPromptComposer from '../components/EnhancedPromptComposer';
-import { analyzeProject, executeCustomPrompt } from '../utils/api';
+import { analyzeProject, executeCustomPrompt, generatePrompt } from '../utils/api';
 import { PromptBlock } from '../types';
 
 // Translation texts
@@ -17,6 +17,7 @@ const texts = {
   subtitle: 'AI Navigator with Advanced Prompt Engineering',
   back: 'Back',
   generating: 'Generating AI analysis...',
+  generatingPrompt: 'Generating optimized prompt...',
   error: 'Error occurred',
   tryAgain: 'Try Again',
   executePrompt: 'Execute Prompt',
@@ -30,7 +31,10 @@ const texts = {
   formPanel: 'Project Settings',
   promptPanel: 'Prompt Composer',
   editorPanel: 'Prompt Editor',
-  resultPanel: 'AI Results'
+  resultPanel: 'AI Results',
+  optimizedPrompt: 'AI-Optimized Prompt',
+  promptGenerated: 'Optimized prompt generated! Review and edit if needed, then click "Send to AI".',
+  quickGenerate: 'Quick Generate'
 };
 
 interface DialogModeScreenProps {
@@ -41,6 +45,7 @@ interface DialogModeScreenProps {
 const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language }) => {
   // State Management
   const [isLoading, setIsLoading] = useState(false);
+  const [isGeneratingPrompt, setIsGeneratingPrompt] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [layoutMode, setLayoutMode] = useState<'desktop' | 'mobile'>('desktop');
 
@@ -55,6 +60,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
   const [promptBlocks, setPromptBlocks] = useState<PromptBlock[]>([]);
   const [currentPrompt, setCurrentPrompt] = useState('');
   const [aiResult, setAiResult] = useState<string | null>(null);
+  const [promptGenerated, setPromptGenerated] = useState(false);
 
   const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(true);
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
@@ -112,59 +118,56 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
     }
   };
 
-  // Handle quick generation (auto-generate prompt from form data)
+  // NEW: Handle quick generation (generate optimized prompt first)
   const handleQuickGenerate = async () => {
     if (!formData.purpose.trim()) return;
 
-    // Auto-generate prompt blocks from form data
-    const autoBlocks: PromptBlock[] = [
-      {
-        id: 'purpose-block',
-        content: `Project Purpose: ${formData.purpose}`,
-        priority: 0,
-        timestamp: new Date(),
-        type: 'text'
-      },
-      {
-        id: 'type-block',
-        content: `Project Type: ${formData.projectType}`,
-        priority: 1,
-        timestamp: new Date(),
-        type: 'text'
-      },
-      {
-        id: 'budget-block',
-        content: `Monthly Budget: $${formData.budget}`,
-        priority: 2,
-        timestamp: new Date(),
-        type: 'text'
-      },
-      {
-        id: 'experience-block',
-        content: `Development Experience Level: ${formData.experienceLevel}`,
-        priority: 3,
-        timestamp: new Date(),
-        type: 'text'
-      },
-      {
-        id: 'time-block',
-        content: `Weekly Development Time: ${formData.weeklyHours}, Development Period: ${developmentTime} months`,
-        priority: 4,
-        timestamp: new Date(),
-        type: 'text'
-      }
-    ];
+    setIsGeneratingPrompt(true);
+    setError(null);
+    setPromptGenerated(false);
 
-    setPromptBlocks(autoBlocks);
+    try {
+      const payload = {
+        purpose: formData.purpose,
+        project_type: formData.projectType,
+        budget: formData.budget,
+        experience_level: formData.experienceLevel,
+        weekly_hours: formData.weeklyHours,
+        development_time: developmentTime,
+        language: 'en'
+      };
 
-    // Generate combined prompt
-    const combinedPrompt = autoBlocks.map(block => block.content).join('\n\n');
-    setCurrentPrompt(combinedPrompt);
+      // Call the new generate_prompt endpoint
+      const response = await generatePrompt(payload);
+      
+      // Set the optimized prompt in the editor
+      setCurrentPrompt(response.suggestion);
+      setPromptGenerated(true);
+      
+      // Auto-generate prompt blocks for the composer
+      const autoBlocks: PromptBlock[] = [
+        {
+          id: 'optimized-prompt',
+          content: response.suggestion,
+          priority: 0,
+          timestamp: new Date(),
+          type: 'text'
+        }
+      ];
+      setPromptBlocks(autoBlocks);
+
+    } catch (err) {
+      console.error('API Request Error (Generate Prompt):', err);
+      setError(err instanceof Error ? err.message : 'Unknown error occurred');
+    } finally {
+      setIsGeneratingPrompt(false);
+    }
   };
 
   // Handle prompt from composer
   const handlePromptFromComposer = (prompt: string) => {
     setCurrentPrompt(prompt);
+    setPromptGenerated(false); // Reset the generated flag when manually editing
   };
 
   // Execute prompt
@@ -178,6 +181,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
     try {
       const response = await executeCustomPrompt(currentPrompt, 'en');
       setAiResult(response.suggestion);
+      setPromptGenerated(false); // Reset after execution
     } catch (err) {
       console.error('API Request Error (Custom Prompt):', err);
       setError(err instanceof Error ? err.message : 'Unknown error occurred');
@@ -295,7 +299,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                   </select>
                 </div>
 
-                {/* Development Time Slider - Moved here */}
+                {/* Development Time Slider */}
                 <DevelopmentTimeSlider
                   value={developmentTime}
                   onChange={setDevelopmentTime}
@@ -304,15 +308,15 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
 
                 <button
                   onClick={handleQuickGenerate}
-                  disabled={isLoading || !formData.purpose.trim()}
+                  disabled={isGeneratingPrompt || !formData.purpose.trim()}
                   className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-2.5 px-4 rounded-md hover:from-green-600 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-medium transition-all duration-200"
                 >
-                  {isLoading ? (
+                  {isGeneratingPrompt ? (
                     <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
                   ) : (
-                    <Sparkles className="h-4 w-4" />
+                    <Zap className="h-4 w-4" />
                   )}
-                  <span>{isLoading ? 'Generating...' : 'Quick Generate'}</span>
+                  <span>{isGeneratingPrompt ? 'Generating Prompt...' : texts.quickGenerate}</span>
                 </button>
 
                 <button
@@ -329,7 +333,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                 </button>
               </div>
               
-              <div className="bg-white rounded-lg border border-gray-200 max-h-96 overflow-hidden">
+              <div className="bg-white rounded-lg border border-gray-200 max-h-96 overflow-hidden mt-4">
                 <EnhancedPromptComposer
                   blocks={promptBlocks}
                   onBlocksChange={setPromptBlocks}
@@ -348,6 +352,11 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                 <div className="flex items-center gap-2">
                   <Edit3 className="h-5 w-5 text-green-600" />
                   <h3 className="text-lg font-semibold text-gray-900">{texts.editorPanel}</h3>
+                  {promptGenerated && (
+                    <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full font-medium">
+                      {texts.optimizedPrompt}
+                    </span>
+                  )}
                 </div>
                 <button
                   onClick={handleExecutePrompt}
@@ -362,6 +371,15 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                   {isLoading ? texts.generating : texts.sendToAI}
                 </button>
               </div>
+              
+              {promptGenerated && (
+                <div className="mb-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+                  <p className="text-green-800 text-sm font-medium flex items-center gap-2">
+                    <Sparkles className="h-4 w-4" />
+                    {texts.promptGenerated}
+                  </p>
+                </div>
+              )}
               
               <textarea
                 value={currentPrompt}
@@ -455,7 +473,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
               onFormChange={handleFormChange}
               onSubmit={handleFormSubmit}
               onQuickGenerate={handleQuickGenerate}
-              isLoading={isLoading}
+              isLoading={isLoading || isGeneratingPrompt}
             />
             
             <div className="p-4">
@@ -539,6 +557,11 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                   <div className="flex items-center gap-2">
                     <Edit3 className="h-5 w-5 text-green-600" />
                     <h3 className="text-lg font-semibold text-gray-900">{texts.editorPanel}</h3>
+                    {promptGenerated && (
+                      <span className="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full font-medium">
+                        {texts.optimizedPrompt}
+                      </span>
+                    )}
                   </div>
                   <button
                     onClick={handleExecutePrompt}
@@ -555,6 +578,14 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                 </div>
               </div>
               <div className="p-6">
+                {promptGenerated && (
+                  <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <p className="text-green-800 font-medium flex items-center gap-2">
+                      <Sparkles className="h-5 w-5" />
+                      {texts.promptGenerated}
+                    </p>
+                  </div>
+                )}
                 <textarea
                   value={currentPrompt}
                   onChange={(e) => setCurrentPrompt(e.target.value)}

@@ -151,3 +151,25 @@ export const executeCustomPrompt = async (prompt: string, language: 'en' | 'ja' 
     throw error;
   }
 };
+
+// NEW: Generate optimized prompt from user requirements
+export const generatePrompt = async (payload: UserPayload): Promise<ApiResponse> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/generate_prompt/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    await handleApiError(error, '/generate_prompt/');
+    throw error;
+  }
+};

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bot, Send, Sparkles } from 'lucide-react';
+import { Bot, Send, Sparkles, Zap } from 'lucide-react';
 
 interface SidebarProps {
   formData: {
@@ -136,9 +136,9 @@ const Sidebar: React.FC<SidebarProps> = ({
             {isLoading ? (
               <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
             ) : (
-              <Sparkles className="h-4 w-4" />
+              <Zap className="h-4 w-4" />
             )}
-            <span>{isLoading ? 'Generating...' : 'Quick Generate'}</span>
+            <span>{isLoading ? 'Generating Prompt...' : 'Quick Generate'}</span>
           </button>
 
           <button
