@@ -43,19 +43,19 @@ const Sidebar: React.FC<SidebarProps> = ({
           </div>
           <div>
             <h2 className="text-lg font-semibold text-gray-900">AI Navigator</h2>
-            <p className="text-sm text-gray-500">あなたのAIプロジェクトパートナー</p>
+            <p className="text-sm text-gray-500">Your AI Project Partner</p>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              AIを使って実現したいことは何ですか？
+              What do you want to achieve with AI?
             </label>
             <textarea
               value={formData.purpose}
               onChange={(e) => onFormChange('purpose', e.target.value)}
-              placeholder="例：顧客データを分析して売上予測を行うシステムを作りたい"
+              placeholder="e.g., Analyze customer data to predict sales trends"
               className="w-full h-32 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
               required
             />
@@ -63,67 +63,67 @@ const Sidebar: React.FC<SidebarProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              プロジェクトの種類
+              Project Type
             </label>
             <select
               value={formData.projectType}
               onChange={(e) => onFormChange('projectType', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="Webアプリケーション">Webアプリケーション</option>
-              <option value="モバイルアプリケーション">モバイルアプリケーション</option>
-              <option value="APIバックエンド">APIバックエンド</option>
-              <option value="データ分析基盤">データ分析基盤</option>
-              <option value="その他">その他</option>
+              <option value="Web Application">Web Application</option>
+              <option value="Mobile Application">Mobile Application</option>
+              <option value="API Backend">API Backend</option>
+              <option value="Data Analysis Platform">Data Analysis Platform</option>
+              <option value="Other">Other</option>
             </select>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              月額予算（円）
+              Monthly Budget (USD)
             </label>
             <input
               type="number"
               value={formData.budget}
               onChange={(e) => onFormChange('budget', Number(e.target.value) || 0)}
               min="0"
-              max="100000"
-              step="1000"
+              max="10000"
+              step="100"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             <div className="flex justify-between text-xs text-gray-500 mt-1">
-              <span>¥0</span>
-              <span>¥100,000</span>
+              <span>$0</span>
+              <span>$10,000</span>
             </div>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              あなたの開発経験レベル
+              Your Development Experience Level
             </label>
             <select
               value={formData.experienceLevel}
               onChange={(e) => onFormChange('experienceLevel', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="初心者">初心者</option>
-              <option value="中級者">中級者</option>
-              <option value="上級者">上級者</option>
+              <option value="Beginner">Beginner</option>
+              <option value="Intermediate">Intermediate</option>
+              <option value="Advanced">Advanced</option>
             </select>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              週に使える開発時間
+              Weekly Development Time
             </label>
             <select
               value={formData.weeklyHours}
               onChange={(e) => onFormChange('weeklyHours', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="〜5時間">〜5時間</option>
-              <option value="5〜20時間">5〜20時間</option>
-              <option value="20時間以上">20時間以上</option>
+              <option value="~5 hours">~5 hours</option>
+              <option value="5~20 hours">5~20 hours</option>
+              <option value="20+ hours">20+ hours</option>
             </select>
           </div>
           
@@ -138,7 +138,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             ) : (
               <Sparkles className="h-4 w-4" />
             )}
-            <span>{isLoading ? '生成中...' : 'クイック生成'}</span>
+            <span>{isLoading ? 'Generating...' : 'Quick Generate'}</span>
           </button>
 
           <button
@@ -151,7 +151,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             ) : (
               <Send className="h-4 w-4" />
             )}
-            <span>{isLoading ? '分析中...' : '詳細分析を実行'}</span>
+            <span>{isLoading ? 'Analyzing...' : 'Detailed Analysis'}</span>
           </button>
         </form>
       </div>

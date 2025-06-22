@@ -6,77 +6,74 @@ import DialogModeScreen from './screens/DialogModeScreen';
 import BallModeScreen from './screens/BallModeScreen';
 import TreeModeScreen from './screens/TreeModeScreen';
 import BoltBadge from './components/BoltBadge';
-import LanguageSelector from './components/LanguageSelector';
-import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 
-type AppMode = 'language' | 'intro' | 'dialog' | 'ball' | 'tree';
+type AppMode = 'intro' | 'dialog' | 'ball' | 'tree';
 
 interface ModeCard {
   id: AppMode;
-  titleKey: string;
-  subtitleKey: string;
-  descriptionKey: string;
+  title: string;
+  subtitle: string;
+  description: string;
   icon: React.ReactNode;
   gradient: string;
-  featuresKeys: string[];
+  features: string[];
   difficulty: 'beginner' | 'intermediate' | 'advanced';
-  estimatedTimeKey: string;
+  estimatedTime: string;
   isNew?: boolean;
 }
 
-function AppContent() {
-  const { language, setLanguage, t } = useLanguage();
-  const [currentMode, setCurrentMode] = useState<AppMode>('language');
+function App() {
+  const [currentMode, setCurrentMode] = useState<AppMode>('intro');
 
   const modes: ModeCard[] = [
     {
       id: 'dialog',
-      titleKey: 'dialog.title',
-      subtitleKey: 'dialog.subtitle',
-      descriptionKey: 'dialog.description',
+      title: 'Dialog Mode',
+      subtitle: 'AI Navigator with Advanced Prompt Engineering',
+      description: 'Chat with AI to create optimal technology stacks and comprehensive project proposals. Now with advanced prompt composition and editing capabilities.',
       icon: <MessageCircle className="h-8 w-8" />,
       gradient: 'from-blue-500 via-blue-600 to-purple-600',
-      featuresKeys: [
-        'dialog.features.stepByStep',
-        'dialog.features.promptEngineering',
-        'dialog.features.interactiveRefinement',
-        'dialog.features.visualComposition'
+      features: [
+        'Step-by-step guidance',
+        'Prompt engineering workspace',
+        'Interactive refinement',
+        'Visual prompt composition'
       ],
       difficulty: 'beginner',
-      estimatedTimeKey: 'dialog.estimatedTime',
+      estimatedTime: '10-15 min',
       isNew: true
     },
     {
       id: 'ball',
-      titleKey: 'ball.title',
-      subtitleKey: 'ball.subtitle',
-      descriptionKey: 'ball.description',
+      title: 'Ball Mode',
+      subtitle: 'Interactive Discovery',
+      description: 'Tap interesting balls to let AI learn your interest patterns and suggest optimal projects.',
       icon: <Sparkles className="h-8 w-8" />,
       gradient: 'from-purple-500 via-pink-500 to-orange-500',
-      featuresKeys: [
-        'ball.features.intuitive',
-        'ball.features.visual',
-        'ball.features.patternLearning',
-        'ball.features.discoveries'
+      features: [
+        'Intuitive interaction',
+        'Visual-focused approach',
+        'Pattern learning AI',
+        'Discover new possibilities'
       ],
       difficulty: 'intermediate',
-      estimatedTimeKey: 'ball.estimatedTime'
+      estimatedTime: '5-10 min'
     },
     {
       id: 'tree',
-      titleKey: 'tree.title',
-      subtitleKey: 'tree.subtitle',
-      descriptionKey: 'tree.description',
+      title: 'Tree Mode',
+      subtitle: 'Structured Planning',
+      description: 'Organize project elements in a tree structure while AI suggests optimal combinations and implementation order.',
       icon: <GitBranch className="h-8 w-8" />,
       gradient: 'from-green-500 via-emerald-500 to-teal-600',
-      featuresKeys: [
-        'tree.features.structured',
-        'tree.features.visualization',
-        'tree.features.phased',
-        'tree.features.advanced'
+      features: [
+        'Structured thinking',
+        'Dependency visualization',
+        'Phased planning approach',
+        'Advanced configuration'
       ],
       difficulty: 'advanced',
-      estimatedTimeKey: 'tree.estimatedTime'
+      estimatedTime: '15-20 min'
     }
   ];
 
@@ -89,24 +86,13 @@ function AppContent() {
     }
   };
 
-  // Language selection screen
-  if (currentMode === 'language') {
-    return (
-      <LanguageSelector
-        selectedLanguage={language}
-        onLanguageChange={setLanguage}
-        onContinue={() => setCurrentMode('intro')}
-      />
-    );
-  }
-
   // Render different screens based on current mode
   if (currentMode === 'dialog') {
     return (
       <>
         <DialogModeScreen 
           onBack={() => setCurrentMode('intro')} 
-          language={language}
+          language="en"
         />
         <BoltBadge />
       </>
@@ -114,11 +100,11 @@ function AppContent() {
   }
 
   if (currentMode === 'ball') {
-    return <BallModeScreen onBack={() => setCurrentMode('intro')} language={language} />;
+    return <BallModeScreen onBack={() => setCurrentMode('intro')} language="en" />;
   }
 
   if (currentMode === 'tree') {
-    return <TreeModeScreen onBack={() => setCurrentMode('intro')} language={language} />;
+    return <TreeModeScreen onBack={() => setCurrentMode('intro')} language="en" />;
   }
 
   // Main intro screen
@@ -141,21 +127,15 @@ function AppContent() {
               </div>
               <div>
                 <h1 className="text-2xl lg:text-3xl font-bold text-white">
-                  {t('app.title')}
+                  AI Navigator
                 </h1>
                 <p className="text-white/70 text-sm lg:text-base">
-                  {t('app.subtitle')}
+                  Your AI Project Partner
                 </p>
               </div>
             </div>
             
             <div className="flex items-center gap-4">
-              <button
-                onClick={() => setCurrentMode('language')}
-                className="px-3 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 text-white text-sm hover:bg-white/15 transition-colors"
-              >
-                {language === 'en' ? '🇺🇸 EN' : '🇯🇵 JP'}
-              </button>
               <div className="hidden lg:flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
                 <Star className="h-4 w-4 text-yellow-400" />
                 <span className="text-white text-sm font-medium">v2.0 Enhanced</span>
@@ -173,48 +153,35 @@ function AppContent() {
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-6">
               <Zap className="h-4 w-4 text-yellow-400" />
               <span className="text-white text-sm font-medium">
-                {language === 'en' ? '3 Revolutionary Approaches' : '3つの革新的なアプローチ'}
+                3 Revolutionary Approaches
               </span>
             </div>
             
             <h2 className="text-3xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-              {language === 'en' ? (
-                <>
-                  Realize Your
-                  <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                    {' '}AI Project{' '}
-                  </span>
-                  in the<br />
-                  Optimal Way
-                </>
-              ) : (
-                <>
-                  あなたの
-                  <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                    AIプロジェクト
-                  </span>
-                  を<br />
-                  最適な形で実現しよう
-                </>
-              )}
+              Realize Your
+              <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                {' '}AI Project{' '}
+              </span>
+              in the<br />
+              Optimal Way
             </h2>
             
             <p className="text-lg lg:text-2xl text-white/80 mb-8 max-w-3xl mx-auto leading-relaxed">
-              {t('app.tagline')}
+              Select the interaction mode that best fits your thinking style
             </p>
             
             <div className="flex flex-wrap items-center justify-center gap-4 text-white/60">
               <div className="flex items-center gap-2">
                 <Target className="h-4 w-4" />
-                <span className="text-sm">{t('modes.features')}</span>
+                <span className="text-sm">Free to start</span>
               </div>
               <div className="flex items-center gap-2">
                 <TreePine className="h-4 w-4" />
-                <span className="text-sm">{t('modes.autoGenerate')}</span>
+                <span className="text-sm">Auto-generate proposals</span>
               </div>
               <div className="flex items-center gap-2">
                 <Brain className="h-4 w-4" />
-                <span className="text-sm">{t('modes.aiOptimized')}</span>
+                <span className="text-sm">AI-optimized suggestions</span>
               </div>
             </div>
           </div>
@@ -248,7 +215,7 @@ function AppContent() {
                       </div>
                       <div className="text-right">
                         <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${getDifficultyColor(mode.difficulty)}`}>
-                          {t(`difficulty.${mode.difficulty}`)}
+                          {mode.difficulty.charAt(0).toUpperCase() + mode.difficulty.slice(1)}
                         </span>
                       </div>
                     </div>
@@ -256,28 +223,28 @@ function AppContent() {
                     {/* Title and subtitle */}
                     <div className="mb-4">
                       <h3 className="text-xl lg:text-2xl font-bold text-white mb-1">
-                        {t(mode.titleKey)}
+                        {mode.title}
                       </h3>
                       <p className="text-white/60 text-sm font-medium">
-                        {t(mode.subtitleKey)}
+                        {mode.subtitle}
                       </p>
                     </div>
                     
                     {/* Description */}
                     <p className="text-white/80 text-sm lg:text-base leading-relaxed mb-6 flex-grow">
-                      {t(mode.descriptionKey)}
+                      {mode.description}
                     </p>
                     
                     {/* Features */}
                     <div className="mb-6">
                       <h4 className="text-white font-medium text-sm mb-3">
-                        {language === 'en' ? 'Key Features' : '主な機能'}
+                        Key Features
                       </h4>
                       <ul className="space-y-2">
-                        {mode.featuresKeys.map((featureKey, featureIndex) => (
+                        {mode.features.map((feature, featureIndex) => (
                           <li key={featureIndex} className="flex items-center gap-2 text-white/70 text-sm">
                             <div className="w-1.5 h-1.5 bg-white/50 rounded-full"></div>
-                            {t(featureKey)}
+                            {feature}
                           </li>
                         ))}
                       </ul>
@@ -287,7 +254,7 @@ function AppContent() {
                     <div className="flex items-center gap-2 text-white/60 text-sm mb-6">
                       <Zap className="h-4 w-4" />
                       <span>
-                        {language === 'en' ? 'Time required: ' : '所要時間: '}{t(mode.estimatedTimeKey)}
+                        Time required: {mode.estimatedTime}
                       </span>
                     </div>
                     
@@ -296,7 +263,7 @@ function AppContent() {
                       onClick={() => setCurrentMode(mode.id)}
                       className={`w-full bg-gradient-to-r ${mode.gradient} text-white py-4 px-6 rounded-2xl font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 group-hover:shadow-xl mt-auto`}
                     >
-                      <span>{t('button.selectMode')}</span>
+                      <span>Select This Mode</span>
                       <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
                     </button>
                   </div>
@@ -309,7 +276,7 @@ function AppContent() {
           <div className="text-center mt-12 lg:mt-16">
             <div className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-white/80">
               <Brain className="h-5 w-5" />
-              <span className="text-sm">{t('modes.freeExperience')}</span>
+              <span className="text-sm">All modes are free to experience</span>
             </div>
           </div>
         </div>
@@ -337,14 +304,6 @@ function AppContent() {
         }
       `}</style>
     </div>
-  );
-}
-
-function App() {
-  return (
-    <LanguageProvider>
-      <AppContent />
-    </LanguageProvider>
   );
 }
 

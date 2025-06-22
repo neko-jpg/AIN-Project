@@ -13,46 +13,24 @@ import { PromptBlock } from '../types';
 
 // Translation texts
 const texts = {
-  en: {
-    title: 'Dialog Mode',
-    subtitle: 'AI Navigator with Advanced Prompt Engineering',
-    back: 'Back',
-    generating: 'Generating AI analysis...',
-    error: 'Error occurred',
-    tryAgain: 'Try Again',
-    executePrompt: 'Execute Prompt',
-    promptResult: 'AI Result',
-    promptPlaceholder: 'The combined prompt will appear here. Edit as needed before sending to AI.',
-    noPromptYet: 'No prompt generated yet. Use the prompt composer on the right to create one.',
-    sendToAI: 'Send to AI',
-    toggleLeftPanel: 'Toggle Form Panel',
-    toggleRightPanel: 'Toggle Prompt Panel',
-    toggleBottomPanel: 'Toggle Result Panel',
-    formPanel: 'Project Settings',
-    promptPanel: 'Prompt Composer',
-    editorPanel: 'Prompt Editor',
-    resultPanel: 'AI Results'
-  },
-  ja: {
-    title: '対話モード',
-    subtitle: '高度なプロンプトエンジニアリング対応AIナビゲーター',
-    back: '戻る',
-    generating: 'AI分析を生成中...',
-    error: 'エラーが発生しました',
-    tryAgain: '再試行',
-    executePrompt: 'プロンプトを実行',
-    promptResult: 'AI結果',
-    promptPlaceholder: '結合されたプロンプトがここに表示されます。必要に応じて編集してからAIに送信してください。',
-    noPromptYet: 'まだプロンプトが生成されていません。右側のプロンプト構成ツールを使用してプロンプトを作成してください。',
-    sendToAI: 'AIに送信',
-    toggleLeftPanel: 'フォームパネル切り替え',
-    toggleRightPanel: 'プロンプトパネル切り替え',
-    toggleBottomPanel: '結果パネル切り替え',
-    formPanel: 'プロジェクト設定',
-    promptPanel: 'プロンプト構成',
-    editorPanel: 'プロンプトエディター',
-    resultPanel: 'AI結果'
-  }
+  title: 'Dialog Mode',
+  subtitle: 'AI Navigator with Advanced Prompt Engineering',
+  back: 'Back',
+  generating: 'Generating AI analysis...',
+  error: 'Error occurred',
+  tryAgain: 'Try Again',
+  executePrompt: 'Execute Prompt',
+  promptResult: 'AI Result',
+  promptPlaceholder: 'The combined prompt will appear here. Edit as needed before sending to AI.',
+  noPromptYet: 'No prompt generated yet. Use the prompt composer on the right to create one.',
+  sendToAI: 'Send to AI',
+  toggleLeftPanel: 'Toggle Form Panel',
+  toggleRightPanel: 'Toggle Prompt Panel',
+  toggleBottomPanel: 'Toggle Result Panel',
+  formPanel: 'Project Settings',
+  promptPanel: 'Prompt Composer',
+  editorPanel: 'Prompt Editor',
+  resultPanel: 'AI Results'
 };
 
 interface DialogModeScreenProps {
@@ -68,10 +46,10 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
 
   const [formData, setFormData] = useState({
     purpose: '',
-    projectType: 'Webアプリケーション',
-    budget: 10000,
-    experienceLevel: '初心者',
-    weeklyHours: '〜5時間',
+    projectType: 'Web Application',
+    budget: 1000,
+    experienceLevel: 'Beginner',
+    weeklyHours: '~5 hours',
   });
   const [developmentTime, setDevelopmentTime] = useState(3);
   const [promptBlocks, setPromptBlocks] = useState<PromptBlock[]>([]);
@@ -83,9 +61,6 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
   const [isBottomPanelOpen, setIsBottomPanelOpen] = useState(false);
 
   const chatEndRef = useRef<HTMLDivElement>(null);
-
-  // useMemoで翻訳テキストをメモ化
-  const t = useMemo(() => texts[language], [language]);
 
   // Detect screen size
   useEffect(() => {
@@ -124,7 +99,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
         experience_level: formData.experienceLevel,
         weekly_hours: formData.weeklyHours,
         development_time: developmentTime,
-        language
+        language: 'en'
       };
 
       const response = await analyzeProject(payload);
@@ -145,35 +120,35 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
     const autoBlocks: PromptBlock[] = [
       {
         id: 'purpose-block',
-        content: `プロジェクト目的: ${formData.purpose}`,
+        content: `Project Purpose: ${formData.purpose}`,
         priority: 0,
         timestamp: new Date(),
         type: 'text'
       },
       {
         id: 'type-block',
-        content: `プロジェクト種類: ${formData.projectType}`,
+        content: `Project Type: ${formData.projectType}`,
         priority: 1,
         timestamp: new Date(),
         type: 'text'
       },
       {
         id: 'budget-block',
-        content: `月額予算: ${formData.budget}円`,
+        content: `Monthly Budget: $${formData.budget}`,
         priority: 2,
         timestamp: new Date(),
         type: 'text'
       },
       {
         id: 'experience-block',
-        content: `開発経験レベル: ${formData.experienceLevel}`,
+        content: `Development Experience Level: ${formData.experienceLevel}`,
         priority: 3,
         timestamp: new Date(),
         type: 'text'
       },
       {
         id: 'time-block',
-        content: `週間開発時間: ${formData.weeklyHours}、開発期間: ${developmentTime}ヶ月`,
+        content: `Weekly Development Time: ${formData.weeklyHours}, Development Period: ${developmentTime} months`,
         priority: 4,
         timestamp: new Date(),
         type: 'text'
@@ -201,7 +176,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
     setIsBottomPanelOpen(true); // Auto-open results panel
 
     try {
-      const response = await executeCustomPrompt(currentPrompt, language);
+      const response = await executeCustomPrompt(currentPrompt, 'en');
       setAiResult(response.suggestion);
     } catch (err) {
       console.error('API Request Error (Custom Prompt):', err);
@@ -222,11 +197,11 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
               className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
             >
               <ArrowLeft className="h-5 w-5" />
-              <span>{t.back}</span>
+              <span>{texts.back}</span>
             </button>
             
             <div className="text-center">
-              <h1 className="text-lg font-bold text-gray-900">{t.title}</h1>
+              <h1 className="text-lg font-bold text-gray-900">{texts.title}</h1>
             </div>
             
             <div className="w-16" />
@@ -240,24 +215,24 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
             <div className="p-4">
               <div className="flex items-center gap-2 mb-4">
                 <PanelLeftOpen className="h-5 w-5 text-blue-600" />
-                <h3 className="text-lg font-semibold text-gray-900">{t.formPanel}</h3>
+                <h3 className="text-lg font-semibold text-gray-900">{texts.formPanel}</h3>
               </div>
               
               <div className="space-y-4">
                 <DevelopmentTimeSlider
                   value={developmentTime}
                   onChange={setDevelopmentTime}
-                  language={language}
+                  language="en"
                 />
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    AIを使って実現したいことは何ですか？
+                    What do you want to achieve with AI?
                   </label>
                   <textarea
                     value={formData.purpose}
                     onChange={(e) => handleFormChange('purpose', e.target.value)}
-                    placeholder="例：顧客データを分析して売上予測を行うシステムを作りたい"
+                    placeholder="e.g., Analyze customer data to predict sales trends"
                     className="w-full h-24 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                   />
                 </div>
@@ -265,32 +240,32 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      プロジェクト種類
+                      Project Type
                     </label>
                     <select
                       value={formData.projectType}
                       onChange={(e) => handleFormChange('projectType', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
-                      <option value="Webアプリケーション">Webアプリ</option>
-                      <option value="モバイルアプリケーション">モバイルアプリ</option>
-                      <option value="APIバックエンド">API</option>
-                      <option value="データ分析基盤">データ分析</option>
-                      <option value="その他">その他</option>
+                      <option value="Web Application">Web App</option>
+                      <option value="Mobile Application">Mobile App</option>
+                      <option value="API Backend">API</option>
+                      <option value="Data Analysis Platform">Data Analysis</option>
+                      <option value="Other">Other</option>
                     </select>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      月額予算（円）
+                      Monthly Budget (USD)
                     </label>
                     <input
                       type="number"
                       value={formData.budget}
                       onChange={(e) => handleFormChange('budget', parseInt(e.target.value))}
                       min="0"
-                      max="100000"
-                      step="1000"
+                      max="10000"
+                      step="100"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
@@ -298,31 +273,31 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    開発経験レベル
+                    Development Experience Level
                   </label>
                   <select
                     value={formData.experienceLevel}
                     onChange={(e) => handleFormChange('experienceLevel', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
-                    <option value="初心者">初心者</option>
-                    <option value="中級者">中級者</option>
-                    <option value="上級者">上級者</option>
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
                   </select>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    週間時間
+                    Weekly Time
                   </label>
                   <select
                     value={formData.weeklyHours}
                     onChange={(e) => handleFormChange('weeklyHours', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
-                    <option value="〜5時間">〜5時間</option>
-                    <option value="5〜20時間">5〜20時間</option>
-                    <option value="20時間以上">20時間以上</option>
+                    <option value="~5 hours">~5 hours</option>
+                    <option value="5~20 hours">5~20 hours</option>
+                    <option value="20+ hours">20+ hours</option>
                   </select>
                 </div>
 
@@ -336,7 +311,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                   ) : (
                     <Sparkles className="h-4 w-4" />
                   )}
-                  <span>{isLoading ? '生成中...' : 'クイック生成'}</span>
+                  <span>{isLoading ? 'Generating...' : 'Quick Generate'}</span>
                 </button>
 
                 <button
@@ -349,7 +324,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                   ) : (
                     <Send className="h-4 w-4" />
                   )}
-                  <span>{isLoading ? '分析中...' : '詳細分析を実行'}</span>
+                  <span>{isLoading ? 'Analyzing...' : 'Detailed Analysis'}</span>
                 </button>
               </div>
               
@@ -358,7 +333,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                   blocks={promptBlocks}
                   onBlocksChange={setPromptBlocks}
                   onSendToPrompt={handlePromptFromComposer}
-                  language={language}
+                  language="en"
                   developmentTime={developmentTime}
                 />
               </div>
@@ -371,7 +346,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <Edit3 className="h-5 w-5 text-green-600" />
-                  <h3 className="text-lg font-semibold text-gray-900">{t.editorPanel}</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">{texts.editorPanel}</h3>
                 </div>
                 <button
                   onClick={handleExecutePrompt}
@@ -383,14 +358,14 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                   ) : (
                     <Send className="h-4 w-4" />
                   )}
-                  {isLoading ? t.generating : t.sendToAI}
+                  {isLoading ? texts.generating : texts.sendToAI}
                 </button>
               </div>
               
               <textarea
                 value={currentPrompt}
                 onChange={(e) => setCurrentPrompt(e.target.value)}
-                placeholder={currentPrompt ? t.promptPlaceholder : t.noPromptYet}
+                placeholder={currentPrompt ? texts.promptPlaceholder : texts.noPromptYet}
                 className="w-full h-32 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm resize-none"
               />
             </div>
@@ -402,7 +377,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
               <div className="p-4">
                 <div className="flex items-center gap-2 mb-4">
                   <Sparkles className="h-5 w-5 text-orange-600" />
-                  <h3 className="text-lg font-semibold text-gray-900">{t.resultPanel}</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">{texts.resultPanel}</h3>
                 </div>
                 
                 {error && (
@@ -410,7 +385,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                     <div className="flex items-center gap-3">
                       <AlertTriangle className="h-5 w-5 text-red-600 flex-shrink-0" />
                       <div className="flex-1">
-                        <p className="text-red-800 font-medium">{t.error}</p>
+                        <p className="text-red-800 font-medium">{texts.error}</p>
                         <p className="text-red-700 text-sm mt-1">{error}</p>
                       </div>
                       <button
@@ -426,7 +401,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                 {aiResult && (
                   <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="font-medium text-gray-900">{t.promptResult}</span>
+                      <span className="font-medium text-gray-900">{texts.promptResult}</span>
                       <DownloadButton
                         content={aiResult}
                         filename="ai-result.md"
@@ -462,7 +437,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <PanelLeftOpen className="h-5 w-5 text-blue-600" />
-                <h3 className="text-lg font-semibold text-gray-900">{t.formPanel}</h3>
+                <h3 className="text-lg font-semibold text-gray-900">{texts.formPanel}</h3>
               </div>
               <button
                 onClick={() => setIsLeftPanelOpen(false)}
@@ -486,7 +461,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
               <DevelopmentTimeSlider
                 value={developmentTime}
                 onChange={setDevelopmentTime}
-                language={language}
+                language="en"
               />
             </div>
           </div>
@@ -504,12 +479,12 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                 className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 <ArrowLeft className="h-5 w-5" />
-                <span>{t.back}</span>
+                <span>{texts.back}</span>
               </button>
               
               <div>
-                <h1 className="text-xl lg:text-2xl font-bold text-gray-900">{t.title}</h1>
-                <p className="text-sm text-gray-600">{t.subtitle}</p>
+                <h1 className="text-xl lg:text-2xl font-bold text-gray-900">{texts.title}</h1>
+                <p className="text-sm text-gray-600">{texts.subtitle}</p>
               </div>
             </div>
 
@@ -519,10 +494,10 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                 <button
                   onClick={() => setIsLeftPanelOpen(true)}
                   className="flex items-center gap-2 px-3 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors"
-                  title={t.toggleLeftPanel}
+                  title={texts.toggleLeftPanel}
                 >
                   <PanelLeftOpen className="h-4 w-4" />
-                  <span className="hidden sm:inline">{t.formPanel}</span>
+                  <span className="hidden sm:inline">{texts.formPanel}</span>
                 </button>
               )}
               
@@ -530,10 +505,10 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                 <button
                   onClick={() => setIsRightPanelOpen(true)}
                   className="flex items-center gap-2 px-3 py-2 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 transition-colors"
-                  title={t.toggleRightPanel}
+                  title={texts.toggleRightPanel}
                 >
                   <PanelRightOpen className="h-4 w-4" />
-                  <span className="hidden sm:inline">{t.promptPanel}</span>
+                  <span className="hidden sm:inline">{texts.promptPanel}</span>
                 </button>
               )}
               
@@ -544,10 +519,10 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                     ? 'bg-orange-100 text-orange-700 hover:bg-orange-200' 
                     : 'bg-orange-50 text-orange-700 hover:bg-orange-100'
                 }`}
-                title={t.toggleBottomPanel}
+                title={texts.toggleBottomPanel}
               >
                 <PanelTopOpen className="h-4 w-4" />
-                <span className="hidden sm:inline">{t.resultPanel}</span>
+                <span className="hidden sm:inline">{texts.resultPanel}</span>
               </button>
             </div>
           </div>
@@ -562,7 +537,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Edit3 className="h-5 w-5 text-green-600" />
-                    <h3 className="text-lg font-semibold text-gray-900">{t.editorPanel}</h3>
+                    <h3 className="text-lg font-semibold text-gray-900">{texts.editorPanel}</h3>
                   </div>
                   <button
                     onClick={handleExecutePrompt}
@@ -574,7 +549,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                     ) : (
                       <Send className="h-4 w-4" />
                     )}
-                    {isLoading ? t.generating : t.sendToAI}
+                    {isLoading ? texts.generating : texts.sendToAI}
                   </button>
                 </div>
               </div>
@@ -582,7 +557,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                 <textarea
                   value={currentPrompt}
                   onChange={(e) => setCurrentPrompt(e.target.value)}
-                  placeholder={currentPrompt ? t.promptPlaceholder : t.noPromptYet}
+                  placeholder={currentPrompt ? texts.promptPlaceholder : texts.noPromptYet}
                   className="w-full h-64 p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm resize-none"
                 />
               </div>
@@ -594,7 +569,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                 <div className="flex items-center gap-3">
                   <AlertTriangle className="h-5 w-5 text-red-600 flex-shrink-0" />
                   <div className="flex-1">
-                    <p className="text-red-800 font-medium">{t.error}</p>
+                    <p className="text-red-800 font-medium">{texts.error}</p>
                     <p className="text-red-700 text-sm mt-1">{error}</p>
                   </div>
                   <button
@@ -617,7 +592,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <PanelRightOpen className="h-5 w-5 text-purple-600" />
-                    <h3 className="text-lg font-semibold text-gray-900">{t.promptPanel}</h3>
+                    <h3 className="text-lg font-semibold text-gray-900">{texts.promptPanel}</h3>
                   </div>
                   <button
                     onClick={() => setIsRightPanelOpen(false)}
@@ -633,7 +608,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
                   blocks={promptBlocks}
                   onBlocksChange={setPromptBlocks}
                   onSendToPrompt={handlePromptFromComposer}
-                  language={language}
+                  language="en"
                   developmentTime={developmentTime}
                 />
               </div>
@@ -648,7 +623,7 @@ const DialogModeScreen: React.FC<DialogModeScreenProps> = ({ onBack, language })
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Sparkles className="h-5 w-5 text-orange-600" />
-                  <h3 className="text-lg font-semibold text-gray-900">{t.resultPanel}</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">{texts.resultPanel}</h3>
                 </div>
                 <div className="flex items-center gap-2">
                   <DownloadButton
