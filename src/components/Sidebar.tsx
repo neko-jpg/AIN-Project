@@ -1,8 +1,7 @@
-// src/components/Sidebar.tsx （修正版）
-
 import React from 'react';
 import { Bot, Send, Sparkles } from 'lucide-react';
-import { useLanguage } from '../contexts/LanguageContext'; // [修正点1] useLanguageをインポート
+import { useLanguage } from '../contexts/LanguageContext';
+import DevelopmentTimeSlider from './DevelopmentTimeSlider';
 
 interface SidebarProps {
   formData: {
@@ -12,7 +11,9 @@ interface SidebarProps {
     experienceLevel: string;
     weeklyHours: string;
   };
+  developmentTime: number;
   onFormChange: (field: keyof SidebarProps['formData'], value: string | number) => void;
+  onDevelopmentTimeChange: (value: number) => void;
   onSubmit: () => void;
   onQuickGenerate: () => void;
   isLoading: boolean;
@@ -20,12 +21,13 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ 
   formData, 
+  developmentTime,
   onFormChange, 
+  onDevelopmentTimeChange,
   onSubmit, 
   isLoading, 
   onQuickGenerate 
 }) => {
-  // [修正点2] useLanguageフックを呼び出して、t関数を使えるようにします
   const { t } = useLanguage();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -34,11 +36,10 @@ const Sidebar: React.FC<SidebarProps> = ({
     onSubmit();
   };
 
-  // [修正点3] クイック生成ボタンがクリックされたときの処理を正しく定義します
   const handleQuickGenerateClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault(); // フォーム全体の送信を防ぎます
+    e.preventDefault();
     if (!formData.purpose.trim()) return;
-    onQuickGenerate(); // 親から渡された関数を実行します
+    onQuickGenerate();
   }
 
   return (
@@ -49,7 +50,6 @@ const Sidebar: React.FC<SidebarProps> = ({
             <Bot className="h-6 w-6 text-blue-600" />
           </div>
           <div>
-            {/* [修正点4] t関数を正しく使ってテキストを表示します */}
             <h2 className="text-lg font-semibold text-gray-900">{t('app.title')}</h2>
             <p className="text-sm text-gray-500">{t('app.subtitle')}</p>
           </div>
@@ -134,6 +134,15 @@ const Sidebar: React.FC<SidebarProps> = ({
               <option value="20時間以上">{t('form.weeklyHours.high')}</option>
             </select>
           </div>
+
+          {/* Development Time Slider - Moved here */}
+          <div>
+            <DevelopmentTimeSlider
+              value={developmentTime}
+              onChange={onDevelopmentTimeChange}
+              language={t('language.code') as 'en' | 'ja'}
+            />
+          </div>
           
           <button
             type="button" 
@@ -146,7 +155,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             ) : (
               <Sparkles className="h-4 w-4" />
             )}
-            <span>{isLoading ? '生成中...' : 'クイック生成'}</span>
+            <span>{isLoading ? t('loading.generating') : t('button.generatePrompt')}</span>
           </button>
 
           <button
@@ -159,7 +168,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             ) : (
               <Send className="h-4 w-4" />
             )}
-            <span>{isLoading ? '分析中...' : '詳細プロンプトで実行'}</span>
+            <span>{isLoading ? t('loading.analyzing') : t('button.detailedAnalysis')}</span>
           </button>
         </form>
       </div>

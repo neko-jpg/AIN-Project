@@ -162,6 +162,42 @@ def generate_initial_prompt(user_input: UserPayload) -> str:
 (プロジェクトを始めるための具体的な初期ステップを5〜7個程度記述)
 """
 
+def generate_prompt_creation_prompt(user_input: UserPayload) -> str:
+    """Generate a prompt that creates an AI prompt based on user requirements"""
+    language_instruction = "Please respond in English." if user_input.language == "en" else "日本語で回答してください。"
+    
+    return f"""
+# 役割: あなたは、プロンプトエンジニアリングの専門家です。ユーザーの要件から、AIシステムに送信するための最適化されたプロンプトを生成します。
+
+# 現在の日付: {datetime.date.today().strftime("%Y年%m月%d日")}
+
+# ユーザー要件:
+- **目的**: {user_input.purpose}
+- **プロジェクト種類**: {user_input.project_type}
+- **月額予算**: {user_input.budget}円 以下
+- **開発経験**: {user_input.experience_level}
+- **週の開発時間**: {user_input.weekly_hours}
+- **開発期間**: {user_input.development_time or '未指定'}ヶ月
+- **言語設定**: {user_input.language}
+
+{language_instruction}
+
+# 指示: 上記のユーザー要件を基に、AIシステムに送信するための包括的で効果的なプロンプトを生成してください。
+
+生成するプロンプトには以下の要素を含めてください：
+1. 明確なプロジェクトコンテキストと目標
+2. 技術的要件と制約
+3. 予算とタイムラインの考慮事項
+4. 経験レベルに応じた推奨事項の要求
+5. 具体的な技術スタック推奨の依頼
+6. 実装ステップとベストプラクティスの要求
+
+生成されたプロンプトは、そのままAIシステムに送信して包括的な技術スタック推奨を得られるように構成してください。
+
+# 出力フォーマット:
+生成されたプロンプトのみを出力してください（説明文は不要）。
+"""
+
 def generate_full_proposal_prompt(request: FullProposalRequest) -> str:
     language_instruction = "Please respond in English." if request.language == "en" else "日本語で回答してください。"
     
@@ -295,6 +331,27 @@ async def analyze_purpose(request: UserPayload):
     except Exception as e:
         logging.exception("初期提案の生成中にエラーが発生しました")
         raise HTTPException(status_code=500, detail=f"初期提案の生成中にエラーが発生しました: {str(e)}")
+
+@app.post("/generate_prompt/")
+async def generate_prompt(request: UserPayload):
+    """Generate an AI prompt based on user requirements"""
+    try:
+        if KNOWLEDGE_BASE_STR == "[]":
+            logging.error("知識ベースが空です。data/ディレクトリのJSONファイルを確認してください。")
+            raise HTTPException(status_code=500, detail="プロンプト生成中にエラー: 知識ベースが空です。")
+            
+        prompt = generate_prompt_creation_prompt(request)
+        model = genai.GenerativeModel('gemini-1.5-flash-latest') 
+        
+        logging.info(f"Geminiにプロンプト生成リクエストを送信します... (モデル: {model.model_name})")
+        response = await model.generate_content_async(prompt)
+        
+        logging.info("Geminiからプロンプト生成応答を受信しました。")
+        return {"suggestion": response.text}
+        
+    except Exception as e:
+        logging.exception("プロンプト生成中にエラーが発生しました")
+        raise HTTPException(status_code=500, detail=f"プロンプト生成中にエラーが発生しました: {str(e)}")
 
 @app.post("/generate_full_proposal/")
 async def generate_full_proposal(request: FullProposalRequest):

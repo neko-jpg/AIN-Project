@@ -21,6 +21,9 @@ export const useLanguage = () => {
 // Comprehensive translation object
 const translations = {
   en: {
+    // Language info
+    'language.code': 'en',
+    
     // Common
     'common.back': 'Back',
     'common.next': 'Next',
@@ -144,7 +147,7 @@ const translations = {
     'steps.promptEngineering': 'Prompt Engineering',
 
     // Loading States
-    'loading.generating': 'Generating AI analysis...',
+    'loading.generating': 'Generating AI prompt...',
     'loading.generatingProposal': 'Creating comprehensive proposal...',
     'loading.refining': 'Processing refinement...',
     'loading.analyzing': 'Analyzing...',
@@ -188,12 +191,14 @@ const translations = {
     // Buttons
     'button.selectMode': 'Select This Mode',
     'button.generateProposal': 'Generate Full Proposal',
+    'button.generatePrompt': 'Generate AI Prompt',
     'button.downloadProposal': 'Download Proposal',
     'button.viewFullProposal': 'View Full Proposal',
     'button.backToProposal': 'Back to Proposal',
     'button.startRecording': 'Start Recording',
     'button.stopRecording': 'Stop Recording',
     'button.uploadAudio': 'Upload Audio File',
+    'button.detailedAnalysis': 'Detailed Analysis',
 
     // Time Labels
     'time.quick': 'Quick',
@@ -254,6 +259,9 @@ const translations = {
     'bolt.builtOn': 'Built on Bolt'
   },
   ja: {
+    // Language info
+    'language.code': 'ja',
+    
     // Common
     'common.back': '戻る',
     'common.next': '次へ',
@@ -377,7 +385,7 @@ const translations = {
     'steps.promptEngineering': 'プロンプトエンジニアリング',
 
     // Loading States
-    'loading.generating': 'AI分析を生成中...',
+    'loading.generating': 'AIプロンプトを生成中...',
     'loading.generatingProposal': '包括的な企画書を作成中...',
     'loading.refining': '調整を処理中...',
     'loading.analyzing': '分析中...',
@@ -421,12 +429,14 @@ const translations = {
     // Buttons
     'button.selectMode': 'このモードを選択',
     'button.generateProposal': '完全企画書を生成',
+    'button.generatePrompt': 'AIプロンプトを生成',
     'button.downloadProposal': '企画書をダウンロード',
     'button.viewFullProposal': '完全企画書を表示',
     'button.backToProposal': '企画書に戻る',
     'button.startRecording': '録音開始',
     'button.stopRecording': '録音停止',
     'button.uploadAudio': '音声ファイルをアップロード',
+    'button.detailedAnalysis': '詳細分析を実行',
 
     // Time Labels
     'time.quick': 'クイック',
